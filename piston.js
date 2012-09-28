@@ -57,6 +57,7 @@ var PistonEngine = Class.create({
     {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         var time = new Date().getTime() * 0.002;
+        mainClass.draw();
     },
     update: function(mainMethod)
     {
