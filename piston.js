@@ -1,16 +1,16 @@
 var PistonEngine = Class.create({
+    
     canvas : null,
     ctx : null,
     canvasWidth : null,
     canvasHeight : null,
     mainClass : null,
     animationFrame : null,
-    img: null,
     _fps: 0,
     lastCall: null,
+    
     initialize: function(canvasID, w, h, _mainClass)
     {
-        
         canvas = document.getElementById(canvasID);
         canvasWidth = w;
         canvasHeight = h;
@@ -18,8 +18,6 @@ var PistonEngine = Class.create({
         canvas.height = h;
         mainClass = new _mainClass;
         ctx = canvas.getContext('2d');
-        img = new Image();
-        img.src = 'assets/tiles/player.png';
         var that = this;
         // gameloop stuff
         var animationFrame = window.requestAnimationFrame ||
