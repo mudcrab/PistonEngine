@@ -6,7 +6,7 @@ var PistonEngine = Class.create({
     mainClass : null,
     animationFrame : null,
     img: null,
-    fps: 0,
+    _fps: 0,
     lastCall: null,
     initialize: function(canvasID, w, h, _mainClass)
     {
@@ -33,7 +33,7 @@ var PistonEngine = Class.create({
             if(that.lastCall == null)
             {
                 that.lastCall = new Date().getTime();
-                that.fps = 0;
+                that._fps = 0;
             }
             var animation = function()
             {
@@ -43,34 +43,36 @@ var PistonEngine = Class.create({
                 }, 10)
                 var delta = (new Date().getTime() - that.lastCall) / 1000;
                 that.lastCall = new Date().getTime();
-                that.fps = Math.floor(1 / delta);
+                that._fps = Math.floor(1 / delta);
             };
             animationFrame(animation, canvas);
+        }
+        else
+        {
+            var frame = 1000 / 60;
+            setInterval(that.loop, frame);
         }
     },
     draw: function()
     {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        var time = new Date().getTime() * 0.002;   
-        var x = Math.sin( time ) * 96 + 128;   
-        var y = Math.cos( time * 0.9 ) * 96 + 128;   
-        var colors = ["red", "orange", "yellow", "green", "blue", "cyan", "purple"];   
-        ctx.fillStyle = 'rgb(245,245,245)';   
-        ctx.fillRect( 0, 0, 1440, 775);
-        ctx.drawImage(img, Math.floor(Math.random() * 1440), Math.floor(Math.random() * 775));
+        var time = new Date().getTime() * 0.002;
     },
     update: function(mainMethod)
     {
-        
+        mainClass.update();
     },
     loop: function()
     {
-        var that = this;
-        jQuery('#framecounter').html(that.fps);
-        that.draw();
+        this.update();
+        this.draw();
     },
     stage: function()
     {
         
+    },
+    fps: function()
+    {
+        return this._fps;
     }
 });
