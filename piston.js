@@ -1,3 +1,6 @@
+/*
+ * Main engine class, handles game class drawing and updates
+ */
 var PistonEngine = Class.create({
     
     canvas : null,
@@ -8,7 +11,11 @@ var PistonEngine = Class.create({
     animationFrame : null,
     _fps: 0,
     lastCall: null,
-    
+    input: null,
+    /*
+     * constructor
+     * @
+     */
     initialize: function(canvasID, w, h, _mainClass)
     {
         canvas = document.getElementById(canvasID);
@@ -18,6 +25,7 @@ var PistonEngine = Class.create({
         canvas.height = h;
         mainClass = new _mainClass;
         ctx = canvas.getContext('2d');
+        input = new Input();
         var that = this;
         // gameloop stuff
         var animationFrame = window.requestAnimationFrame ||
@@ -73,5 +81,16 @@ var PistonEngine = Class.create({
     fps: function()
     {
         return this._fps;
+    },
+    onKeyDown: function(key)
+    {
+        if(input.keyDown(key))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 });
