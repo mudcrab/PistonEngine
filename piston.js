@@ -12,6 +12,7 @@ var PistonEngine = Class.create({
     _fps: 0,
     lastCall: null,
     input: null,
+    stage: null,
     /*
      * constructor
      * @
@@ -26,6 +27,8 @@ var PistonEngine = Class.create({
         mainClass = new _mainClass;
         ctx = canvas.getContext('2d');
         input = new Input();
+        this.stage = new Stage();
+        
         var that = this;
         // gameloop stuff
         var animationFrame = window.requestAnimationFrame ||
@@ -58,6 +61,11 @@ var PistonEngine = Class.create({
             var frame = 1000 / 60;
             setInterval(that.loop, frame);
         }
+        that.setup();
+    },
+    setup: function()
+    {
+        mainClass.setup(this.stage);
     },
     draw: function()
     {
@@ -74,9 +82,9 @@ var PistonEngine = Class.create({
         this.update();
         this.draw();
     },
-    stage: function()
+    getStage: function()
     {
-        
+        return this.stage;
     },
     fps: function()
     {

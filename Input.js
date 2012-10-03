@@ -30,7 +30,6 @@ var Input = Class.create(PistonEngine, {
         this.codeToString[40] = "down" 
         this.codeToString[45] = "insert"
         this.codeToString[46] = "delete"
-        
         this.codeToString[91] = "leftwindowkey"
         this.codeToString[92] = "rightwindowkey"
         this.codeToString[93] = "selectkey"
@@ -39,7 +38,6 @@ var Input = Class.create(PistonEngine, {
         this.codeToString[109] = "subtract"
         this.codeToString[110] = "decimalpoint"
         this.codeToString[111] = "divide"
-        
         this.codeToString[144] = "numlock"
         this.codeToString[145] = "scrollock"
         this.codeToString[186] = "semicolon"
