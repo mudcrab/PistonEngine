@@ -3,6 +3,8 @@ var Stage = Class.create(PistonEngine, {
     tileWidth: null,
     tileHeight: null,
     entities: [],
+    totalEntities: 0,
+    drawnEntities: 0,
     initialize: function()
     {
         
@@ -10,6 +12,7 @@ var Stage = Class.create(PistonEngine, {
     addChild: function(entity)
     {
         var newLength = this.entities.push(entity);
+        this.totalEntities++;
         return newLength - 1; // eg element index
     },
     addChildAt: function(index, entity)
@@ -17,21 +20,30 @@ var Stage = Class.create(PistonEngine, {
         if(this.entities[index] == undefined)
         {
             entities[index] = entity;
+            this.totalEntities++;
         }
     },
     removeChild: function(entity)
     {
         this.entities.splice(this.searchForEntity(entity), 1);
+        this.totalEntities--;
     },
     removeChildAt: function(index)
     {
         this.entities.splice(index, 1);
+        this.totalEntities--;
     },
     render: function()
     {
+        var drawn = 0;
         for(var i = 0; i < this.entities.length; i++)
         {
             this.entities[i].render();
+            drawn++;
+        }
+        if(drawn < this.drawnEntities || drawn > this.drawnEntities)
+        {
+            this.drawnEntities = drawn;
         }
     },
     move: function(x, y)

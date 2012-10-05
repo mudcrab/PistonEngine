@@ -1,12 +1,11 @@
 var Input = Class.create(PistonEngine, {
     
-    pressedKey: [],
+    upKeys: [],
+    downKeys: [],
     codeToString: null,
     
     initialize: function()
     {
-        
-        
         this.codeToString = new Array();
         var letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
         for(var i = 0; letters[i]; i++)     { this.codeToString[65+i] = letters[i] }
@@ -53,10 +52,11 @@ var Input = Class.create(PistonEngine, {
         this.codeToString[222] = "singlequote"
         var that = this;
         window.addEventListener('keydown', function(event) {
-            that.pressedKey[that.codeToString[event.keyCode]] = true;
+            that.downKeys[that.codeToString[event.keyCode]] = true;
         });
         window.addEventListener('keyup', function(event) {
-            that.pressedKey[that.codeToString[event.keyCode]] = false;
+            that.downKeys[that.codeToString[event.keyCode]] = false;
+            that.upKeys[that.codeToString[event.keyCode]] = true;
         });
     },
     getMouseX: function()
@@ -71,13 +71,10 @@ var Input = Class.create(PistonEngine, {
     {
         
     },
-    keyPress: function()
-    {
-        
-    },
     keyDown: function(key)
     {
-        if(this.pressedKey[key])
+        
+        if(this.downKeys[key])
         {
             return true;
         }
@@ -86,9 +83,17 @@ var Input = Class.create(PistonEngine, {
             return false;
         }
     },
-    keyUp: function()
+    keyUp: function(key)
     {
-        
+        if(this.upKeys[key])
+        {
+            this.upKeys[key] = false;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     },
     leftMouseClick: function()
     {

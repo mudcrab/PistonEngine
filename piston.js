@@ -100,5 +100,16 @@ var PistonEngine = Class.create({
         {
             return false;
         }
+    },
+    onKeyUp: function(key)
+    {
+        if(input.keyUp(key))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 });

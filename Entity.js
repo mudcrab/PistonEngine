@@ -4,12 +4,12 @@ var Entity = Class.create({
     properties: null,
     sprite: null,
     instanceName: null,
-    initialize: function(x, y, name)
+    initialize: function(img, x, y, name)
     {
         this.instanceName = name;
         this.x = x;
         this.y = y;
-        this.sprite = new Sprite('assets/tiles/player.png', x, y, 32, 32);
+        this.sprite = new Sprite('assets/tiles/' + img, x, y, 32, 32);
         this.sprite.setPosition(x, y);
     },
     move: function()
