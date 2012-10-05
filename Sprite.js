@@ -3,8 +3,9 @@ var Sprite = Class.create(PistonEngine, {
     image : null,
     position: null,
     alpha : 1,
+    txt: null,
     
-    initialize: function(src, x, y, w, h)
+    initialize: function(src, x, y, w, h, txt)
     {
         this.image = new Image();
         this.image.src = src;
@@ -14,6 +15,7 @@ var Sprite = Class.create(PistonEngine, {
             x : x,
             y : y
         };
+        this.txt = txt;
     },
     setPosition: function(x, y)
     {
@@ -39,6 +41,7 @@ var Sprite = Class.create(PistonEngine, {
         y = typeof y !== 'undefined' ? y : this.position.y;
         ctx.globalAlpha = this.alpha;
         ctx.drawImage(this.image, x, y);
+        //ctx.fillText(this.txt, x+16, y+16);
     },
     moveTo: function(x, y)
     {

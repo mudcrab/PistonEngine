@@ -5,9 +5,28 @@ var Stage = Class.create(PistonEngine, {
     entities: [],
     totalEntities: 0,
     drawnEntities: 0,
+    maxHeight: 23,
+    maxElement: 1079,
+    currentStart: 0,
+    viewPort: [],
     initialize: function()
     {
         
+    },
+    setSize: function(w, h)
+    {
+        
+        for(var i = 0; i < w; i++)
+        {
+            for(var j = 0; j < h; j++)
+            {
+                var obj = {
+                    x: Math.floor(i * 32),
+                    y: Math.floor(j * 32)
+                }
+                this.viewPort.push(obj)
+            }
+        }
     },
     addChild: function(entity)
     {
@@ -35,17 +54,21 @@ var Stage = Class.create(PistonEngine, {
     },
     render: function()
     {
-        // todo limit by width / height
+        // todo limit by width / height 45 x 24                //this.entities[i].render();
         var drawn = 0;
-        for(var i = 0; i < this.entities.length; i++)
+        for(var i = this.currentStart; i < this.entities.length; i++)
         {
-            this.entities[i].render();
-            drawn++;
+            if(this.entities[i].x >= -32 && this.entities[i].x <= 1472 && this.entities[i].y >= -32 && this.entities[i].y <= 777)
+            {
+                this.entities[i].render();
+                drawn++;
+            }
         }
         if(drawn < this.drawnEntities || drawn > this.drawnEntities)
         {
             this.drawnEntities = drawn;
         }
+        //console.log(this.maxHeight);
     },
     move: function(x, y)
     {

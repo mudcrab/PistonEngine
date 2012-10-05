@@ -11,7 +11,7 @@ var Entity = Class.create({
         this.instanceName = name;
         this.x = x;
         this.y = y;
-        this.sprite = new Sprite('assets/tiles/' + img, x, y, 32, 32);
+        this.sprite = new Sprite('assets/tiles/' + img, x, y, 32, 32, name);
         this.sprite.setPosition(x, y);
         this.scrollable = scrollable;
     },
