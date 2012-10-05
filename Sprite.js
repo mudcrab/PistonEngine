@@ -1,43 +1,44 @@
 var Sprite = Class.create(PistonEngine, {
     
-    sprite : null,
+    image : null,
     position: null,
     alpha : 1,
     
     initialize: function(src, x, y, w, h)
     {
-        sprite = new Image();
-        sprite.src = src;
-        sprite.width = w;
-        sprite.height = h;
-        position = {
+        this.image = new Image();
+        this.image.src = src;
+        this.image.width = w;
+        this.image.height = h;
+        this.position = {
             x : x,
             y : y
         };
     },
     setPosition: function(x, y)
     {
-        position.x = x;
-        position.y = y;
+        this.position.x = x;
+        this.position.y = y;
     },
     setX: function(x)
     {
-        position.x = x;
+        this.position.x = x;
     },
     setY: function(y)
     {
-        positoin.y = y;
+        this.position.y = y;
     },
     getPosition: function()
     {
-        return position;
+        return this.position;
     },
     render: function(x, y)
     {
-        x = typeof x !== 'undefined' ? x : position.x;
-        y = typeof y !== 'undefined' ? y : position.y;
+        //console.log(x);
+        x = typeof x !== 'undefined' ? x : this.position.x;
+        y = typeof y !== 'undefined' ? y : this.position.y;
         ctx.globalAlpha = this.alpha;
-        ctx.drawImage(sprite, x, y);
+        ctx.drawImage(this.image, x, y);
     },
     moveTo: function(x, y)
     {

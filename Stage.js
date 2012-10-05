@@ -35,6 +35,7 @@ var Stage = Class.create(PistonEngine, {
     },
     render: function()
     {
+        // todo limit by width / height
         var drawn = 0;
         for(var i = 0; i < this.entities.length; i++)
         {
@@ -48,7 +49,13 @@ var Stage = Class.create(PistonEngine, {
     },
     move: function(x, y)
     {
-        
+        for(var i = 0; i < this.entities.length; i++)
+        {
+            if(this.entities[i].scrollable)
+            {
+                this.entities[i].move(x, y);
+            }
+        }
     },
     moveTo: function(x, y)
     {
