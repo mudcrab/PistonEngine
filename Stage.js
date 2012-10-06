@@ -8,25 +8,22 @@ var Stage = Class.create(PistonEngine, {
     maxHeight: 23,
     maxElement: 1079,
     currentStart: 0,
+    stageX: 0,
+    stageY: 0,
+    stageWidth: 0,
+    stageHeight: 0,
+    cameraWidth: 0,
+    cameraHeight: 0,
     viewPort: [],
     initialize: function()
     {
-        
+        this.cameraWidth = 1440;
+        this.cameraHeight = 745+32;
     },
-    setSize: function(w, h)
+    setSize: function(x, y)
     {
-        
-        for(var i = 0; i < w; i++)
-        {
-            for(var j = 0; j < h; j++)
-            {
-                var obj = {
-                    x: Math.floor(i * 32),
-                    y: Math.floor(j * 32)
-                }
-                this.viewPort.push(obj)
-            }
-        }
+        this.stageWidth = x;
+        this.stageHeight = y;
     },
     addChild: function(entity)
     {
@@ -72,13 +69,30 @@ var Stage = Class.create(PistonEngine, {
     },
     move: function(x, y)
     {
-        for(var i = 0; i < this.entities.length; i++)
+        var _x = 0;
+        var _y = 0;
+        var offsetX = this.stageWidth - this.cameraWidth;
+        var offsetY = this.stageHeight - this.cameraHeight;
+        var lastX = this.stageX;
+        var lastY = this.stageY;
+        this.stageX += x;
+        this.stageY += y;
+        if(this.stageX > -offsetX && this.stageX <= 0 && this.stageY > -offsetY && this.stageY <= 0)
         {
-            if(this.entities[i].scrollable)
+            for(var i = 0; i < this.entities.length; i++)
             {
-                this.entities[i].move(x, y);
+                if(this.entities[i].scrollable)
+                {
+                    this.entities[i].move(x, y);
+                }
             }
         }
+        else
+        {
+            this.stageX = lastX;
+            this.stageY = lastY;
+        }
+        //console.log(offsetX, offsetY, this.stageX, this.stageY);
     },
     moveTo: function(x, y)
     {
