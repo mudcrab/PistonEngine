@@ -15,15 +15,19 @@ var Stage = Class.create(PistonEngine, {
     cameraWidth: 0,
     cameraHeight: 0,
     viewPort: [],
-    initialize: function()
+    initialize: function(cWidth, cHeight)
     {
-        this.cameraWidth = 1440;
-        this.cameraHeight = 745+32;
+        this.cameraWidth = cWidth;
+        this.cameraHeight = cHeight;
     },
-    setSize: function(x, y)
+    setSize: function(w, h, tileW, tileH)
     {
-        this.stageWidth = x;
-        this.stageHeight = y;
+        this.stageWidth = w;
+        this.stageHeight = h;
+        this.tileWidth = tileW;
+        this.tileHeight = tileH;
+        this.cameraWidth += tileW;
+        this.cameraHeight += tileH;
     },
     addChild: function(entity)
     {
@@ -55,7 +59,7 @@ var Stage = Class.create(PistonEngine, {
         var drawn = 0;
         for(var i = this.currentStart; i < this.entities.length; i++)
         {
-            if(this.entities[i].x >= -32 && this.entities[i].x <= 1472 && this.entities[i].y >= -32 && this.entities[i].y <= 777)
+            if(this.entities[i].x >= -this.tileWidth && this.entities[i].x <= this.cameraWidth && this.entities[i].y >= -this.tileHeight && this.entities[i].y <= this.cameraHeight)
             {
                 this.entities[i].render();
                 drawn++;

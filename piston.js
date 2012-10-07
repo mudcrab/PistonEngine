@@ -27,7 +27,7 @@ var PistonEngine = Class.create({
         mainClass = new _mainClass;
         ctx = canvas.getContext('2d');
         input = new Input();
-        this.stage = new Stage();
+        this.stage = new Stage(w, h);
         
         var that = this;
         // gameloop stuff
