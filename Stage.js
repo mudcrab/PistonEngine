@@ -5,20 +5,21 @@ var Stage = Class.create(PistonEngine, {
     entities: [],
     totalEntities: 0,
     drawnEntities: 0,
-    maxHeight: 23,
-    maxElement: 1079,
-    currentStart: 0,
     stageX: 0,
     stageY: 0,
     stageWidth: 0,
     stageHeight: 0,
     cameraWidth: 0,
     cameraHeight: 0,
-    viewPort: [],
+    offsetX: 0,
+    offsetY: 0,
+    cameraEntity: null,
+    boundingBox: {},
     initialize: function(cWidth, cHeight)
     {
         this.cameraWidth = cWidth;
         this.cameraHeight = cHeight;
+        
     },
     setSize: function(w, h, tileW, tileH)
     {
@@ -55,9 +56,69 @@ var Stage = Class.create(PistonEngine, {
     },
     render: function()
     {
-        // todo limit by width / height 45 x 24                //this.entities[i].render();
+        if(this.cameraEntity.x >= this.boundingBox.right)
+        {
+            var off = this.cameraWidth - this.stageWidth;
+            if(this.stageX - 2 !== off && this.stageX - 3 !== off)
+            {
+                this.cameraEntity.x = this.boundingBox.right;
+                this.move(-this.cameraEntity.properties.xspeed, 0);
+            }
+            else
+            {
+                if(this.cameraEntity.x >= this.cameraWidth - this.tileWidth * 2)
+                {
+                    this.cameraEntity.x = this.cameraWidth - this.tileHeight * 2;
+                }
+            }
+        }
+        if(this.cameraEntity.x <= this.boundingBox.left)
+        {
+            if(this.stageX !== 0)
+            {
+                this.cameraEntity.x = this.boundingBox.left;
+                this.move(this.cameraEntity.properties.xspeed, 0);
+            }
+            else
+            {
+                if(this.cameraEntity.x <= 0)
+                {
+                    this.cameraEntity.x = 0;
+                }
+            }
+        }
+        if(this.cameraEntity.y <= this.boundingBox.top)
+        {
+            if(this.stageY !== 0)
+            {
+                this.cameraEntity.y = this.boundingBox.top;
+                this.move(0, this.cameraEntity.properties.yspeed);
+            }
+            else
+            {
+                if(this.cameraEntity.y <= 0)
+                {
+                    this.cameraEntity.y = 0;
+                }
+            }
+        }
+        if(this.cameraEntity.y >= this.boundingBox.bottom)
+        {
+            if(this.stageY - 3 !== this.cameraHeight - this.stageHeight)
+            {
+                this.cameraEntity.y = this.boundingBox.bottom;
+                this.move(0, -this.cameraEntity.properties.yspeed);
+            }
+            else
+            {
+                if(this.cameraEntity.y >= this.cameraHeight - this.tileHeight * 2)
+                {
+                    this.cameraEntity.y = this.cameraHeight - this.tileHeight * 2;
+                }
+            }
+        }
         var drawn = 0;
-        for(var i = this.currentStart; i < this.entities.length; i++)
+        for(var i = 0; i < this.entities.length; i++)
         {
             if(this.entities[i].x >= -this.tileWidth && this.entities[i].x <= this.cameraWidth && this.entities[i].y >= -this.tileHeight && this.entities[i].y <= this.cameraHeight)
             {
@@ -69,19 +130,20 @@ var Stage = Class.create(PistonEngine, {
         {
             this.drawnEntities = drawn;
         }
-        //console.log(this.maxHeight);
     },
     move: function(x, y)
     {
+        
         var _x = 0;
         var _y = 0;
-        var offsetX = this.stageWidth - this.cameraWidth;
-        var offsetY = this.stageHeight - this.cameraHeight;
+        this.offsetX = this.stageWidth - this.cameraWidth;
+        this.offsetY = this.stageHeight - this.cameraHeight;
         var lastX = this.stageX;
         var lastY = this.stageY;
         this.stageX += x;
         this.stageY += y;
-        if(this.stageX > -offsetX && this.stageX <= 0 && this.stageY > -offsetY && this.stageY <= 0)
+        
+        if(this.stageX > -this.offsetX && this.stageX <= 0 && this.stageY >= -this.offsetY && this.stageY <= 0)
         {
             for(var i = 0; i < this.entities.length; i++)
             {
@@ -96,7 +158,7 @@ var Stage = Class.create(PistonEngine, {
             this.stageX = lastX;
             this.stageY = lastY;
         }
-        //console.log(offsetX, offsetY, this.stageX, this.stageY);
+        //console.log('oX: ' + this.offsetX, 'oY: ' + this.offsetY, 'sX: ' +this.stageX, 'sY: ' + this.stageY, this.stageHeight, this.stageWidth, this.cameraHeight, this.cameraWidth);
     },
     moveTo: function(x, y)
     {
@@ -125,5 +187,9 @@ var Stage = Class.create(PistonEngine, {
             }
         }
         return index;
+    },
+    addCamera: function(entity)
+    {
+        this.cameraEntity = entity;
     }
 });

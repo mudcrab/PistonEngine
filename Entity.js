@@ -1,7 +1,7 @@
 var Entity = Class.create({
     x: null,
     y: null,
-    properties: null,
+    properties: {},
     sprite: null,
     instanceName: null,
     scrollable: false,
