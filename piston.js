@@ -13,6 +13,8 @@ var PistonEngine = Class.create({
     lastCall: null,
     input: null,
     stage: null,
+    delta: 0,
+    ui: null,
     /*
      * constructor
      * @
@@ -28,6 +30,7 @@ var PistonEngine = Class.create({
         ctx = canvas.getContext('2d');
         input = new Input();
         this.stage = new Stage(w, h);
+        this.ui = new UI('uiDisplay', w, h);
         
         var that = this;
         // gameloop stuff
@@ -49,10 +52,10 @@ var PistonEngine = Class.create({
                 that.loop();
                 setTimeout(function() {
                     animationFrame(animation, canvas);
-                }, 10)
-                var delta = (new Date().getTime() - that.lastCall) / 1000;
+                }, 7)
+                that.delta = (new Date().getTime() - that.lastCall) / 1000;
                 that.lastCall = new Date().getTime();
-                that._fps = Math.floor(1 / delta);
+                that._fps = Math.floor(1 / that.delta);
             };
             animationFrame(animation, canvas);
         }

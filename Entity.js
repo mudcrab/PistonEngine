@@ -5,6 +5,7 @@ var Entity = Class.create({
     sprite: null,
     instanceName: null,
     scrollable: false,
+    collidable: false,
     img: null,
     initialize: function(img, x, y, scrollable, name)
     {
