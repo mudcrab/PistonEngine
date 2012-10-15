@@ -1,4 +1,4 @@
-var UI = Class.create(PistonEngine, {
+var UI = Class.create({
 	uiCanvas: null,
 	uiCtx: null,
 	uiWidth: null,
@@ -7,6 +7,8 @@ var UI = Class.create(PistonEngine, {
 	uiInput: null,
 	uiLastCall: null,
 	uiDelta: null,
+	uiFPS: 0,
+	uiElements: [],
 	initialize: function(uiID, w, h)
 	{
 		this.uiCanvas = document.getElementById(uiID, w, h);
@@ -36,10 +38,10 @@ var UI = Class.create(PistonEngine, {
                 that.uiLoop();
                 setTimeout(function() {
                     animationFrame(animation, that.uiCanvas);
-                }, 7)
+                }, 1)
                 that.uiDelta = (new Date().getTime() - that.uiLastCall) / 1000;
                 that.uiLastCall = new Date().getTime();
-                //that._fps = Math.floor(1 / that.delta);
+                that.uiFPS = Math.floor(1 / that.uiDelta);
             };
             animationFrame(animation, that.uiCanvas);
         }
@@ -51,6 +53,26 @@ var UI = Class.create(PistonEngine, {
 	},
 	uiLoop: function()
 	{
-		
-	}
+		this.uiUpdate();
+		this.uiDraw();
+	},
+	uiDraw: function()
+	{
+		for(var i = 0; i < this.uiElements.length; i++)
+		{
+			this.uiElements[i].render();
+		}
+	},
+	uiUpdate: function()
+	{
+
+	},
+    addUIElement: function(uiEntity)
+    {
+        return this.uiElements.push(uiEntity);
+    },
+    fps: function()
+    {
+    	return this.uiFPS;
+    }
 });

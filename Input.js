@@ -3,6 +3,9 @@ var Input = Class.create(PistonEngine, {
     upKeys: [],
     downKeys: [],
     codeToString: null,
+    leftMousePressed: false,
+    leftMouseUp: false,
+    mouseXY : {},
     
     initialize: function()
     {
@@ -58,6 +61,17 @@ var Input = Class.create(PistonEngine, {
             that.downKeys[that.codeToString[event.keyCode]] = false;
             that.upKeys[that.codeToString[event.keyCode]] = true;
         });
+        window.addEventListener('mousedown', function(event) {
+            that.leftMousePressed = true;
+            that.mouseXY.x = event.offsetX;
+            that.mouseXY.y = event.offsetY;
+        });
+        window.addEventListener('mouseup', function(event) {
+            that.leftMousePressed = false;
+            that.mouseXY.x = event.offsetX;
+            that.mouseXY.y = event.offsetY;
+            that.leftMouseUp = true;
+        });
     },
     getMouseX: function()
     {
@@ -95,12 +109,32 @@ var Input = Class.create(PistonEngine, {
             return false;
         }
     },
+    leftMousePress: function()
+    {
+        var obj = {
+            pressed : this.leftMousePressed,
+            x : this.mouseXY.x,
+            y : this.mouseXY.y
+        }
+        return obj;
+    },
     leftMouseClick: function()
     {
-        
-    },
-    leftMouseDown: function()
-    {
-        
+        if(this.leftMouseUp)
+        {
+            var obj = {
+                clicked : true,
+                x : this.mouseXY.x,
+                y : this.mouseXY.y
+            };
+            this.mouseXY.x = null;
+            this.mouseXY.y = null;
+            this.leftMouseUp = false;
+            return obj;
+        }
+        else
+        {
+            return false;
+        }
     }
 });

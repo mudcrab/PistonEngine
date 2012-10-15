@@ -1,21 +1,20 @@
-var Entity = Class.create({
+var UIEntity = Class.create({
     x: null,
     y: null,
     properties: {},
     sprite: null,
     instanceName: null,
-    scrollable: false,
-    collidable: false,
     clickable: false,
+    collidable: false,
     img: null,
-    initialize: function(img, x, y, w, h, scrollable, name)
+    initialize: function(ctx, img, x, y, w, h, clickable, name)
     {
         this.instanceName = name;
         this.x = x;
         this.y = y;
-        this.sprite = new Sprite('assets/' + img, x, y, w, h, name);
+        this.sprite = new UISprite(ctx, 'assets/ui/' + img, x, y, w, h);
         this.sprite.setPosition(x, y);
-        this.scrollable = scrollable;
+        this.clickable = clickable;
     },
     move: function(x, y)
     {

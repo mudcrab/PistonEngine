@@ -3,6 +3,7 @@ var Stage = Class.create(PistonEngine, {
     tileWidth: null,
     tileHeight: null,
     entities: [],
+    uiEntities: [],
     totalEntities: 0,
     drawnEntities: 0,
     stageX: 0,
@@ -176,6 +177,10 @@ var Stage = Class.create(PistonEngine, {
     {
         return this.entities[index];
     },
+    getEntityAtPos: function(x, y)
+    {
+        
+    },
     searchForEntity: function(instanceName)
     {
         var index = null;
@@ -191,5 +196,9 @@ var Stage = Class.create(PistonEngine, {
     addCamera: function(entity)
     {
         this.cameraEntity = entity;
+    },
+    addUIChild: function(entity)
+    {
+
     }
 });

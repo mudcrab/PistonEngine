@@ -14,7 +14,7 @@ var PistonEngine = Class.create({
     input: null,
     stage: null,
     delta: 0,
-    ui: null,
+    uiElements: [],
     /*
      * constructor
      * @
@@ -30,7 +30,6 @@ var PistonEngine = Class.create({
         ctx = canvas.getContext('2d');
         input = new Input();
         this.stage = new Stage(w, h);
-        this.ui = new UI('uiDisplay', w, h);
         
         var that = this;
         // gameloop stuff
@@ -109,6 +108,30 @@ var PistonEngine = Class.create({
         if(input.keyUp(key))
         {
             return true;
+        }
+        else
+        {
+            return false;
+        }
+    },
+    mousePress: function()
+    {
+        var mouse = input.leftMousePress();
+        if(mouse.pressed)
+        {
+            return mouse;
+        }
+        else
+        {
+            return false;
+        }
+    },
+    mouseClick: function()
+    {
+        var mouse = input.leftMouseClick();
+        if(mouse.clicked)
+        {
+            return mouse;
         }
         else
         {
