@@ -3,7 +3,7 @@ var Stage = Class.create(PistonEngine, {
     tileWidth: null,
     tileHeight: null,
     entities: [],
-    uiEntities: [],
+    clickableEntities: [],
     totalEntities: 0,
     drawnEntities: 0,
     stageX: 0,
@@ -35,6 +35,10 @@ var Stage = Class.create(PistonEngine, {
     {
         var newLength = this.entities.push(entity);
         this.totalEntities++;
+        if(entity.clickable)
+        {
+            this.clickableEntities.push(entity);
+        }
         return newLength - 1; // eg element index
     },
     addChildAt: function(index, entity)
@@ -43,6 +47,10 @@ var Stage = Class.create(PistonEngine, {
         {
             entities[index] = entity;
             this.totalEntities++;
+            if(entity.clickable)
+            {
+                this.clickableEntities.push(entity);
+            }
         }
     },
     removeChild: function(entity)
@@ -179,7 +187,7 @@ var Stage = Class.create(PistonEngine, {
     },
     getEntityAtPos: function(x, y)
     {
-        
+
     },
     searchForEntity: function(instanceName)
     {
@@ -197,8 +205,23 @@ var Stage = Class.create(PistonEngine, {
     {
         this.cameraEntity = entity;
     },
-    addUIChild: function(entity)
+    getClickableEntities: function()
     {
-
+        return this.clickableEntities;
+    },
+    isClicked: function(x, y)
+    {
+        var entities = this.clickableEntities;
+        for(var i = 0; i < entities.length; i++)
+        {
+            var minX = entities[i].x;
+            var maxX = entities[i].x + entities[i].width;
+            var minY = entities[i].y;
+            var maxY = entities[i].y + entities[i].height;
+            if(x >= minX && x <= maxX && y >= minY && y <= maxY)
+            {
+                return entities[i];
+            }
+        }
     }
 });
