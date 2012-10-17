@@ -63,13 +63,13 @@ var Input = Class.create(PistonEngine, {
         });
         window.addEventListener('mousedown', function(event) {
             that.leftMousePressed = true;
-            that.mouseXY.x = event.offsetX;
-            that.mouseXY.y = event.offsetY;
+            that.mouseXY.x = event.clientX;
+            that.mouseXY.y = event.clientY;
         });
         window.addEventListener('mouseup', function(event) {
             that.leftMousePressed = false;
-            that.mouseXY.x = event.offsetX;
-            that.mouseXY.y = event.offsetY;
+            that.mouseXY.x = event.clientX;
+            that.mouseXY.y = event.clientY;
             that.leftMouseUp = true;
         });
     },
