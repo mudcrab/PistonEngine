@@ -39,8 +39,8 @@ var Sprite = Class.create(PistonEngine, {
         //console.log(x);
         x = typeof x !== 'undefined' ? x : this.position.x;
         y = typeof y !== 'undefined' ? y : this.position.y;
-        ctx.globalAlpha = this.alpha;
-        ctx.drawImage(this.image, x, y);
+        tmpContext.globalAlpha = this.alpha;
+        tmpContext.drawImage(this.image, x, y);
         //ctx.fillText(this.txt, x+16, y+16);
     },
     moveTo: function(x, y)

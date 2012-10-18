@@ -15,12 +15,18 @@ var PistonEngine = Class.create({
     stage: null,
     delta: 0,
     uiElements: [],
+    tmpCanvas: null,
+    tmpContext: null,
     /*
      * constructor
      * @
      */
     initialize: function(canvasID, w, h, _mainClass)
     {
+        tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = w;
+        tmpCanvas.height = h;
+        tmpContext = tmpCanvas.getContext('2d');
         canvas = document.getElementById(canvasID);
         canvasWidth = w;
         canvasHeight = h;
@@ -74,6 +80,7 @@ var PistonEngine = Class.create({
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         var time = new Date().getTime() * 0.002;
         mainClass.draw();
+        ctx.drawImage(tmpCanvas, 0, 0);
     },
     update: function(mainMethod)
     {
