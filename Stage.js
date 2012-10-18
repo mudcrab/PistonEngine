@@ -158,6 +158,17 @@ var Stage = Class.create(PistonEngine, {
             {
                 if(this.entities[i].scrollable)
                 {
+                    var originalX = this.entities[i].x;
+                    var originalY = this.entities[i].y;
+                    if(originalX != (this.entities[i].x + x) || originalY != (this.entities[i].y + y))
+                    {
+                        this.redrawObjects.push({
+                            x: originalX,
+                            y: originalY,
+                            width: this.entities[i].width,
+                            height: this.entities[i].height
+                        });
+                    }
                     this.entities[i].move(x, y);
                 }
             }

@@ -17,6 +17,7 @@ var PistonEngine = Class.create({
     uiElements: [],
     tmpCanvas: null,
     tmpContext: null,
+    redrawObjects: [],
     /*
      * constructor
      * @
@@ -57,7 +58,7 @@ var PistonEngine = Class.create({
                 that.loop();
                 setTimeout(function() {
                     animationFrame(animation, canvas);
-                }, 7)
+                }, 8)
                 that.delta = (new Date().getTime() - that.lastCall) / 1000;
                 that.lastCall = new Date().getTime();
                 that._fps = Math.floor(1 / that.delta);
@@ -77,7 +78,15 @@ var PistonEngine = Class.create({
     },
     draw: function()
     {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        //ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        var i, dirtyRectangleCount = this.redrawObjects.length;
+        for(i = 0; i < dirtyRectangleCount; i++)
+        {
+            var rect = this.redrawObjects[i];
+            tmpContext.clearRect(rect.x, rect.y, rect.width, rect.height);
+        }
+        this.redrawObjects = [];
+
         var time = new Date().getTime() * 0.002;
         mainClass.draw();
         ctx.drawImage(tmpCanvas, 0, 0);
