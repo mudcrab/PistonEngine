@@ -1,4 +1,4 @@
-var Input = Class.create(PistonEngine, {
+var PistonInput = Class.create({
     
     upKeys: [],
     downKeys: [],
