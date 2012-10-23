@@ -150,6 +150,20 @@ var PistonStage = Class.create(PistonEngine, {
                 }
             }
     },
+    /* taken from http://stackoverflow.com/a/8017599 */
+    isColliding: function(entity1, entity2)
+    {
+        var bottom1, bottom2, left1, left2, right1, right2, top1, top2, x1 = entity1.x, y1 = entity1.y, size1 = 16, x2 = entity2.x, y2 = entity2.y, size2 = 16;
+        left1 = x1 - size1;
+        right1 = x1 + size1;
+        top1 = y1 - size1;
+        bottom1 = y1 + size1;
+        left2 = x2 - size2;
+        right2 = x2 + size2;
+        top2 = y2 - size2;
+        bottom2 = y2 + size2;
+        return !(left1 > right2 || left2 > right1 || top1 > bottom2 || top2 > bottom1);
+    },
     prepareRender: function()
     {
     	if(this.cameraEntity.x >= this.boundingBox.right)
