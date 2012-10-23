@@ -10,6 +10,7 @@ var PistonRenderer = Class.create({
 	initialize: function(rendererType, options, cb)
 	{
 		this.rType = rendererType;
+		var that = this;
 		switch(rendererType)
 		{
 			case 'c2d':
@@ -20,7 +21,7 @@ var PistonRenderer = Class.create({
 		        canvas.height = options.height;
 		        ctx = canvas.getContext('2d');
 		        this.stage = new PistonStage();
-		        var that = this;
+		        //var that = this;
 		        // gameloop stuff
 		        var animationFrame = window.requestAnimationFrame ||
 		            window.webkitRequestAnimationFrame ||
@@ -48,11 +49,23 @@ var PistonRenderer = Class.create({
 		            animationFrame(animation, canvas);
 		        }
 			break;
+			case 'webgl':
+				canvas = document.getElementById(options.canvasElement);
+		        canvasWidth = options.width;
+		        canvasHeight = options.height;
+		        canvas.width = options.width;
+		        canvas.height = options.height;
+		        WebGL2D.enable(canvas);
+		        ctx = canvas.getContext('webgl-2d');
+				console.log(ctx);
+				setInterval(function() { cb(); }, 1000 / 60);
+			break;
 		}
 	},
 	clear: function()
 	{
-		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+		if(this.rType != 'webgl')
+			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	},
 	renderEntity: function(entity)
 	{
@@ -60,7 +73,9 @@ var PistonRenderer = Class.create({
 		{
 			case 'c2d':
 				ctx.drawImage(entity.image, entity.x, entity.y);
-				
+			break;
+			case 'webgl':
+				ctx.drawImage(entity.image, entity.x, entity.y);
 			break;
 		}
 	},
@@ -71,6 +86,9 @@ var PistonRenderer = Class.create({
 			case 'c2d':
 				ctx.clearRect(entity.lastx, entity.lasty, entity.image.width, entity.image.height);
 				ctx.drawImage(entity.image, entity.x, entity.y);
+			break;
+			case 'webgl':
+				
 			break;
 		}
 	},

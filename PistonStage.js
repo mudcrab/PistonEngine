@@ -123,14 +123,12 @@ var PistonStage = Class.create(PistonEngine, {
         var lastY = this.stageY;
         this.stageX += x;
         this.stageY += y;
-        
-        if(this.stageX > -this.offsetX && this.stageX <= 0 && this.stageY >= -this.offsetY && this.stageY <= 0)
+        if(this.stageX > this.offsetX && this.stageX <= 0 && this.stageY >= this.offsetY && this.stageY <= 0)
         {
             for(var i = 0; i < this.entities.length; i++)
             {
                 if(this.entities[i].scrollable)
                 {
-                    console.log('sc');
                     this.entities[i].move(x, y);
                 }
             }
@@ -151,5 +149,85 @@ var PistonStage = Class.create(PistonEngine, {
                     this.entities[i].move(x, y);
                 }
             }
+    },
+    prepareRender: function()
+    {
+    	if(this.cameraEntity.x >= this.boundingBox.right)
+        {
+            var off = this.cameraWidth - this.stageWidth;
+            if(this.stageX - 2 !== off && this.stageX - 3 !== off)
+            {
+                this.cameraEntity.x = this.boundingBox.right;
+                this.move(-this.cameraEntity.properties.xspeed, 0);
+            }
+            else
+            {
+                if(this.cameraEntity.x >= this.cameraWidth - this.tileWidth * 2)
+                {
+                    this.cameraEntity.x = this.cameraWidth - this.tileHeight * 2;
+                }
+            }
+        }
+        if(this.cameraEntity.x <= this.boundingBox.left)
+        {
+            if(this.stageX !== 0)
+            {
+                this.cameraEntity.x = this.boundingBox.left;
+                this.move(this.cameraEntity.properties.xspeed, 0);
+            }
+            else
+            {
+                if(this.cameraEntity.x <= 0)
+                {
+                    this.cameraEntity.x = 0;
+                }
+            }
+        }
+        if(this.cameraEntity.y <= this.boundingBox.top)
+        {
+            if(this.stageY !== 0)
+            {
+                this.cameraEntity.y = this.boundingBox.top;
+                this.move(0, this.cameraEntity.properties.yspeed);
+            }
+            else
+            {
+                if(this.cameraEntity.y <= 0)
+                {
+                    this.cameraEntity.y = 0;
+                }
+            }
+        }
+        if(this.cameraEntity.y >= this.boundingBox.bottom)
+        {
+            if(Math.abs(this.stageY - 1) !== this.cameraHeight - this.stageHeight)
+            {
+                this.cameraEntity.y = this.boundingBox.bottom;
+                this.move(0, -this.cameraEntity.properties.yspeed);
+            }
+            else
+            {
+                if(this.cameraEntity.y >= this.cameraHeight - this.tileHeight * 2)
+                {
+                    this.cameraEntity.y = this.cameraHeight - this.tileHeight * 2;
+                }
+            }
+        }
+        var drawn = 0;
+        var toDraw = [];
+        for(var i = 0; i < this.entities.length; i++)
+        {
+            if(this.entities[i].x >= -this.tileWidth && this.entities[i].x <= this.cameraWidth && this.entities[i].y >= -this.tileHeight && this.entities[i].y <= this.cameraHeight)
+            {
+                //this.entities[i].render();
+                toDraw.push(this.entities[i]);
+                drawn++;
+            }
+        }
+        if(drawn < this.drawnEntities || drawn > this.drawnEntities)
+        {
+            this.drawnEntities = drawn;
+        }
+        return toDraw;
     }
 });

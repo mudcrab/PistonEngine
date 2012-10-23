@@ -11,6 +11,7 @@ var PistonEntity = Class.create({
 	clickable: true,
 	visible: true,
 	image: null,
+	properties: {},
 
 	initialize: function(x, y, w, h, source, name)
 	{
