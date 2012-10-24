@@ -37,5 +37,12 @@ var PistonEntity = Class.create({
 		this.lasty = this.y;
 		this.x += x;
 		this.y += y;
+	},
+	moveTo: function(x, y)
+	{
+		this.lastx = this.x;
+		this.lasty = this.y;
+		this.x = x;
+		this.y = y;
 	}
 });
