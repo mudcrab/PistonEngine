@@ -41,7 +41,7 @@ var PistonRenderer = Class.create({
 		                cb();
 		                setTimeout(function() {
 		                    animationFrame(animation, canvas);
-		                }, 8)
+		                }, options.fps)
 		                that.delta = (new Date().getTime() - that.lastCall) / 1000;
 		                that.lastCall = new Date().getTime();
 		                that._fps = Math.floor(1 / that.delta);
@@ -60,6 +60,34 @@ var PistonRenderer = Class.create({
 				console.log(ctx);
 				setInterval(function() { cb(); }, 1000 / 60);
 			break;
+			case 'fallback':
+				canvas = document.getElementById(options.canvasElement);
+		        canvasWidth = options.width;
+		        canvasHeight = options.height;
+		        canvas.width = options.width;
+		        canvas.height = options.height;
+		        ctx = canvas.getContext('2d');
+		        this.stage = new PistonStage();
+				if(that.lastCall == null)
+		        {
+		            that.lastCall = new Date().getTime();
+		            that._fps = 0;
+		        }
+				var fallbackLoop = function()
+				{
+					cb();
+					setTimeout(function() {
+						fallbackLoop();
+					}, options.fps);
+					that.delta = (new Date().getTime() - that.lastCall) / 1000;
+		                that.lastCall = new Date().getTime();
+		                that._fps = Math.floor(1 / that.delta);
+				};
+				setTimeout(function() {
+					fallbackLoop();	
+				}, 10);
+				//
+			break;
 		}
 	},
 	clear: function()
@@ -75,6 +103,9 @@ var PistonRenderer = Class.create({
 				ctx.drawImage(entity.image, entity.x, entity.y);
 			break;
 			case 'webgl':
+				ctx.drawImage(entity.image, entity.x, entity.y);
+			break;
+			case 'fallback':
 				ctx.drawImage(entity.image, entity.x, entity.y);
 			break;
 		}

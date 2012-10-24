@@ -8,14 +8,16 @@ var PistonEngine = Class.create({
     renderer: null,
     testimg: null,
 
-	initialize: function(_canvasElement, _width, _height, _mC)
+	initialize: function(_canvasElement, _width, _height, _mC, rendererType, desiredFPS)
 	{
+		rendererType == undefined ? rendererType = 'c2d' : rendererType;
+		desiredFPS == undefined ? desiredFPS = 60 : desiredFPS;
 		mainClass = new _mC;
 		this.stage = new PistonStage(_width, _height);
 		var that = this;
 		that.testimg = new Image();
        	that.testimg.src = 'assets/tiles/player.png';
-		that.renderer = new PistonRenderer('c2d', { canvasElement: _canvasElement, width: _width, height: _height }, function() { that.loop(); });
+		that.renderer = new PistonRenderer(rendererType, { canvasElement: _canvasElement, width: _width, height: _height, fps: desiredFPS }, function() { that.loop(); });
         that.setup();
 	},
 	loop: function()
