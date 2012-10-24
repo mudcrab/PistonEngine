@@ -12,15 +12,17 @@ var PistonEntity = Class.create({
 	visible: true,
 	image: null,
 	properties: {},
+	source: null,
 
-	initialize: function(x, y, w, h, source, name)
+	initialize: function(x, y, w, h, _source, name)
 	{
 		this.x = x;
 		this.y = y;
 		this.lastx = x;
 		this.lasty = y;
+		this.source = _source;
 		this.image = new Image();
-		this.image.src = 'assets/tiles/' + source + '.png';
+		this.image.src = 'assets/tiles/' + this.source + '.png';
 		this.image.width = w;
 		this.image.height = h;
 		this.width = w;
@@ -44,5 +46,12 @@ var PistonEntity = Class.create({
 		this.lasty = this.y;
 		this.x = x;
 		this.y = y;
+	},
+	changeSource: function(src)
+	{
+		this.image = new Image();
+		this.image.src = 'assets/tiles/' + src + '.png';
+		this.image.width = this.width;
+		this.image.height = this.height;
 	}
 });
