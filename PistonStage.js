@@ -62,6 +62,15 @@ var PistonStage = Class.create(PistonEngine, {
         this.entities.splice(index, 1);
         this.totalEntities--;
     },
+    clearStage: function()
+    {
+        for(var i = 0; i < this.entities.length; i++)
+        {
+            this.entities.pop();
+        }
+        this.entities = [];
+        console.log(this.entities);
+    },
     getEntities: function()
     {
         return this.entities;
