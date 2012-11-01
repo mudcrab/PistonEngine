@@ -13,6 +13,7 @@ var PistonEntity = Class.create({
 	image: null,
 	properties: {},
 	source: null,
+	angle: 0,
 
 	initialize: function(x, y, w, h, _source, name)
 	{
@@ -53,5 +54,9 @@ var PistonEntity = Class.create({
 		this.image.src = 'assets/tiles/' + src + '.png';
 		this.image.width = this.width;
 		this.image.height = this.height;
+	},
+	rotate: function(degrees)
+	{
+
 	}
 });

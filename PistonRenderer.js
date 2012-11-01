@@ -106,6 +106,7 @@ var PistonRenderer = Class.create({
 				ctx.drawImage(entity.image, entity.x, entity.y);
 			break;
 			case 'fallback':
+				
 				ctx.drawImage(entity.image, entity.x, entity.y);
 			break;
 		}
@@ -126,5 +127,13 @@ var PistonRenderer = Class.create({
 	fps: function()
 	{
 		return this._fps;
+	},
+	toRadians: function(degrees)
+	{
+		return degrees * Math.PI / 180;
+	},
+	toDegrees: function(radians)
+	{
+		return radians * 180 / Math.PI;
 	}
 });
