@@ -162,7 +162,7 @@ var PistonStage = Class.create(PistonEngine, {
     /* taken from http://stackoverflow.com/a/8017599 */
     isColliding: function(entity1, entity2)
     {
-        var bottom1, bottom2, left1, left2, right1, right2, top1, top2, x1 = entity1.x, y1 = entity1.y, size1 = 15, x2 = entity2.x, y2 = entity2.y, size2 = 15;
+        var bottom1, bottom2, left1, left2, right1, right2, top1, top2, x1 = entity1.x, y1 = entity1.y, size1 = Math.floor(entity1.width / 2), x2 = entity2.x, y2 = entity2.y, size2 = Math.floor(entity2.width / 2);
         left1 = x1 - size1;
         right1 = x1 + size1;
         top1 = y1 - size1;

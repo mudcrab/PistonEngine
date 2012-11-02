@@ -48,12 +48,17 @@ var PistonEntity = Class.create({
 		this.x = x;
 		this.y = y;
 	},
-	changeSource: function(src)
+	/*
+		Change the source file of the Entity, you can also specify new width and height of the image
+	*/
+	changeSource: function(src, w, h)
 	{
+		w = undefined ? w = this.width : w = w;
+		h = undefined ? h = this.width : h = h;
 		this.image = new Image();
 		this.image.src = 'assets/tiles/' + src + '.png';
-		this.image.width = this.width;
-		this.image.height = this.height;
+		this.image.width = w;
+		this.image.height = h;
 	},
 	rotate: function(degrees)
 	{
