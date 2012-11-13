@@ -32,7 +32,7 @@ var PistonEngine = Class.create({
 	draw: function()
 	{
 		this.renderer.clear();
-		var entities = this.stage.prepareRender();
+		var entities = this.stage.renderableObjects();
 		for(var i = 0; i < entities.length; i++)
 		{
 			if(entities[i].visible)

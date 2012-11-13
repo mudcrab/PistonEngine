@@ -21,7 +21,7 @@ var PistonStage = Class.create(PistonEngine, {
         this.cameraWidth = cWidth;
         this.cameraHeight = cHeight;
     },
-    setSize: function(w, h, tileW, tileH)
+    setSize: function(w, h, tileW, tileH, viewPortW, viewPortH)
     {
         this.stageWidth = w;
         this.stageHeight = h;
@@ -29,6 +29,12 @@ var PistonStage = Class.create(PistonEngine, {
         this.tileHeight = tileH;
         this.cameraWidth += tileW;
         this.cameraHeight += tileH;
+        this.boundingBox = {
+            top: viewPortH * 0.1,
+            bottom: viewPortH * 0.9,
+            left: viewPortW * 0.1,
+            right: viewPortW * 0.9
+        };
     },
     addChild: function(entity)
     {
@@ -124,7 +130,7 @@ var PistonStage = Class.create(PistonEngine, {
     },
     move: function(x, y)
     {
-        var _x = 0;
+        /*var _x = 0;
         var _y = 0;
         this.offsetX = this.stageWidth - this.cameraWidth;
         this.offsetY = this.stageHeight - this.cameraHeight;
@@ -146,18 +152,19 @@ var PistonStage = Class.create(PistonEngine, {
         {
             this.stageX = lastX;
             this.stageY = lastY;
-        }
+        }*/
         //console.log('oX: ' + this.offsetX, 'oY: ' + this.offsetY, 'sX: ' +this.stageX, 'sY: ' + this.stageY, this.stageHeight, this.stageWidth, this.cameraHeight, this.cameraWidth);
     },
     moveStage: function(x, y)
     {
-    	for(var i = 0; i < this.entities.length; i++)
+    	/*for(var i = 0; i < this.entities.length; i++)
             {
                 if(this.entities[i].scrollable)
                 {
                     this.entities[i].move(x, y);
                 }
             }
+            */
     },
     /* taken from http://stackoverflow.com/a/8017599 */
     isColliding: function(entity1, entity2)
@@ -173,9 +180,9 @@ var PistonStage = Class.create(PistonEngine, {
         bottom2 = y2 + size2;
         return !(left1 > right2 || left2 > right1 || top1 > bottom2 || top2 > bottom1);
     },
-    prepareRender: function()
+    renderableObjects: function()
     {
-    	if(this.cameraEntity.x >= this.boundingBox.right)
+    	/*if(this.cameraEntity.x >= this.boundingBox.right)
         {
             var off = this.cameraWidth - this.stageWidth;
             if(this.stageX - 2 !== off && this.stageX - 3 !== off)
@@ -235,7 +242,7 @@ var PistonStage = Class.create(PistonEngine, {
                     this.cameraEntity.y = this.cameraHeight - this.tileHeight * 2;
                 }
             }
-        }
+        }*/
         var drawn = 0;
         var toDraw = [];
         for(var i = 0; i < this.entities.length; i++)
