@@ -3,8 +3,31 @@
 */
 var PistonEngine = Class.create({
 	RENDERER: null,
-	initialize: function(canvasElement) 
+	mainClass: null,
+	fps: null,
+	initialize: function(canvasElement, _mC) 
 	{
-		this.RENDERER = new PistonRenderer(canvasElement, 'canvas', { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() });
+		this.mainClass = new _mC;
+		var that = this;
+		that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+		that.setup();
+	},
+	setup: function()
+	{
+
+	},
+	loop: function()
+	{
+		this.update();
+		this.draw();
+	},
+	update: function()
+	{
+		this.fps = this.RENDERER.fps();
+		this.mainClass.update();
+	},
+	draw: function()
+	{
+
 	}
 });
