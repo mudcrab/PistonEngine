@@ -1,4 +1,4 @@
-var PistonMap = Class.create({
+var PistonEntity = Class.create({
 	initialize: function() 
 	{
 		
