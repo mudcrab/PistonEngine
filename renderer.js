@@ -69,6 +69,11 @@ var PistonRenderer = Class.create({
 			case 'canvas':
 				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
 				this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
+				if(entity.rectVisible)
+				{
+					this.CONTEXT.strokeStyle = "red";
+					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
+				}
 			break;
 		}
 	},

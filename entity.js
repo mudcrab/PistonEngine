@@ -16,7 +16,10 @@ var PistonEntity = Class.create({
 	source: null,
 	image: null,
 	name: null,
-	properties: null,
+	rectVisible: false, // todo recto bounds
+	rectSize: {w: 0, h: 0},
+	rectPos: {x: 0, y: 0},
+	properties: {},
 	initialize: function(pos_, size_, image_, name_) 
 	{
 		this.pos = pos_;
@@ -27,6 +30,8 @@ var PistonEntity = Class.create({
 		this.image.src = this.ASSETS_PATH + image_ + '.png'; // todo change this to asset loader later
 		this.image.width = this.size.w;
 		this.image.height = this.size.h;
+		this.rectSize = { w: this.size.w, h: this.size.h };
+		this.rectPos = pos_;
 	},
 	/* 
 		move entity by x, y pixels 
@@ -37,6 +42,8 @@ var PistonEntity = Class.create({
 		this.pos.lasty = this.pos.y;
 		this.pos.x += x;
 		this.pos.y += y;
+		this.rectPos.x += x;
+		this.rectPos.y += y;
 	},
 	/*
 		move entity to x, y
