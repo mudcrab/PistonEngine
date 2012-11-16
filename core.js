@@ -14,7 +14,7 @@ var PistonEngine = Class.create({
 	},
 	setup: function()
 	{
-
+		this.mainClass.setup();
 	},
 	loop: function()
 	{
@@ -28,6 +28,10 @@ var PistonEngine = Class.create({
 	},
 	draw: function()
 	{
-
+		var entities = this.mainClass.stage.entities;
+		for(var i = 0; i < entities.length; i++)
+		{
+			this.RENDERER.render(entities[i]);
+		}
 	}
 });

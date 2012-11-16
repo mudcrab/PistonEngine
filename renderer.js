@@ -8,15 +8,18 @@ var PistonRenderer = Class.create({
 	lastCall: null,
 	delta: null,
 	tick: null,
-	initialize: function(canvas, type, fps, size, cb) 
+	initialize: function(canvas_, type, fps, size, cb) 
 	{
-		this.CANVAS = $(canvas);
+		this.CANVAS = document.getElementById(canvas_);
 		this.DISPLAY_SIZE = size;	
 		this.FPS = fps;
+		this.RENDERER_TYPE = type;
 		var that = this;
 		switch(type)
 		{
 			case 'canvas':
+				this.CANVAS.width = this.DISPLAY_SIZE.width;
+				this.CANVAS.height = this.DISPLAY_SIZE.height;
 				this.CONTEXT = this.CANVAS.getContext('2d');
 				var that = this;
 				var frame = window.requestAnimationFrame ||
@@ -64,8 +67,8 @@ var PistonRenderer = Class.create({
 		switch(this.RENDERER_TYPE)
 		{
 			case 'canvas':
-				this.CONTEXT.clearRect(entity.lastx, entity.lasty, entity.image.width, entity.image.height);
-				this.CONTEXT.drawImage(entity.image, entity.x, entity.y);
+				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
+				this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
 			break;
 		}
 	},
