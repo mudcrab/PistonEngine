@@ -3,9 +3,25 @@ var PistonStage = Class.create({
 	totalEntities: 0,
     drawnEntities: 0,
     clickableEntities: [],
-	initialize: function() 
+    cameraEntity: null,
+    stageSize: {
+        width: 0,
+        height: 0,
+    },
+    stagePos: {
+        x: 0,
+        y: 0
+    },
+	initialize: function(pos_, size_) 
 	{
-		
+		this.stagePos = pos_;
+        this.stageSize = size_;
+        this.cameraEntity = new PistonEntity({x: 0, y: 0}, {w: 0, h: 0}, 'player');
+        this.cameraEntity.rectSize = {w: 500, h: 300};
+        this.cameraEntity.rectPos = {x: Math.floor($('gameDisplay').getWidth() / 2 - 250), y: Math.floor($('gameDisplay').getHeight() / 2 - 150)};
+        this.cameraEntity.rectVisible = true;
+        this.imgVisible = false;
+        this.addChild(1000, this.cameraEntity)
 	},
 	addChild: function(entity)
     {
@@ -28,6 +44,10 @@ var PistonStage = Class.create({
                 this.clickableEntities.push(entity);
             }
         }
+    },
+    changeChildPos: function(entity, newIndex)
+    {
+        
     },
     removeChild: function(entity)
     {
@@ -75,5 +95,16 @@ var PistonStage = Class.create({
             }
         }
         return index;
+    },
+    addCamera: function(entity)
+    {
+
+    },
+    move: function(x, y)
+    {
+        for(var i = 0; i < this.entities.length; i++)
+        {
+            this.entities[i].move(x, y);        
+        }
     }
 });
