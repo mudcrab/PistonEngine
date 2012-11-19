@@ -16,12 +16,6 @@ var PistonStage = Class.create({
 	{
 		this.stagePos = pos_;
         this.stageSize = size_;
-        this.cameraEntity = new PistonEntity({x: 0, y: 0}, {w: 0, h: 0}, 'player');
-        this.cameraEntity.rectSize = {w: 500, h: 300};
-        this.cameraEntity.rectPos = {x: Math.floor($('gameDisplay').getWidth() / 2 - 250), y: Math.floor($('gameDisplay').getHeight() / 2 - 150)};
-        this.cameraEntity.rectVisible = true;
-        this.imgVisible = false;
-        this.addChild(1000, this.cameraEntity)
 	},
 	addChild: function(entity)
     {
@@ -45,9 +39,16 @@ var PistonStage = Class.create({
             }
         }
     },
-    changeChildPos: function(entity, newIndex)
+    /*
+        changes camera's position in the array, so it's always on top
+    */
+    changeCamerLevel: function(entity, newIndex)
     {
         
+    },
+    arrayMove: function(from, to)
+    {
+
     },
     removeChild: function(entity)
     {
