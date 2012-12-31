@@ -12,6 +12,13 @@ var PistonEngine = Class.create({
 		that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
 		that.setup();
 	},
+	info: function()
+	{
+		var info_ = {
+			renderer: this.RENDERER.RENDERER_TYPE
+		};
+		return info_;
+	},
 	setup: function()
 	{
 		this.mainClass.setup();
