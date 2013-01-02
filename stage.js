@@ -7,6 +7,8 @@ var PistonStage = Class.create({
     stageSize: {
         width: 0,
         height: 0,
+        pxW: 0,
+        pxH: 0
     },
     stagePos: {
         x: 0,
@@ -19,6 +21,10 @@ var PistonStage = Class.create({
 	},
 	addChild: function(entity)
     {
+        if(entity.isCamera == true)
+        {
+            this.cameraEntity = entity;
+        }
         var newLength = this.entities.push(entity);
         this.totalEntities++;
         if(entity.clickable)
@@ -29,6 +35,10 @@ var PistonStage = Class.create({
     },
     addChildAt: function(index, entity)
     {
+        if(entity.isCamera == true)
+        {
+            this.cameraEntity = entity;
+        }
         if(this.entities[index] == undefined)
         {
             entities[index] = entity;
@@ -99,13 +109,34 @@ var PistonStage = Class.create({
     },
     addCamera: function(entity)
     {
-
+        this.cameraEntity = entity;
     },
     move: function(x, y)
     {
         for(var i = 0; i < this.entities.length; i++)
         {
             this.entities[i].move(x, y);        
+        }
+    },
+    update: function()
+    {
+        var cameraPos = this.cameraEntity.getEdgePos();
+        //console.log(cameraPos)
+        if(cameraPos.t <= 0)
+        {
+            this.cameraEntity.moveTo(cameraPos.x, 0);
+        }
+        if(cameraPos.b >= this.stageSize.pxH)
+        {
+            
+        }
+        if(cameraPos.l <= 0)
+        {
+            
+        }
+        if(cameraPos.r >= this.stageSize.pxW)
+        {
+
         }
     }
 });

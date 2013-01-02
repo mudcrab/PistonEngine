@@ -4,6 +4,7 @@
 */
 var PistonCamera = Class.create(PistonEntity, {
 	cameraEntity: null,
+	isCamera : true,
 	initialize: function()
 	{
 		this.rectSize = {w: 500, h: 300};
@@ -18,6 +19,15 @@ var PistonCamera = Class.create(PistonEntity, {
 	getPos: function()
 	{
 		return this.rectPos;
+	},
+	getEdgePos: function()
+	{
+		return {
+			l: this.rectPos.x,
+			r: this.rectPos.x + this.rectSize.w,
+			t: this.rectPos.y,
+			b: this.rectPos.y + this.rectSize.h
+		};
 	},
 	setPos: function(x_, y_)
 	{
