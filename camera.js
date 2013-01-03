@@ -34,6 +34,18 @@ var PistonCamera = Class.create(PistonEntity, {
 		this.rectPos = {x: x_, y: y_};
 		this.moveTo(x_, y_);
 	},
+	setPosX: function(x_)
+	{
+		this.rectPos.x = x_;
+		this.pos.lastx = this.pos.x;
+		this.pos.x = x_;
+	},
+	setPosY: function(y_)
+	{
+		this.rectPos.y = y_;
+		this.pos.lasty = this.pos.y;
+		this.pos.y = y_;
+	},
 	moveStage: function()
 	{
 
@@ -41,23 +53,35 @@ var PistonCamera = Class.create(PistonEntity, {
 	update: function(stagePos, stageSize)
 	{
 		//this.testent.moveTo(this.camera.getPos().x + this.camera.rectSize.w / 2 - 16, this.camera.getPos().y + this.camera.rectSize.h / 2 - 16);
-		this.setPos(Math.floor(this.cameraEntity.pos.x - this.rectSize.w / 2 + 16), Math.floor(this.cameraEntity.pos.y - this.rectSize.h / 2 + 16)); // TODO: tile size
+		//this.setPos(Math.floor(this.cameraEntity.pos.x - this.rectSize.w / 2 + 16), Math.floor(this.cameraEntity.pos.y - this.rectSize.h / 2 + 16)); // TODO: tile size
+		
+		var cameraPos = this.getEdgePos();
+		var entityPos = this.cameraEntity.pos;
 
-		/*if(cameraPos.t <= 0)
+		if(entityPos.x <= cameraPos.l)
+		{
+			this.setPosX(entityPos.x);
+		}
+		if(entityPos.x + this.cameraEntity.size.w >= cameraPos.r)
+		{
+			this.setPosX(entityPos.x - this.rectSize.w + this.cameraEntity.size.w)
+		}
+		if(entityPos.y <= cameraPos.t)
+		{
+			this.setPosY(entityPos.y);
+		}
+		if(entityPos.y + this.cameraEntity.size.h >= cameraPos.b)
+		{
+			this.setPosY(entityPos.y - this.rectSize.h + this.cameraEntity.size.h);
+		}
+		/*if(cameraPos.t <= 0 || cameraPos.b >= stageSize.pxH)
         {
-            
-        }
-        if(cameraPos.b >= this.stageSize.pxH)
-        {
-            
-        }
-        if(cameraPos.l <= 0)
-        {
-            
-        }
-        if(cameraPos.r >= this.stageSize.pxW)
-        {
-
+            this.setPos(this.pos.x, this.pos.lasty);
         }*/
+        /*if(cameraPos.l <= 0 || cameraPos.r >= stageSize.pxW)
+        {
+            this.setPos(this.pos.lastx, this.pos.y);
+        }*/
+        
 	}
 });
