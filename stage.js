@@ -120,11 +120,12 @@ var PistonStage = Class.create({
     },
     update: function()
     {
-        var cameraPos = this.cameraEntity.getEdgePos();
+        this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
+        //var cameraPos = this.cameraEntity.getEdgePos();
         //console.log(cameraPos)
-        if(cameraPos.t <= 0)
+        /*if(cameraPos.t <= 0)
         {
-            this.cameraEntity.moveTo(cameraPos.x, 0);
+            
         }
         if(cameraPos.b >= this.stageSize.pxH)
         {
@@ -137,6 +138,6 @@ var PistonStage = Class.create({
         if(cameraPos.r >= this.stageSize.pxW)
         {
 
-        }
+        }*/
     }
 });
