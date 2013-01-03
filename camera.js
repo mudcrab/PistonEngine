@@ -5,6 +5,8 @@
 var PistonCamera = Class.create(PistonEntity, {
 	cameraEntity: null,
 	isCamera : true,
+	maxX: false,
+	maxY: false,
 	initialize: function()
 	{
 		this.rectSize = {w: 500, h: 300};
@@ -58,30 +60,24 @@ var PistonCamera = Class.create(PistonEntity, {
 		var cameraPos = this.getEdgePos();
 		var entityPos = this.cameraEntity.pos;
 
-		if(entityPos.x <= cameraPos.l)
+		if(entityPos.x <= cameraPos.l && cameraPos.l >= 0 && entityPos.x >= 0)
 		{
 			this.setPosX(entityPos.x);
 		}
-		if(entityPos.x + this.cameraEntity.size.w >= cameraPos.r)
+
+		if(entityPos.x + this.cameraEntity.size.w >= cameraPos.r && cameraPos.r <= stageSize.pxW)
 		{
-			this.setPosX(entityPos.x - this.rectSize.w + this.cameraEntity.size.w)
+			this.setPosX(entityPos.x - this.rectSize.w + this.cameraEntity.size.w);
 		}
-		if(entityPos.y <= cameraPos.t)
+
+		if(entityPos.y <= cameraPos.t && cameraPos.t >= 0 && entityPos.y >= 0)
 		{
 			this.setPosY(entityPos.y);
 		}
-		if(entityPos.y + this.cameraEntity.size.h >= cameraPos.b)
+
+		if(entityPos.y + this.cameraEntity.size.h >= cameraPos.b && cameraPos.b <= stageSize.pxH)
 		{
 			this.setPosY(entityPos.y - this.rectSize.h + this.cameraEntity.size.h);
 		}
-		/*if(cameraPos.t <= 0 || cameraPos.b >= stageSize.pxH)
-        {
-            this.setPos(this.pos.x, this.pos.lasty);
-        }*/
-        /*if(cameraPos.l <= 0 || cameraPos.r >= stageSize.pxW)
-        {
-            this.setPos(this.pos.lastx, this.pos.y);
-        }*/
-        
 	}
 });
