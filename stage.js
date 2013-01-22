@@ -1,7 +1,8 @@
 var PistonStage = Class.create({
 	entities: [],
 	totalEntities: 0,
-    drawnEntities: [],
+    drawableEntities: [],
+    drawnEntities: 0,
     clickableEntities: [],
     cameraEntity: null,
     stageSize: {
@@ -56,6 +57,14 @@ var PistonStage = Class.create({
         if(entity.clickable)
         {
             this.clickableEntities.push(entity);
+        }
+        if(entity.pos.x >= this.stagePos.x && entity.pos.x <= this.stagePos.x + this.stageSize.screenWidth)
+        {
+            //this.drawableEntities.push(entity);
+        }
+        else
+        {
+           
         }
         return newLength - 1; // eg element index
     },
@@ -137,8 +146,23 @@ var PistonStage = Class.create({
     {
         this.cameraEntity = entity;
     },
+    setup: function()
+    {
+        this.drawableEntities = [];
+        for(var i = 0; i < this.entities.length; i++)
+        {
+            // why did i do this like this before?
+            if(this.entities[i].pos.x >= -32 && this.entities[i].pos.x <= this.stageSize.screenWidth && this.entities[i].pos.y >= -32 && this.entities[i].pos.y <= this.stageSize.screenHeight)
+            {
+                this.drawableEntities.push(this.entities[i]);
+                
+            }
+        }
+    },
     move: function(x, y)
     {
+        this.drawableEntities = [];
+        var drawn = 0;
         var lastX = this.stagePos.x;
         var lastY = this.stagePos.y;
         this.updatePos(x * 2, y * 2); // TODO fix this, i have no idea why it has to be done like this
@@ -147,6 +171,12 @@ var PistonStage = Class.create({
             for(var i = 0; i < this.entities.length; i++)
             {
                 this.entities[i].move(x, y);
+                // why did i do this like this before?
+                if(this.entities[i].pos.x >= -32 && this.entities[i].pos.x <= this.stageSize.screenWidth && this.entities[i].pos.y >= -32 && this.entities[i].pos.y <= this.stageSize.screenHeight)
+                {
+                    this.drawableEntities.push(this.entities[i]);
+                    drawn++;
+                }
             }
         }
         else
@@ -154,6 +184,7 @@ var PistonStage = Class.create({
             this.stagePos.x = lastX;
             this.stagePos.y = lastY;
         }
+        this.drawnEntities = drawn;
     },
     updatePos: function(x, y)
     {

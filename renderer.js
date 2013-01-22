@@ -108,7 +108,7 @@ var PistonRenderer = Class.create({
 		{
 			case 'canvas':
 				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
-				if(entity.imgVisible)
+				if(entity.visible)
 				{
 					this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
 				}
