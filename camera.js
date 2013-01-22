@@ -54,9 +54,6 @@ var PistonCamera = Class.create(PistonEntity, {
 	},
 	update: function(stagePos, stageSize)
 	{
-		//this.testent.moveTo(this.camera.getPos().x + this.camera.rectSize.w / 2 - 16, this.camera.getPos().y + this.camera.rectSize.h / 2 - 16);
-		//this.setPos(Math.floor(this.cameraEntity.pos.x - this.rectSize.w / 2 + 16), Math.floor(this.cameraEntity.pos.y - this.rectSize.h / 2 + 16)); // TODO: tile size
-		
 		var cameraPos = this.getEdgePos();
 		var entityPos = this.cameraEntity.pos;
 

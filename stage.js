@@ -1,29 +1,55 @@
 var PistonStage = Class.create({
 	entities: [],
 	totalEntities: 0,
-    drawnEntities: 0,
+    drawnEntities: [],
     clickableEntities: [],
     cameraEntity: null,
     stageSize: {
-        width: 0,
-        height: 0,
-        pxW: 0,
-        pxH: 0
+        stageWidth: 0,
+        stageHeight: 0,
+        screenWidth: 0,
+        screenHeight: 0,
+        pxWidth: 0,
+        pxHeight: 0
     },
     stagePos: {
         x: 0,
-        y: 0
+        y: 0,
+        maxScrollX: 0,
+        maxScrollY: 0
+    },
+    currentPos: {
+        l: 0,
+        r: 0,
+        t: 0,
+        b: 0
     },
 	initialize: function(pos_, size_) 
 	{
-		this.stagePos = pos_;
         this.stageSize = size_;
+        this.stagePos.x = pos_.x;
+        this.stagePos.y = pos_.y;
+        console.log(Util.objToString(size_));
+        this.stagePos.maxScrollX = Math.abs(this.stageSize.pxWidth -this.stageSize.screenWidth);
+        this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
+        console.log(Util.objToString(this.stagePos));
+        /*this.currentPos: {
+            l: pos_.x,
+            r: (size_.totalW + Math.abs(pos_.x)),
+            t: pos_.x,
+            b: size_.totalH + Math.abs(pos_.y)
+        };*/
+        /*this.currentPos.l = pos_.x;
+        this.currentPos.r = size_.totalW + Math.abs(pos_.x);
+        this.currentPos.t = pos_.y;
+        this.currentPos.b = size_.totalH + Math.abs(pos_.y);*/
 	},
 	addChild: function(entity)
     {
         if(entity.isCamera == true)
         {
             this.cameraEntity = entity;
+
         }
         var newLength = this.entities.push(entity);
         this.totalEntities++;
@@ -113,31 +139,40 @@ var PistonStage = Class.create({
     },
     move: function(x, y)
     {
-        for(var i = 0; i < this.entities.length; i++)
+        var lastX = this.stagePos.x;
+        var lastY = this.stagePos.y;
+        this.updatePos(x * 2, y * 2); // TODO fix this, i have no idea why it has to be done like this
+        if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
-            this.entities[i].move(x, y);        
+            for(var i = 0; i < this.entities.length; i++)
+            {
+                this.entities[i].move(x, y);
+            }
         }
+        else
+        {
+            this.stagePos.x = lastX;
+            this.stagePos.y = lastY;
+        }
+    },
+    updatePos: function(x, y)
+    {
+        this.stagePos.x += x;
+        this.stagePos.y += y;
     },
     update: function()
     {
-        this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
-        //var cameraPos = this.cameraEntity.getEdgePos();
-        //console.log(cameraPos)
-        /*if(cameraPos.t <= 0)
-        {
-            
-        }
-        if(cameraPos.b >= this.stageSize.pxH)
-        {
-            
-        }
-        if(cameraPos.l <= 0)
-        {
-            
-        }
-        if(cameraPos.r >= this.stageSize.pxW)
+        if(this.cameraEntity !== null)
+            this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
+        
+    },
+    setDrawable: function()
+    {
+        var drawn = 0;
+        var toDraw = [];
+        for(var i = 0; i < this.entities.length; i++)
         {
 
-        }*/
+        }
     }
 });
