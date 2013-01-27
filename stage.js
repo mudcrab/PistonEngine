@@ -165,7 +165,7 @@ var PistonStage = Class.create({
         var drawn = 0;
         var lastX = this.stagePos.x;
         var lastY = this.stagePos.y;
-        this.updatePos(x * 2, y * 2); // TODO fix this, i have no idea why it has to be done like this
+        this.updatePos(x, y); // TODO fix this, i have no idea why it has to be done like this
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
             for(var i = 0; i < this.entities.length; i++)
