@@ -148,8 +148,8 @@ var PistonStage = Class.create({
     },
     setup: function()
     {
-        this.drawableEntities = [];
-        for(var i = 0; i < this.entities.length; i++)
+        this.drawableEntities = this.entities;
+        /*for(var i = 0; i < this.entities.length; i++)
         {
             // why did i do this like this before?
             if(this.entities[i].pos.x >= -32 && this.entities[i].pos.x <= this.stageSize.screenWidth && this.entities[i].pos.y >= -32 && this.entities[i].pos.y <= this.stageSize.screenHeight)
@@ -157,7 +157,7 @@ var PistonStage = Class.create({
                 this.drawableEntities.push(this.entities[i]);
                 
             }
-        }
+        }*/
     },
     move: function(x, y)
     {
@@ -165,7 +165,8 @@ var PistonStage = Class.create({
         var drawn = 0;
         var lastX = this.stagePos.x;
         var lastY = this.stagePos.y;
-        this.updatePos(x, y); // TODO fix this, i have no idea why it has to be done like this
+        this.stagePos.x += x;
+        this.stagePos.y += y;
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
             for(var i = 0; i < this.entities.length; i++)
@@ -188,8 +189,7 @@ var PistonStage = Class.create({
     },
     updatePos: function(x, y)
     {
-        this.stagePos.x += x;
-        this.stagePos.y += y;
+        
     },
     update: function()
     {
