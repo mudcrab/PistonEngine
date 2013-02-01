@@ -32,21 +32,9 @@ var PistonStage = Class.create({
         this.stageSize = size_;
         this.stagePos.x = pos_.x;
         this.stagePos.y = pos_.y;
-        console.log(Util.objToString(size_));
         this.stagePos.maxScrollX = Math.abs(this.stageSize.pxWidth -this.stageSize.screenWidth);
         this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
-        console.log(Util.objToString(this.stagePos));
         toDraw = new Array();
-        /*this.currentPos: {
-            l: pos_.x,
-            r: (size_.totalW + Math.abs(pos_.x)),
-            t: pos_.x,
-            b: size_.totalH + Math.abs(pos_.y)
-        };*/
-        /*this.currentPos.l = pos_.x;
-        this.currentPos.r = size_.totalW + Math.abs(pos_.x);
-        this.currentPos.t = pos_.y;
-        this.currentPos.b = size_.totalH + Math.abs(pos_.y);*/
 	},
 	addChild: function(entity, layerID)
     {
@@ -78,16 +66,17 @@ var PistonStage = Class.create({
     addLayer: function(id) {
         this.layers.push(new PistonLayer(id, this.stageSize));
     },
-    /*
-        changes camera's position in the array, so it's always on top
-    */
-    changeCamerLevel: function(entity, newIndex)
-    {
-        
-    },
-    arrayMove: function(from, to)
-    {
+    deleteLayer: function(id) {
 
+    },
+    shiftLayer: function(id, to) {
+
+    },
+    hideLayer: function(id) {
+        this.layers[id].hideLayer();
+    },
+    showLayer: function(id) {
+        this.layers[id].showLayer();
     },
     removeChild: function(entity)
     {
@@ -201,7 +190,10 @@ var PistonStage = Class.create({
     {
         if(this.cameraEntity !== null)
             this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
-        
+        for(var layer = 0; layer < this.layers.length; layer++)
+        {
+            this.layers[layer].update();
+        }
     },
     setDrawable: function()
     {

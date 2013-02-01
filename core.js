@@ -35,11 +35,6 @@ var PistonEngine = Class.create({
 	},
 	draw: function()
 	{
-		/*var entities = this.mainClass.stage.drawableEntities;
-		for(var i = 0; i < entities.length; i++)
-		{
-			this.RENDERER.render(entities[i]);
-		}*/
 		var layers = this.mainClass.stage.toDraw;
 		for(var layer = 0; layer < layers.length; layer++)
 		{

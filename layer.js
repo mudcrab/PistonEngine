@@ -5,6 +5,7 @@ var PistonLayer = Class.create({
 	layerSize: {},
 	totalLayerEntities: 0,
 	totalDrawnEntities: 0,
+	hidden: false,
 
 	initialize: function(id, size) {
 		this.layerID = id;
@@ -14,11 +15,14 @@ var PistonLayer = Class.create({
 	},
 	initDrawables: function() {
 		this.drawnLayerEntities = [];
-		for(var i = 0; i < this.layerEntities.length; i++)
+		if(!this.hidden)
 		{
-			if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+			for(var i = 0; i < this.layerEntities.length; i++)
 			{
-				this.drawnLayerEntities.push(this.layerEntities[i]);
+				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+				{
+					this.drawnLayerEntities.push(this.layerEntities[i]);
+				}
 			}
 		}
 	},
@@ -41,9 +45,30 @@ var PistonLayer = Class.create({
 		for(var i = 0; i < this.layerEntities.length; i++)
 		{
 			this.layerEntities[i].move(x, y);
-			if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+			if(!this.hidden)
 			{
-				this.drawnLayerEntities.push(this.layerEntities[i]);
+				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+				{
+					this.drawnLayerEntities.push(this.layerEntities[i]);
+				}
+			}
+		}
+	},
+	hideLayer: function() {
+		this.hidden = true;
+		for(var i = 0; i < this.drawnLayerEntities.length; i++)
+		{
+			this.drawnLayerEntities[i].visible = false;
+		}
+		this.drawnLayerEntities = [];
+	},
+	showLayer: function() {
+		this.hidden = false;
+		for(var i = 0; i < this.layerEntities.length; i++)
+		{
+			if(!this.layerEntities[i].visible)
+			{
+				this.layerEntities[i].visible = true;
 			}
 		}
 	},
@@ -52,5 +77,18 @@ var PistonLayer = Class.create({
 	},
 	clearAllEntities: function() {
 
+	},
+	update: function() {
+		this.drawnLayerEntities = [];
+		if(!this.hidden)
+		{
+			for(var i = 0; i < this.layerEntities.length; i++)
+			{
+				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+				{
+					this.drawnLayerEntities.push(this.layerEntities[i]);
+				}
+			}
+		}
 	}
 });
