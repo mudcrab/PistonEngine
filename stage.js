@@ -1,9 +1,11 @@
 var PistonStage = Class.create({
+    layers: [],
 	entities: [],
 	totalEntities: 0,
     drawableEntities: [],
     drawnEntities: 0,
     clickableEntities: [],
+    toDraw: null,
     cameraEntity: null,
     stageSize: {
         stageWidth: 0,
@@ -34,6 +36,7 @@ var PistonStage = Class.create({
         this.stagePos.maxScrollX = Math.abs(this.stageSize.pxWidth -this.stageSize.screenWidth);
         this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
         console.log(Util.objToString(this.stagePos));
+        toDraw = new Array();
         /*this.currentPos: {
             l: pos_.x,
             r: (size_.totalW + Math.abs(pos_.x)),
@@ -45,26 +48,14 @@ var PistonStage = Class.create({
         this.currentPos.t = pos_.y;
         this.currentPos.b = size_.totalH + Math.abs(pos_.y);*/
 	},
-	addChild: function(entity)
+	addChild: function(entity, layerID)
     {
-        if(entity.isCamera == true)
-        {
-            this.cameraEntity = entity;
-
-        }
+        this.layers[layerID].addChild(entity);
         var newLength = this.entities.push(entity);
         this.totalEntities++;
         if(entity.clickable)
         {
             this.clickableEntities.push(entity);
-        }
-        if(entity.pos.x >= this.stagePos.x && entity.pos.x <= this.stagePos.x + this.stageSize.screenWidth)
-        {
-            //this.drawableEntities.push(entity);
-        }
-        else
-        {
-           
         }
         return newLength - 1; // eg element index
     },
@@ -83,6 +74,9 @@ var PistonStage = Class.create({
                 this.clickableEntities.push(entity);
             }
         }
+    },
+    addLayer: function(id) {
+        this.layers.push(new PistonLayer(id, this.stageSize));
     },
     /*
         changes camera's position in the array, so it's always on top
@@ -148,7 +142,13 @@ var PistonStage = Class.create({
     },
     setup: function()
     {
-        this.drawableEntities = this.entities;
+        //this.drawableEntities = this.entities;
+        this.toDraw = [];
+        for(var layer = 0; layer < this.layers.length; layer++)
+        {
+            this.layers[layer].initDrawables();
+            this.toDraw.push(this.layers[layer].drawnLayerEntities);
+        }
         /*for(var i = 0; i < this.entities.length; i++)
         {
             // why did i do this like this before?
@@ -169,7 +169,7 @@ var PistonStage = Class.create({
         this.stagePos.y += y;
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
-            for(var i = 0; i < this.entities.length; i++)
+            /*for(var i = 0; i < this.entities.length; i++)
             {
                 this.entities[i].move(x, y);
                 // why did i do this like this before?
@@ -178,6 +178,12 @@ var PistonStage = Class.create({
                     this.drawableEntities.push(this.entities[i]);
                     drawn++;
                 }
+            }*/
+            this.toDraw = [];
+            for(var layer = 0; layer < this.layers.length; layer++)
+            {
+                this.layers[layer].move(x, y);
+                this.toDraw.push(this.layers[layer].drawnLayerEntities);
             }
         }
         else
