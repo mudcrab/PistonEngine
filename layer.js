@@ -29,6 +29,10 @@ var PistonLayer = Class.create({
 	addChild: function(entity) {
 		var len = this.layerEntities.push(entity);
 		this.totalLayerEntities++;
+		if(entity.pos.x >= -32 && entity.pos.x <= this.layerSize.screenWidth && entity.pos.y >= -32 && entity.pos.y <= this.layerSize.screenHeight)
+		{
+			this.drawnLayerEntities.push(entity);
+		}
 		return len--;
 	},
 	addChildAt: function(entity) {
@@ -79,6 +83,7 @@ var PistonLayer = Class.create({
 
 	},
 	update: function() {
+
 		this.drawnLayerEntities = [];
 		if(!this.hidden)
 		{
@@ -89,6 +94,7 @@ var PistonLayer = Class.create({
 					this.drawnLayerEntities.push(this.layerEntities[i]);
 				}
 			}
+
 		}
 	}
 });

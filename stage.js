@@ -131,22 +131,12 @@ var PistonStage = Class.create({
     },
     setup: function()
     {
-        //this.drawableEntities = this.entities;
         this.toDraw = [];
         for(var layer = 0; layer < this.layers.length; layer++)
         {
             this.layers[layer].initDrawables();
             this.toDraw.push(this.layers[layer].drawnLayerEntities);
         }
-        /*for(var i = 0; i < this.entities.length; i++)
-        {
-            // why did i do this like this before?
-            if(this.entities[i].pos.x >= -32 && this.entities[i].pos.x <= this.stageSize.screenWidth && this.entities[i].pos.y >= -32 && this.entities[i].pos.y <= this.stageSize.screenHeight)
-            {
-                this.drawableEntities.push(this.entities[i]);
-                
-            }
-        }*/
     },
     move: function(x, y)
     {
@@ -158,16 +148,6 @@ var PistonStage = Class.create({
         this.stagePos.y += y;
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
-            /*for(var i = 0; i < this.entities.length; i++)
-            {
-                this.entities[i].move(x, y);
-                // why did i do this like this before?
-                if(this.entities[i].pos.x >= -32 && this.entities[i].pos.x <= this.stageSize.screenWidth && this.entities[i].pos.y >= -32 && this.entities[i].pos.y <= this.stageSize.screenHeight)
-                {
-                    this.drawableEntities.push(this.entities[i]);
-                    drawn++;
-                }
-            }*/
             this.toDraw = [];
             for(var layer = 0; layer < this.layers.length; layer++)
             {

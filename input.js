@@ -3,8 +3,13 @@ var PistonInput = Class.create({
     upKeys: [],
     downKeys: [],
     codeToString: null,
-    leftMousePressed: false,
-    leftMouseUp: false,
+    leftMouseHandler: {
+        click: false,
+        press: false,
+        up: false,
+        down: false,
+        element: "none"
+    },
     mouseXY : {},
     
     initialize: function()
@@ -61,16 +66,51 @@ var PistonInput = Class.create({
             that.downKeys[that.codeToString[event.keyCode]] = false;
             that.upKeys[that.codeToString[event.keyCode]] = true;
         });
-        window.addEventListener('mousedown', function(event) {
+        /*window.addEventListener('mousedown', function(event) {
             that.leftMousePressed = true;
             that.mouseXY.x = event.clientX;
             that.mouseXY.y = event.clientY;
-        });
-        window.addEventListener('mouseup', function(event) {
+        });*/
+        /*window.addEventListener('mouseup', function(event) {
+            event.stopPropagation();
             that.leftMousePressed = false;
             that.mouseXY.x = event.clientX;
             that.mouseXY.y = event.clientY;
             that.leftMouseUp = true;
+        });*/
+        //jQuery('document').
+    },
+    addMouseHandler: function(eventType, element)
+    {
+        var that = this;
+        $(element).observe(eventType, function(event) {
+            event.stop();
+            switch(eventType)
+            {
+                case 'click':
+                    that.leftMouseHandler = {
+                        click: true,
+                        press: false,
+                        up: false,
+                        down: false,
+                        element: element
+                    };
+                break;
+                case 'mouseup':
+                    that.leftMouseHandler = {
+                        click: false,
+                        press: false,
+                        up: true,
+                        down: false,
+                        element: element
+                    };
+                break;
+            }
+            that.mouseXY = {
+                x: event.clientX,
+                y: event.clientY
+            };
+            that.clickedElement = element;
         });
     },
     getMouseX: function()
@@ -109,7 +149,51 @@ var PistonInput = Class.create({
             return false;
         }
     },
-    leftMousePress: function()
+    leftMousePress: function(element)
+    {
+        if(this.leftMouseHandler.element == element && this.leftMouseHandler.press == true)
+        {
+            this.leftMouseHandler.press = false;
+            this.leftMouseHandler.element = "none";
+            return true;
+        }
+        else
+            return false;
+    },
+    leftMouseClick: function(element)
+    {
+        if(this.leftMouseHandler.element == element && this.leftMouseHandler.click == true)
+        {
+            this.leftMouseHandler.click = false;
+            this.leftMouseHandler.element = "none";
+            return true;
+        }
+        else
+            return false;
+    },
+    leftMouseDown: function(element)
+    {
+        if(this.leftMouseHandler.element == element && this.leftMouseHandler.down == true)
+        {
+            this.leftMouseHandler.down = false;
+            this.leftMouseHandler.element = "none";
+            return true;
+        }
+        else
+            return false;
+    },
+    leftMouseUp: function(element)
+    {
+        if(this.leftMouseHandler.element == element && this.leftMouseHandler.up == true)
+        {
+            this.leftMouseHandler.up = false;
+            this.leftMouseHandler.element = "none";
+            return true;
+        }
+        else
+            return false;
+    }
+    /*leftMousePress: function()
     {
         var obj = {
             pressed : this.leftMousePressed,
@@ -136,5 +220,5 @@ var PistonInput = Class.create({
         {
             return false;
         }
-    }
+    }*/
 });
