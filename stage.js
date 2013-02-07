@@ -183,5 +183,20 @@ var PistonStage = Class.create({
         {
 
         }
+    },
+    getClickedEntity: function(x, y)
+    {
+        var entities = this.clickableEntities;
+        for(var entity = 0; entity < entities.length; entity++)
+        {
+            var minX = entities[entity].pos.x;
+            var maxX = entities[entity].pos.x + entities[entity].size.w;
+            var minY = entities[entity].pos.y;
+            var maxY = entities[entity].pos.y + entities[entity].size.h;
+            if(x >= minX && x <= maxX && y >= minY && y <= maxY)
+            {
+                return entities[entity];
+            }
+        }
     }
 });

@@ -39,12 +39,13 @@ var PistonEntity = Class.create({
 	*/
 	move: function(x, y)
 	{
-		this.pos.lastx = this.pos.x;
-		this.pos.lasty = this.pos.y;
-		this.pos.x += x;
-		this.pos.y += y;
-		//this.rectPos.x += x;
-		//this.rectPos.y += y;
+		if(this.scrollable)
+		{
+			this.pos.lastx = this.pos.x;
+			this.pos.lasty = this.pos.y;
+			this.pos.x += x;
+			this.pos.y += y;
+		}
 	},
 	/*
 		move entity to x, y
