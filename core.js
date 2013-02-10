@@ -5,12 +5,20 @@ var PistonEngine = Class.create({
 	RENDERER: null,
 	mainClass: null,
 	fps: null,
+	loader: null,
 	initialize: function(canvasElement, _mC) 
 	{
 		this.mainClass = new _mC;
 		var that = this;
-		that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
-		that.setup();
+		that.loader = new PistonAssetLoader();
+		var assets = that.mainClass.toLoad;
+		for(var i = 0; i < assets.length; i++)
+		{
+			console.log(that.loader.addAsset(assets[i]));
+		}
+		//that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+
+		//that.setup();
 	},
 	info: function()
 	{
