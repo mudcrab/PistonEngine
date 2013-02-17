@@ -40,7 +40,9 @@ var PistonAssetLoader = Class.create({
 			if(this.assets[asset].type == 'image')
 			{
 				var img = new Image();
+				img.src = self.assets[asset].path + self.assets[asset].file + '.png';
 				img.onload = self.setLoaded();
+				self.assets[asset].image = img;
 			}
 		}
 

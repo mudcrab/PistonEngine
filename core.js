@@ -16,9 +16,9 @@ var PistonEngine = Class.create({
 		{
 			console.log(that.loader.addAsset(assets[i]));
 		}
-		//that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+		that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
 
-		//that.setup();
+		that.setup();
 	},
 	info: function()
 	{
@@ -29,6 +29,10 @@ var PistonEngine = Class.create({
 	},
 	setup: function()
 	{
+		
+		this.loader.preload();
+		this.mainClass.loader = this.loader;
+
 		this.mainClass.setup();
 	},
 	loop: function()
