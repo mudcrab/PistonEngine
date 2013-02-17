@@ -14,7 +14,7 @@ var PistonEngine = Class.create({
 		var assets = that.mainClass.toLoad;
 		for(var i = 0; i < assets.length; i++)
 		{
-			console.log(that.loader.addAsset(assets[i]));
+			that.loader.addAsset(assets[i]);
 		}
 		that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
 
