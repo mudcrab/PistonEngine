@@ -10,6 +10,7 @@ var PistonEngine = Class.create({
 	{
 		this.mainClass = new _mC;
 		var that = this;
+		// window.debug = PistonDebug; // add this to window ns, so it will be available globally, TODO create a piston ns!
 		that.loader = new PistonAssetLoader();
 		var assets = that.mainClass.toLoad;
 		for(var i = 0; i < assets.length; i++)
