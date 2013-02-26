@@ -51,6 +51,7 @@ var PistonAssetLoader = Class.create({
 	setLoaded: function()
 	{
 		this.loaded++;
+		debug.log('Loaded asset ' + this.loaded + ' of ' + this.assets.length)
 	},
 	getProgress: function()
 	{
