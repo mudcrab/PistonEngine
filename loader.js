@@ -3,6 +3,7 @@ var PistonAssetLoader = Class.create({
 	assets: null,
 	loaded: 0,
 	spritemaps: null,
+	last: 0,
 	initialize: function()
 	{
 		this.assets = new Array();
@@ -12,6 +13,7 @@ var PistonAssetLoader = Class.create({
 	{
 		typeof asset.size == 'undefined' ? asset.size = null : asset.size = size;
 		typeof asset.path == 'undefined' ? asset.path = this.DEFAULT_PATH : asset.path = path;
+		asset.loaded = false;
 
 		//var path_ == 'undfined' ? path = this.DEFAULT_PATH : path = path:
 		switch(asset.type)
@@ -86,8 +88,10 @@ var PistonAssetLoader = Class.create({
 			{
 				var img = new Image();
 				img.src = self.assets[asset].path + self.assets[asset].file + '.png';
-				img.onload = self.setLoaded();
+				img.onload = self.setLoaded(self.assets[asset].instanceName);
 				self.assets[asset].image = img;
+				self.assets[asset].loaded = true;
+				this.last = asset;
 			}
 		}
 
@@ -110,24 +114,28 @@ var PistonAssetLoader = Class.create({
 							cc.getContext('2d').drawImage(tempSpritemap, sprite.x, sprite.y, sprite.w, sprite.h, 0, 0, sprite.w, sprite.h);
 							var image = new Image();
 							image.src = cc.toDataURL("image/png");
+							self.last++;
 							image.onload = function() {
-								self.assets[j-1].image = image;
-								self.setLoaded();
+								
 							}
+							self.assets[j].image = image;
+							self.setLoaded(self.assets[j].instanceName);
 						}
 					}
 				}
 			};
 			self.spritemaps[spritemap].image = tempSpritemap;
-			self.setLoaded();
+			self.spritemaps[spritemap].loaded = true;
+			self.setLoaded(self.spritemaps[spritemap].instanceName);
+			this.last++;
 		}
 
 		//self.genSprites();		
 	},
-	setLoaded: function()
+	setLoaded: function(name)
 	{
 		this.loaded++;
-		debug.log('Loaded asset ' + this.loaded + ' of ' + this.assets.length)
+		debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
 	},
 	getProgress: function()
 	{
