@@ -4,7 +4,8 @@
 var PistonEngine = Class.create({
 	RENDERER: null,
 	mainClass: null,
-	fps: null,
+	fps: 0,
+	delta: 0,
 	loader: null,
 	initialize: function(canvasElement, _mC) 
 	{
@@ -54,6 +55,7 @@ var PistonEngine = Class.create({
 	update: function()
 	{
 		this.fps = this.RENDERER.fps();
+		this.delta = this.RENDERER.getDelta();
 		this.mainClass.update();
 	},
 	draw: function()
