@@ -135,5 +135,9 @@ var PistonRenderer = Class.create({
 	fps: function()
 	{
 		return this._fps;
+	},
+	getDelta: function()
+	{
+		return this.delta;
 	}
 });

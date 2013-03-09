@@ -132,10 +132,12 @@ var PistonStage = Class.create({
     setup: function()
     {
         this.toDraw = [];
+        this.drawnEntities = 0;
         for(var layer = 0; layer < this.layers.length; layer++)
         {
             this.layers[layer].initDrawables();
             this.toDraw.push(this.layers[layer].drawnLayerEntities);
+            this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
         }
     },
     move: function(x, y)
@@ -149,10 +151,12 @@ var PistonStage = Class.create({
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
             this.toDraw = [];
+            this.drawnEntities = 0;
             for(var layer = 0; layer < this.layers.length; layer++)
             {
                 this.layers[layer].move(x, y);
                 this.toDraw.push(this.layers[layer].drawnLayerEntities);
+                this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
             }
         }
         else
