@@ -13,22 +13,19 @@ var PistonEngine = Class.create({
 		this.mainClass = new _mC;
 		var that = this;
 		// window.debug = PistonDebug; // add this to window ns, so it will be available globally, TODO create a piston ns!
-		that.loader = new PistonAssetLoader();
+		piston.loader = new PistonAssetLoader();
 		var assets = that.mainClass.toLoad;
 		for(var i = 0; i < assets.length; i++)
 		{
-			that.loader.addAsset(assets[i]);
+			piston.loader.addAsset(assets[i]);
 		}
-		this.loader.preload();
+		piston.loader.preload();
 		//this.loader.genSprites();
 		
 		var timeout = setInterval(function() {
-			if(that.loader.loaded == that.loader.assets.length)
+			if(piston.loader.loaded == piston.loader.assets.length)
 			{
-
-				console.log('loaded')
 				clearTimeout(timeout);
-
 				that.setup();
 				that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
 			}

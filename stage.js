@@ -36,6 +36,11 @@ var PistonStage = Class.create({
         this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
         toDraw = new Array();
 	},
+    setSize: function(w, h)
+    {
+        this.stageSize.stageWidth = w;
+        this.stageSize.stageHeight = h;
+    },
 	addChild: function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
@@ -156,7 +161,7 @@ var PistonStage = Class.create({
             {
                 this.layers[layer].move(x, y);
                 this.toDraw.push(this.layers[layer].drawnLayerEntities);
-                this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
+                this.drawnEntities += this.layers[layer].totalDrawnEntities;
             }
         }
         else
@@ -164,7 +169,7 @@ var PistonStage = Class.create({
             this.stagePos.x = lastX;
             this.stagePos.y = lastY;
         }
-        this.drawnEntities = drawn;
+        //this.drawnEntities = drawn;
     },
     updatePos: function(x, y)
     {

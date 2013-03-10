@@ -1,4 +1,5 @@
 var PistonEntity = Class.create({
+	index: 0,
 	ASSETS_PATH: 'assets/',
 	pos: {
 		x: 0,

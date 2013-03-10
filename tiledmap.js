@@ -28,7 +28,8 @@ var PistonTiledMap = Class.create(PistonMap, {
 							{
 								var data = {
 									pos: { x: 0, y: 0 },
-									size: { w: self.raw.tilewidth, h: self.raw.tileheight }
+									size: { w: self.raw.tilewidth, h: self.raw.tileheight },
+									layer: l
 								};
 								if(count == self.raw.width)
 								{
