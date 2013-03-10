@@ -1,6 +1,7 @@
 /*
 	Piston Engine
 */
+window.piston = {};
 var PistonEngine = Class.create({
 	RENDERER: null,
 	mainClass: null,
@@ -44,7 +45,6 @@ var PistonEngine = Class.create({
 	{
 		
 		this.mainClass.loader = this.loader;
-
 		this.mainClass.setup();
 	},
 	loop: function()
@@ -58,9 +58,22 @@ var PistonEngine = Class.create({
 		this.delta = this.RENDERER.getDelta();
 		this.mainClass.update();
 	},
+	redraw: function()
+	{
+		var layers = pistonengine.stage.toDraw;
+		console.log(layers)
+		for(var layer = 0; layer < layers.length; layer++)
+		{
+			var entities = layers[layer];
+			for(var entity = 0; entity < entities.length; entity++)
+			{
+				this.RENDERER.render(entities[entity]);
+			}
+		}	
+	},
 	draw: function()
 	{
-		var layers = this.mainClass.stage.toDraw;
+		var layers = piston.stage.toDraw;
 		for(var layer = 0; layer < layers.length; layer++)
 		{
 			var entities = layers[layer];

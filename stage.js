@@ -171,9 +171,7 @@ var PistonStage = Class.create({
         
     },
     update: function()
-    {
-        if(this.cameraEntity !== null)
-            this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
+    {        
         for(var layer = 0; layer < this.layers.length; layer++)
         {
             this.layers[layer].update();
