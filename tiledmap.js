@@ -10,6 +10,7 @@ var PistonTiledMap = Class.create(PistonMap, {
 	{
 		var self = this;
 		new Ajax.Request(this.DEFAULT_ASSET_PATH + this.file, {
+			method: 'get',
 			onSuccess: function(response) {
 				self.raw = response.responseText.evalJSON();
 				self.mWidth = self.raw.width;
