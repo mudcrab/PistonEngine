@@ -59,7 +59,10 @@ var PistonLayer = Class.create({
 
 		for(var i = this.startIndex; i < end; i++)
 		{
-			this.layerEntities[i].move(x, y);
+			if(!this.layerEntities[i].manual)
+			{
+				this.layerEntities[i].move(x, y);
+			}
 			if(!this.hidden)
 			{
 				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)

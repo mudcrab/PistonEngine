@@ -13,6 +13,7 @@ var PistonEntity = Class.create({
 	},
 	clickable: false,
 	scrollable: false,
+	manua: false,
 	visible: true,
 	imgVisible: true,
 	source: null,
