@@ -11,6 +11,7 @@ var PistonAssetLoader = Class.create({
 	},
 	addAsset: function(asset)
 	{
+		var self = this;
 		typeof asset.size == 'undefined' ? asset.size = null : asset.size = size;
 		typeof asset.path == 'undefined' ? asset.path = this.DEFAULT_PATH : asset.path = path;
 		asset.loaded = false;
@@ -21,6 +22,12 @@ var PistonAssetLoader = Class.create({
 			case 'image':
 				if(!this.getAsset(asset.instanceName))
 				{
+					this.last++;
+					var img = new Image();
+					img.src = asset.path + asset.file + '.png';
+					img.onload = setLoaded(asset.instanceName);
+					asset.image = img;
+					asset.loaded = true;
 					this.assets.push(asset);
 					return true;
 				}
@@ -29,11 +36,36 @@ var PistonAssetLoader = Class.create({
 			break
 			case 'spritemap':
 				this.spritemaps.push(asset);
+
+				this.last++;
+				var img = new Image();
+				img.src = asset.path + asset.file + '.png';
+				img.onload = function() {
+					self.setLoaded(asset.instanceName);
+					for(var i = 0; i < asset.sprites.length; i++)
+					{
+						var cc = document.createElement('canvas');
+						cc.width = asset.sprites[i].w;
+						cc.height = asset.sprites[i].h;
+						cc.getContext('2d').drawImage(img, asset.sprites[i].x, asset.sprites[i].y,
+															asset.sprites[i].w, asset.sprites[i].h, 0, 0,
+															asset.sprites[i].w, asset.sprites[i].h);
+						var image = new Image();
+						image.src = cc.toDataURL("image/png");
+						self.last++;
+						image.onload = function() {};
+						asset.sprites[i].image = image;
+						self.assets.push(asset.sprites[i]);
+						self.setLoaded(asset.sprites[i].instanceName);
+					}
+				};
+				asset.image = img;
 				this.assets.push(asset);
-				for(var i = 0; i < asset.sprites.length; i++)
-				{
-					this.assets.push(asset.sprites[i]);
-				}
+				//this.assets.push(asset);
+				//for(var i = 0; i < asset.sprites.length; i++)
+				//{
+				//	this.assets.push(asset.sprites[i]);
+				//}
 			break;
 		}
 		
@@ -76,61 +108,6 @@ var PistonAssetLoader = Class.create({
 				};
 			}
 		}	
-	},
-	preload: function()
-	{
-		var self = this;
-		var loaded = 0;	
-		
-		for(var asset = 0; asset < this.assets.length; asset++)
-		{
-			if(this.assets[asset].type == 'image')
-			{
-				var img = new Image();
-				img.src = self.assets[asset].path + self.assets[asset].file + '.png';
-				img.onload = self.setLoaded(self.assets[asset].instanceName);
-				self.assets[asset].image = img;
-				self.assets[asset].loaded = true;
-				this.last = asset;
-			}
-		}
-
-		for(var spritemap = 0; spritemap < this.spritemaps.length; spritemap++)
-		{
-			var spMap = self.spritemaps[spritemap];
-			var tempSpritemap = new Image();
-			tempSpritemap.src = self.spritemaps[spritemap].path + self.spritemaps[spritemap].file + '.png';
-			tempSpritemap.onload = function() {
-				for(var i = 0; i < spMap.sprites.length; i++)
-				{
-					for(var j = 0; j < self.assets.length; j++)
-					{
-						if(self.assets[j].instanceName == spMap.sprites[i].instanceName)
-						{
-							var sprite = spMap.sprites[i];
-							var cc = document.createElement('canvas');
-							cc.width = sprite.w;
-							cc.height = sprite.h;
-							cc.getContext('2d').drawImage(tempSpritemap, sprite.x, sprite.y, sprite.w, sprite.h, 0, 0, sprite.w, sprite.h);
-							var image = new Image();
-							image.src = cc.toDataURL("image/png");
-							self.last++;
-							image.onload = function() {
-								
-							}
-							self.assets[j].image = image;
-							self.setLoaded(self.assets[j].instanceName);
-						}
-					}
-				}
-			};
-			self.spritemaps[spritemap].image = tempSpritemap;
-			self.spritemaps[spritemap].loaded = true;
-			self.setLoaded(self.spritemaps[spritemap].instanceName);
-			this.last++;
-		}
-
-		//self.genSprites();		
 	},
 	setLoaded: function(name)
 	{

@@ -1,7 +1,7 @@
 /*
 	Piston Engine
 */
-window.piston = {};
+window.piston = window.piston || {};
 var PistonEngine = Class.create({
 	RENDERER: null,
 	mainClass: null,
@@ -19,7 +19,7 @@ var PistonEngine = Class.create({
 		{
 			piston.loader.addAsset(assets[i]);
 		}
-		piston.loader.preload();
+		//piston.loader.preload();
 		//this.loader.genSprites();
 		
 		var timeout = setInterval(function() {
