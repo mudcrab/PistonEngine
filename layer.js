@@ -3,24 +3,26 @@ var PistonLayer = Class.create({
 	layerEntities: null,
 	drawnLayerEntities: null,
 	layerSize: {},
+	tileSize: this.tileSize,
 	totalLayerEntities: 0,
 	totalDrawnEntities: 0,
 	hidden: false,
 	startIndex: 0,
 	endIndex: 0,
 
-	initialize: function(id, size) {
+	initialize: function(id, size, tileSize) {
 		this.layerID = id;
 		this.layerSize = size;
 		this.layerEntities = new Array();
 		this.drawnLayerEntities = new Array();
+		this.tileSize = tileSize;
 	},
 	addChild: function(entity) {
 		var len = this.layerEntities.push(entity);
 		len--;
 		this.layerEntities[len].index = len;
 		this.totalLayerEntities++;
-		if(entity.pos.x >= -32 && entity.pos.x <= this.layerSize.screenWidth && entity.pos.y >= -32 && entity.pos.y <= this.layerSize.screenHeight)
+		if(entity.pos.x >= -this.tileSize && entity.pos.x <= this.layerSize.screenWidth && entity.pos.y >= -this.tileSize && entity.pos.y <= this.layerSize.screenHeight)
 		{
 			this.drawnLayerEntities.push(entity);
 		}
@@ -38,7 +40,8 @@ var PistonLayer = Class.create({
 	move: function(x, y) {
 		for(var i = 0; i < this.layerEntities.length; i++)
 		{
-			this.layerEntities[i].move(x, y);
+			if(!this.layerEntities[i].manual)
+				this.layerEntities[i].move(x, y);
 		}
 	},
 	hideLayer: function() {
@@ -77,7 +80,7 @@ var PistonLayer = Class.create({
 				{
 					if(this.layerEntities[i].visible)
 					{
-						if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+						if(this.layerEntities[i].pos.x >= -this.tileSize && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -this.tileSize && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
 						{
 							this.drawnLayerEntities.push(this.layerEntities[i]);
 						}

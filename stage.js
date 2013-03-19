@@ -68,8 +68,8 @@ var PistonStage = Class.create({
             }
         }
     },
-    addLayer: function(id) {
-        this.layers.push(new PistonLayer(id, this.stageSize));
+    addLayer: function(id, tileSize) {
+        this.layers.push(new PistonLayer(id, this.stageSize, tileSize));
     },
     deleteLayer: function(id) {
 
@@ -140,7 +140,6 @@ var PistonStage = Class.create({
     },
     move: function(x, y)
     {
-        this.drawableEntities = [];
         var drawn = 0;
         var lastX = this.stagePos.x;
         var lastY = this.stagePos.y;
@@ -148,8 +147,6 @@ var PistonStage = Class.create({
         this.stagePos.y += y;
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
-            this.toDraw = [];
-            this.drawnEntities = 0;
             for(var layer = 0; layer < this.layers.length; layer++)
             {
                 this.layers[layer].move(x, y);
@@ -171,16 +168,19 @@ var PistonStage = Class.create({
     },
     getClickedEntity: function(x, y)
     {
-        var entities = this.clickableEntities;
-        for(var entity = 0; entity < entities.length; entity++)
+        var entity = null;
+        for(var i = this.layers.length-1; i >= 0; i--)
         {
-            var minX = entities[entity].pos.x;
-            var maxX = entities[entity].pos.x + entities[entity].size.w;
-            var minY = entities[entity].pos.y;
-            var maxY = entities[entity].pos.y + entities[entity].size.h;
-            if(x >= minX && x <= maxX && y >= minY && y <= maxY)
+            for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
             {
-                return entities[entity];
+                var minX = this.layers[i].layerEntities[entity].pos.x;
+                var maxX = this.layers[i].layerEntities[entity].pos.x + this.layers[i].layerEntities[entity].size.w;
+                var minY = this.layers[i].layerEntities[entity].pos.y;
+                var maxY = this.layers[i].layerEntities[entity].pos.y + this.layers[i].layerEntities[entity].size.h;
+                if(x >= minX && x <= maxX && y >= minY && y <= maxY)
+                {
+                    return this.layers[i].layerEntities[entity];
+                }
             }
         }
     }
