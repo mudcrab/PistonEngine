@@ -60,6 +60,10 @@ var PistonEngine = Class.create({
 				piston.stage.drawnEntities += entities.length;
 				for(var j = 0; j < entities.length; j++)
 				{
+					if(typeof entities[j].update == 'function')
+					{
+						entities[j].update();
+					}
 					piston.renderer.render(entities[j]);
 				}
 			});

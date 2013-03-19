@@ -69,9 +69,7 @@ var PistonLayer = Class.create({
 
 	},
 	update: function(cb) {
-
 		this.drawnLayerEntities = [];
-
 		if(!this.hidden)
 		{
 			if(this.layerEntities.length <= 4900)
