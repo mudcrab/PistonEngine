@@ -1,5 +1,9 @@
 var PistonDebug = Class.create({
 
+	buffer: [],
+	bufferSize: 500,
+	enabled: true,
+
 	initialize: function() {
 
 	},
@@ -16,9 +20,33 @@ var PistonDebug = Class.create({
 			else
 				log += ', ' + arguments[i];
 		}
-		console.log(log)
+		if(this.buffer.length < this.bufferSize)
+		{
+			this.buffer.push(log);
+		}
+		else
+		{
+			this.buffer.pop();
+			this.buffer.push(log);
+		}
+		if(this.enabled)
+			console.log(log)
 
+	},
+	clear: function()
+	{
+		this.buffer = [];
+		console.clear();
+	},
+	showBuffer: function()
+	{
+		for(var i = 0; i < this.buffer.length; i++)
+		{
+			console.log(i+1 + '. ' + this.buffer[i]);
+		}
+		if(this.buffer.length === 0)
+			console.log('Buffer empty');
 	}
 
 });
-window.debug = new PistonDebug()
+piston.debug = new PistonDebug()

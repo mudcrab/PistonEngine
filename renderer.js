@@ -107,16 +107,7 @@ var PistonRenderer = Class.create({
 		switch(this.RENDERER_TYPE)
 		{
 			case 'canvas':
-				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
-				if(entity.visible)
-				{
-					this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
-				}
-				if(entity.rectVisible)
-				{
-					this.CONTEXT.strokeStyle = "red";
-					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
-				}
+				this.CONTEXT.drawImage(piston.loader.getAsset(entity.image).image, entity.pos.x, entity.pos.y);
 			break;
 			case 'fallback':
 				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);

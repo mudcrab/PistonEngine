@@ -12,16 +12,12 @@ var PistonEngine = Class.create({
 	{
 		this.mainClass = new _mC;
 		var that = this;
-		// window.debug = PistonDebug; // add this to window ns, so it will be available globally, TODO create a piston ns!
 		piston.loader = new PistonAssetLoader();
 		var assets = that.mainClass.toLoad;
 		for(var i = 0; i < assets.length; i++)
 		{
 			piston.loader.addAsset(assets[i]);
 		}
-		//piston.loader.preload();
-		//this.loader.genSprites();
-		
 		var timeout = setInterval(function() {
 			if(piston.loader.loaded == piston.loader.assets.length)
 			{
@@ -54,39 +50,19 @@ var PistonEngine = Class.create({
 		this.delta = piston.renderer.getDelta();
 		this.mainClass.update();
 	},
-	redraw: function()
-	{
-		var layers = pistonengine.stage.toDraw;
-		console.log(layers)
-		for(var layer = 0; layer < layers.length; layer++)
-		{
-			var entities = layers[layer];
-			for(var entity = 0; entity < entities.length; entity++)
-			{
-				piston.renderer.render(entities[entity]);
-			}
-		}	
-	},
 	draw: function()
 	{
 		var layers = piston.stage.layers;
+		piston.stage.drawnEntities = 0;
 		for(var i = 0; i < layers.length; i++)
 		{
 			layers[i].update(function(entities) {
+				piston.stage.drawnEntities += entities.length;
 				for(var j = 0; j < entities.length; j++)
 				{
 					piston.renderer.render(entities[j]);
 				}
 			});
 		}
-		/*var layers = piston.stage.toDraw;
-		for(var layer = 0; layer < layers.length; layer++)
-		{
-			var entities = layers[layer];
-			for(var entity = 0; entity < entities.length; entity++)
-			{
-				piston.renderer.render(entities[entity]);
-			}
-		}*/
 	}
 });

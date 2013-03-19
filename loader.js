@@ -15,8 +15,6 @@ var PistonAssetLoader = Class.create({
 		typeof asset.size == 'undefined' ? asset.size = null : asset.size = size;
 		typeof asset.path == 'undefined' ? asset.path = this.DEFAULT_PATH : asset.path = path;
 		asset.loaded = false;
-
-		//var path_ == 'undfined' ? path = this.DEFAULT_PATH : path = path:
 		switch(asset.type)
 		{
 			case 'image':
@@ -61,11 +59,6 @@ var PistonAssetLoader = Class.create({
 				};
 				asset.image = img;
 				this.assets.push(asset);
-				//this.assets.push(asset);
-				//for(var i = 0; i < asset.sprites.length; i++)
-				//{
-				//	this.assets.push(asset.sprites[i]);
-				//}
 			break;
 		}
 		
@@ -82,37 +75,10 @@ var PistonAssetLoader = Class.create({
 		
 		return ret;
 	},
-	genSprites: function()
-	{
-		var self = this;
-		for(var i = 0; i < this.spritemaps.length; i++)
-		{
-			for(var j = 0; j < this.spritemaps[i].sprites.length; j++)
-			{
-				var spr = this.spritemaps[i].sprites[j];
-				var canvas = document.createElement('canvas');
-				canvas.width = spr.w;
-				canvas.height = spr.h;
-				canvas.getContext('2d').drawImage(this.spritemaps[i].image, 32, 0, 32, 32, 0, 0, 32, 32);
-
-				var image = new Image();
-				image.src = canvas.toDataURL("image/png");
-				image.onload = function() {
-					self.setLoaded();
-					var sprite = {
-						instanceName: spr.instanceName,
-						type: 'image',
-						image: image
-					};
-					self.assets.push(sprite);
-				};
-			}
-		}	
-	},
 	setLoaded: function(name)
 	{
 		this.loaded++;
-		debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+		piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
 	},
 	getProgress: function()
 	{

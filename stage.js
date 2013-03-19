@@ -136,14 +136,7 @@ var PistonStage = Class.create({
     },
     setup: function()
     {
-        this.toDraw = [];
         this.drawnEntities = 0;
-        for(var layer = 0; layer < this.layers.length; layer++)
-        {
-            this.layers[layer].initDrawables();
-            this.toDraw.push(this.layers[layer].drawnLayerEntities);
-            this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
-        }
     },
     move: function(x, y)
     {
@@ -160,8 +153,6 @@ var PistonStage = Class.create({
             for(var layer = 0; layer < this.layers.length; layer++)
             {
                 this.layers[layer].move(x, y);
-                this.toDraw.push(this.layers[layer].drawnLayerEntities);
-                this.drawnEntities += this.layers[layer].totalDrawnEntities;
             }
         }
         else
@@ -169,7 +160,6 @@ var PistonStage = Class.create({
             this.stagePos.x = lastX;
             this.stagePos.y = lastY;
         }
-        //this.drawnEntities = drawn;
     },
     updatePos: function(x, y)
     {
@@ -177,19 +167,7 @@ var PistonStage = Class.create({
     },
     update: function()
     {        
-        for(var layer = 0; layer < this.layers.length; layer++)
-        {
-            this.layers[layer].update();
-        }
-    },
-    setDrawable: function()
-    {
-        var drawn = 0;
-        var toDraw = [];
-        for(var i = 0; i < this.entities.length; i++)
-        {
-
-        }
+        
     },
     getClickedEntity: function(x, y)
     {

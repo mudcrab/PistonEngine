@@ -15,19 +15,6 @@ var PistonLayer = Class.create({
 		this.layerEntities = new Array();
 		this.drawnLayerEntities = new Array();
 	},
-	initDrawables: function() {
-		this.drawnLayerEntities = [];
-		if(!this.hidden)
-		{
-			for(var i = 0; i < this.layerEntities.length; i++)
-			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
-				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
-				}
-			}
-		}
-	},
 	addChild: function(entity) {
 		var len = this.layerEntities.push(entity);
 		len--;
@@ -49,28 +36,10 @@ var PistonLayer = Class.create({
 
 	},
 	move: function(x, y) {
-		this.totalDrawnEntities = 0;
-		this.drawnLayerEntities = [];
-		var end = 0;
-		if(this.endIndex == 0)
-			end = this.layerEntities.length;
-		else
-			end = this.endIndex;
-
-		for(var i = this.startIndex; i < end; i++)
+		for(var i = 0; i < this.layerEntities.length; i++)
 		{
 			this.layerEntities[i].move(x, y);
-			if(!this.hidden)
-			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
-				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
-					this.totalDrawnEntities++;
-				}
-			}
 		}
-		//this.startIndex = this.drawnLayerEntities[0].index;
-		//this.endIndex = this.drawnLayerEntities[this.drawnLayerEntities.length - 1].index;
 	},
 	hideLayer: function() {
 		this.hidden = true;
@@ -106,9 +75,12 @@ var PistonLayer = Class.create({
 			{
 				for(var i = 0; i < this.layerEntities.length; i++)
 				{
-					if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+					if(this.layerEntities[i].visible)
 					{
-						this.drawnLayerEntities.push(this.layerEntities[i]);
+						if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+						{
+							this.drawnLayerEntities.push(this.layerEntities[i]);
+						}
 					}
 				}
 				cb(this.drawnLayerEntities);

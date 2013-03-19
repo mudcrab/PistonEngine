@@ -27,7 +27,7 @@ var PistonEntity = Class.create({
 	{
 		this.pos = pos_;
 		this.size = size_;
-		this.source = image_;
+		//this.source = image_;
 		this.name = name_;
 		//this.image = new Image();
 		//this.image.src = this.ASSETS_PATH + image_ + '.png'; // todo change this to asset loader later
