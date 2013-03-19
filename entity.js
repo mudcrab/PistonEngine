@@ -13,7 +13,7 @@ var PistonEntity = Class.create({
 	},
 	clickable: false,
 	scrollable: false,
-	manua: false,
+	manual: false,
 	visible: true,
 	imgVisible: true,
 	source: null,
@@ -22,6 +22,7 @@ var PistonEntity = Class.create({
 	rectVisible: false, // todo recto bounds
 	rectSize: {w: 0, h: 0},
 	rectPos: {x: 0, y: 0},
+	layer: 0,
 	properties: {},
 	initialize: function(pos_, size_, image_, name_) 
 	{

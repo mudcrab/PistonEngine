@@ -114,9 +114,23 @@ var PistonStage = Class.create({
     {
         return this.entities[index];
     },
-    getEntityAtPos: function(x, y)
+    getEntityAtPos: function(x, y, layer)
     {
-
+        typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
+        for(var i = layer; i >= 0; i--)
+        {
+            for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
+            {
+                var minX = this.layers[i].layerEntities[entity].pos.x;
+                var maxX = this.layers[i].layerEntities[entity].pos.x + this.layers[i].layerEntities[entity].size.w;
+                var minY = this.layers[i].layerEntities[entity].pos.y;
+                var maxY = this.layers[i].layerEntities[entity].pos.y + this.layers[i].layerEntities[entity].size.h;
+                if(x >= minX && x <= maxX && y >= minY && y <= maxY)
+                {
+                    return this.layers[i].layerEntities[entity];
+                }
+            }
+        }
     },
     searchForEntity: function(instanceName)
     {
@@ -168,20 +182,17 @@ var PistonStage = Class.create({
     },
     getClickedEntity: function(x, y)
     {
-        var entity = null;
-        for(var i = this.layers.length-1; i >= 0; i--)
-        {
-            for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
-            {
-                var minX = this.layers[i].layerEntities[entity].pos.x;
-                var maxX = this.layers[i].layerEntities[entity].pos.x + this.layers[i].layerEntities[entity].size.w;
-                var minY = this.layers[i].layerEntities[entity].pos.y;
-                var maxY = this.layers[i].layerEntities[entity].pos.y + this.layers[i].layerEntities[entity].size.h;
-                if(x >= minX && x <= maxX && y >= minY && y <= maxY)
-                {
-                    return this.layers[i].layerEntities[entity];
-                }
-            }
-        }
+        var entity = this.getEntityAtPos(x, y);
+        if(typeof entity !== 'undefined')
+            return entity;
+        else
+            return false;
+    },
+    isColliding: function(entity1, entity2)
+    {
+        if(this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer) && this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer).index == entity2.index)
+           return true;
+        else
+            return false;
     }
 });

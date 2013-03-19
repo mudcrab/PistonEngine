@@ -18,6 +18,7 @@ var PistonLayer = Class.create({
 		this.tileSize = tileSize;
 	},
 	addChild: function(entity) {
+		entity.layer = this.layerID;
 		var len = this.layerEntities.push(entity);
 		len--;
 		this.layerEntities[len].index = len;
