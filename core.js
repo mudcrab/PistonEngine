@@ -27,20 +27,19 @@ var PistonEngine = Class.create({
 			{
 				clearTimeout(timeout);
 				that.setup();
-				that.RENDERER = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+				piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
 			}
 		}, 100);
 	},
 	info: function()
 	{
 		var info_ = {
-			renderer: this.RENDERER.RENDERER_TYPE
+			renderer: piston.renderer.RENDERER_TYPE
 		};
 		return info_;
 	},
 	setup: function()
 	{
-		
 		this.mainClass.loader = this.loader;
 		this.mainClass.setup();
 	},
@@ -51,8 +50,8 @@ var PistonEngine = Class.create({
 	},
 	update: function()
 	{
-		this.fps = this.RENDERER.fps();
-		this.delta = this.RENDERER.getDelta();
+		this.fps = piston.renderer.fps();
+		this.delta = piston.renderer.getDelta();
 		this.mainClass.update();
 	},
 	redraw: function()
@@ -64,20 +63,30 @@ var PistonEngine = Class.create({
 			var entities = layers[layer];
 			for(var entity = 0; entity < entities.length; entity++)
 			{
-				this.RENDERER.render(entities[entity]);
+				piston.renderer.render(entities[entity]);
 			}
 		}	
 	},
 	draw: function()
 	{
-		var layers = piston.stage.toDraw;
+		var layers = piston.stage.layers;
+		for(var i = 0; i < layers.length; i++)
+		{
+			layers[i].update(function(entities) {
+				for(var j = 0; j < entities.length; j++)
+				{
+					piston.renderer.render(entities[j]);
+				}
+			});
+		}
+		/*var layers = piston.stage.toDraw;
 		for(var layer = 0; layer < layers.length; layer++)
 		{
 			var entities = layers[layer];
 			for(var entity = 0; entity < entities.length; entity++)
 			{
-				this.RENDERER.render(entities[entity]);
+				piston.renderer.render(entities[entity]);
 			}
-		}
+		}*/
 	}
 });

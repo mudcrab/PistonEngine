@@ -59,10 +59,7 @@ var PistonLayer = Class.create({
 
 		for(var i = this.startIndex; i < end; i++)
 		{
-			if(!this.layerEntities[i].manual)
-			{
-				this.layerEntities[i].move(x, y);
-			}
+			this.layerEntities[i].move(x, y);
 			if(!this.hidden)
 			{
 				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
@@ -99,19 +96,33 @@ var PistonLayer = Class.create({
 	clearAllEntities: function() {
 
 	},
-	update: function() {
+	update: function(cb) {
 
 		this.drawnLayerEntities = [];
+
 		if(!this.hidden)
 		{
-			for(var i = 0; i < this.layerEntities.length; i++)
+			if(this.layerEntities.length <= 4900)
 			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+				for(var i = 0; i < this.layerEntities.length; i++)
 				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
+					if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
+					{
+						this.drawnLayerEntities.push(this.layerEntities[i]);
+					}
 				}
+				cb(this.drawnLayerEntities);
 			}
-
+			else
+			{
+				var worker = new Worker('/js/piston/workers/pickdrawables.js');
+				worker.postMessage(JSON.stringify({ array: this.layerEntities, layerSize: this.layerSize }));
+				worker.addEventListener('message', function(e) {
+					this.drawnLayerEntities = JSON.parse(e.data).entities.array;
+					cb(this.drawnLayerEntities);
+					worker.terminate();
+		        });
+			}
 		}
 	}
 });
