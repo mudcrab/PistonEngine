@@ -1,10 +1,11 @@
 var PistonTiledMap = Class.create(PistonMap, {
 	file: null,
+	mWidth: 0,
+	mHeight: 0,
 	raw: {},
 	initialize: function(mapFile)
 	{
 		this.file = mapFile;
-		
 	},
 	parseTiled: function(cb)
 	{
@@ -51,9 +52,5 @@ var PistonTiledMap = Class.create(PistonMap, {
 				cb(self.mapData);
 			}
 		});
-	},
-	getMapData: function() 
-	{
-
 	}
 });

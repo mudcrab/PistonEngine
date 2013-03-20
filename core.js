@@ -52,6 +52,15 @@ var PistonEngine = Class.create({
 	},
 	draw: function()
 	{
+		var alLEntities = new Array();
+		for(var i = 0; i < piston.stage.layers.length; i++)
+		{
+			alLEntities = alLEntities.concat(piston.stage.layers[i].layerEntities);
+		}
+		piston.renderer.render_(alLEntities);
+	},
+	draw_: function()
+	{
 		var layers = piston.stage.layers;
 		piston.stage.drawnEntities = 0;
 		for(var i = 0; i < layers.length; i++)

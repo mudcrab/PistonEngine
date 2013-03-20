@@ -8,6 +8,10 @@ var PistonRenderer = Class.create({
 	lastCall: null,
 	delta: null,
 	tick: null,
+	entityInfo: {
+		total: 0,
+		drawn: 0
+	},
 	initialize: function(canvas_, type, fps, size, cb) 
 	{
 		this.CANVAS = document.getElementById(canvas_);
@@ -18,6 +22,7 @@ var PistonRenderer = Class.create({
 		this.CANVAS.width = this.DISPLAY_SIZE.width;
 		this.CANVAS.height = this.DISPLAY_SIZE.height;
 		this.CONTEXT = this.CANVAS.getContext('2d');
+
 		var that = this;
 		var frame = window.requestAnimationFrame ||
 		            window.webkitRequestAnimationFrame ||
@@ -104,6 +109,7 @@ var PistonRenderer = Class.create({
 	},
 	render: function(entity)
 	{
+
 		switch(this.RENDERER_TYPE)
 		{
 			case 'canvas':
@@ -121,6 +127,23 @@ var PistonRenderer = Class.create({
 					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
 				}
 			break;
+		}
+	},
+	render_: function(entities)
+	{
+		this.entityInfo.total = entities.length;
+		this.entityInfo.drawn = 0;
+		for(var i = 0; i < entities.length; i++)
+		{
+			if(entities[i].visible)
+			{
+				if(entities[i].pos.x >= -entities[i].size.w && entities[i].pos.x <= this.DISPLAY_SIZE.width && entities[i].pos.y >= -entities[i].size.h && entities[i].pos.y <= this.DISPLAY_SIZE.height)
+				{
+					
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[i].image).image, entities[i].pos.x, entities[i].pos.y);
+					this.entityInfo.drawn++;
+				}
+			}
 		}
 	},
 	fps: function()
