@@ -10,7 +10,13 @@ var PistonRenderer = Class.create({
 	tick: null,
 	entityInfo: {
 		total: 0,
-		drawn: 0
+		drawn: 0,
+		currentPos: 0,
+		max: {
+			x: 39,
+			y: 28,
+			i: 1092
+		}
 	},
 	initialize: function(canvas_, type, fps, size, cb) 
 	{
@@ -129,22 +135,37 @@ var PistonRenderer = Class.create({
 			break;
 		}
 	},
-	render_: function(entities)
+	render_: function(entities, layerSize, tileSize, needle)
 	{
+
 		this.entityInfo.total = entities.length;
 		this.entityInfo.drawn = 0;
-		for(var i = 0; i < entities.length; i++)
+		var index = 0;
+		for(var x = needle.startX; x < layerSize.w; x++)
 		{
-			if(entities[i].visible)
+			for(var y = needle.startY; y < layerSize.h; y++)
 			{
-				if(entities[i].pos.x >= -entities[i].size.w && entities[i].pos.x <= this.DISPLAY_SIZE.width && entities[i].pos.y >= -entities[i].size.h && entities[i].pos.y <= this.DISPLAY_SIZE.height)
+				if(typeof entities[x][y] != 'undefined')
 				{
-					
-					this.CONTEXT.drawImage(piston.loader.getAsset(entities[i].image).image, entities[i].pos.x, entities[i].pos.y);
-					this.entityInfo.drawn++;
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
 				}
+				index++;
 			}
 		}
+		// this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
+		/*for(var y = 0; y < this.entityInfo.max.y; y++)
+		{
+			for(var x = 0; x < this.entityInfo.max.x; x++)
+			{
+
+				if(start < max)
+				{
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[start].image).image, entities[start].pos.x, entities[start].pos.y);
+					this.entityInfo.drawn++;
+				}
+				start++;
+			}
+		}*/
 	},
 	fps: function()
 	{

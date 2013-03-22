@@ -41,6 +41,7 @@ var PistonStage = Class.create({
         this.stageSize.stageWidth = w;
         this.stageSize.stageHeight = h;
     },
+    // TODO fix this
 	addChild: function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
@@ -51,6 +52,10 @@ var PistonStage = Class.create({
             this.clickableEntities.push(entity);
         }
         return newLength - 1; // eg element index
+    },
+    addChildren: function(entities, layerID, width, height)
+    {
+        this.layers[layerID].addChildren(entities, {w: width, h: height});
     },
     addChildAt: function(index, entity)
     {
