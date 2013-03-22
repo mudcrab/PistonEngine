@@ -135,19 +135,35 @@ var PistonRenderer = Class.create({
 			break;
 		}
 	},
-	render_: function(entities, layerSize, tileSize, needle)
+	render_: function(entities, layerSize, tileSize, size)
 	{
-
 		this.entityInfo.total = entities.length;
 		this.entityInfo.drawn = 0;
 		var index = 0;
-		for(var x = needle.startX; x < layerSize.w; x++)
+		var maxY = 0, maxX = 0;
+		if(size.endX > size.totalW)
+			maxX = size.totalW;
+		else
+			maxX = size.endX;
+
+		if(size.endY > size.totalH)
 		{
-			for(var y = needle.startY; y < layerSize.h; y++)
+			maxY = size.totalH;
+		}
+		else
+		{
+			maxY = size.endY;
+		}
+			
+
+		for(var x = size.startX; x < maxX; x++)
+		{
+			for(var y = size.startY; y < maxY ; y++)
 			{
-				if(typeof entities[x][y] != 'undefined')
+				if(typeof entities[x][y] != 'undefined' && entities[x][y].visible)
 				{
-					this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
+					if(x != 5)
+						this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
 				}
 				index++;
 			}

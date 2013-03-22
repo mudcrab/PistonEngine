@@ -45,13 +45,6 @@ var PistonStage = Class.create({
 	addChild: function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
-        var newLength = this.entities.push(entity);
-        this.totalEntities++;
-        if(entity.clickable)
-        {
-            this.clickableEntities.push(entity);
-        }
-        return newLength - 1; // eg element index
     },
     addChildren: function(entities, layerID, width, height)
     {

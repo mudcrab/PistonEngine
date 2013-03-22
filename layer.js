@@ -3,8 +3,9 @@ var PistonLayer = Class.create({
 	layerEntities: null,
 	drawnLayerEntities: null,
 	layerSize: { w: 0, h: 0},
+	renderSize: {x: 0, y: 0},
 	maxLayerSize: {w: 1, h: 1},
-	tileSize: this.tileSize,
+	tileSize: 32,
 	totalLayerEntities: 0,
 	totalDrawnEntities: 0,
 	hidden: false,
@@ -12,6 +13,20 @@ var PistonLayer = Class.create({
 	needle: {
 		startX: 0,
 		startY: 0
+	},
+	current: {
+		x: 0,
+		y: 0
+	},
+	size: {
+		startX: 0,
+		startY: 0,
+		endX: 0,
+		endY: 0,
+		maxX: 0,
+		maxY: 0,
+		totalW: 0,
+		totalH: 0,
 	},
 
 	initialize: function(id, maxLayerSize, tileSize) {
@@ -21,19 +36,27 @@ var PistonLayer = Class.create({
 		this.tileSize = tileSize;
 		this.maxLayerSize.w = maxLayerSize.stageWidth;
 		this.maxLayerSize.h = maxLayerSize.stageHeight;
+		this.renderSize.x = Math.floor(maxLayerSize.screenWidth / tileSize) + 1;
+		this.renderSize.y = Math.floor(maxLayerSize.screenHeight / tileSize) + 1;
 		this.layerEntities = new Array(this.maxLayerSize.w);
 		for(var i = 0; i < this.maxLayerSize.w; i++)
 		{
 			this.layerEntities[i] = new Array(this.maxLayerSize.h);
 		}
+		this.size.endX = Math.floor(maxLayerSize.screenWidth / tileSize) + 1;
+		this.size.endY = Math.floor(maxLayerSize.screenHeight / tileSize) + 1;
+		this.size.maxX = this.size.endX - this.size.startX;
+		this.size.maxY = this.size.endY - this.size.startY;
+		this.size.totalW = maxLayerSize.stageWidth;
+		this.size.totalH = maxLayerSize.stageHeight;
 		//this.max = size.stageWidth * size.stageHeight;
 	},
 	addChild: function(entity) {
 		entity.layer = this.layerID;
 		var index = 0;
-		for(var x = 0; x < this.maxLayerSize.w; x++)
+		for(var y = 0; y < this.maxLayerSize.h; y++)
 		{
-			for(var y = 0; y < this.maxLayerSize.h; y++)
+			for(var x = 0; x < this.maxLayerSize.w; x++)
 			{
 				if(typeof this.layerEntities[x][y] == 'undefined')
 				{
@@ -60,12 +83,26 @@ var PistonLayer = Class.create({
 	getChild: function(id) {
 
 	},
-	move: function(x, y) {
-		for(var i = 0; i < this.layerEntities.length; i++)
+	move: function(_x, _y) {
+		this.current.x += _x;
+		this.current.y += _y;
+		for(var y = 0; y < this.layerSize.h; y++)
 		{
-			if(!this.layerEntities[i].manual)
-				this.layerEntities[i].move(x, y);
+			for(var x = 0; x < this.layerSize.w; x++)
+			{
+				if(!this.layerEntities[x][y].manual)
+					this.layerEntities[x][y].move(_x, _y);
+			}
 		}
+		//console.log()
+		//this.layerSize.w = Math.floor(this.current.x / this.tileSize);
+		//this.needle.startY = Math.abs(Math.floor(this.current.y / this.tileSize));
+		this.size.startX = Math.abs(Math.floor(this.current.x / this.tileSize));
+		this.size.startY = Math.abs(Math.floor(this.current.y / this.tileSize));
+		this.size.endX = this.size.startX + this.renderSize.x;
+		this.size.endY = this.size.startY + this.renderSize.y;
+		this.size.maxX = this.size.endX - this.size.startX;
+		this.size.maxY = this.size.endY - this.size.startY;
 	},
 	hideLayer: function() {
 		this.hidden = true;

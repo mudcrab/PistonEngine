@@ -30,9 +30,9 @@ var PistonTiledMap = Class.create(PistonMap, {
 					if(typeof self.raw.layers[l].data == 'object')
 					{
 						var map = new Array(data.width);
-						for(var a = 0; a < data.width; a++)
+						for(var a = 0; a < data.height; a++)
 						{
-							map[a] = new Array(data.height);
+							map[a] = new Array(data.width);
 						}
 						var i = 0;
 						for(var _y = 0; _y < data.height; _y++)
@@ -64,10 +64,9 @@ var PistonTiledMap = Class.create(PistonMap, {
 
 								*/
 								var id = self.raw.layers[l].data[i] - 1;
-								var tile = new PistonEntity({ x: _x * self.raw.tilewidth, y: _y * self.raw.tileheight }, { w: self.raw.tilewidth, h: self.raw.tileheight }, self.raw.tilesets[0].tileproperties[id].instanceName);
+								var tile = new PistonEntity({ x: _x * self.raw.tilewidth, y: _y * self.raw.tileheight, lastx: _x * self.raw.tilewidth, lasty: _y * self.raw.tileheight }, { w: self.raw.tilewidth, h: self.raw.tileheight }, self.raw.tilesets[0].tileproperties[id].instanceName);
 								tile.scrollable = true;
                 				tile.clickable = true;
-                				tile.name = '';
 								map[_x][_y] = tile;
 								i++;
 							}

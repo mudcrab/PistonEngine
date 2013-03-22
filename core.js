@@ -55,7 +55,7 @@ var PistonEngine = Class.create({
 		//var alLEntities = new Array();
 		for(var i = 0; i < piston.stage.layers.length; i++)
 		{
-			piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].layerSize, piston.stage.layers[i].tileSize, piston.stage.layers[i].needle);
+			piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].layerSize, piston.stage.layers[i].tileSize, piston.stage.layers[i].size);
 		}
 		
 	},
