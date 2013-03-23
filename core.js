@@ -8,6 +8,8 @@ var PistonEngine = Class.create({
 	fps: 0,
 	delta: 0,
 	loader: null,
+	totalEntities: 0,
+	totalDrawnEntities: 0,
 	initialize: function(canvasElement, _mC) 
 	{
 		this.mainClass = new _mC;
@@ -52,38 +54,15 @@ var PistonEngine = Class.create({
 	},
 	draw: function()
 	{
-		//console.log(JSON.stringify(piston.stage.layers[0].getLayerInfo()))
-		//console.log(JSON.stringify(piston.stage.layers[1].layerInfo), piston.stage.layers[1].layerEntities.length)
-		//var alLEntities = new Array();
+		this.totalDrawnEntities = 0;
+		this.totalEntities = 0;
 		for(var i = 0; i < piston.stage.layers.length; i++)
 		{
+			this.totalEntities += piston.stage.layers[i].totalEntities;
 			if(piston.stage.layers[i].layerEntities.length > 0)
 			{
-				piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
-				//else
-					//console.log(i, JSON.stringify(piston.stage.layers[i].layerInfo), piston.stage.layers[i].layerEntities.length)
-			}
-			
-		}
-		
-	},
-	draw_: function()
-	{
-		var layers = piston.stage.layers;
-		piston.stage.drawnEntities = 0;
-		for(var i = 0; i < layers.length; i++)
-		{
-			layers[i].update(function(entities) {
-				piston.stage.drawnEntities += entities.length;
-				for(var j = 0; j < entities.length; j++)
-				{
-					if(typeof entities[j].update == 'function')
-					{
-						entities[j].update();
-					}
-					piston.renderer.render(entities[j]);
-				}
-			});
-		}
+				this.totalDrawnEntities += piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
+			}	
+		}	
 	}
 });

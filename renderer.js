@@ -113,68 +113,20 @@ var PistonRenderer = Class.create({
 	{
 
 	},
-	render: function(entity)
-	{
-
-		switch(this.RENDERER_TYPE)
-		{
-			case 'canvas':
-				this.CONTEXT.drawImage(piston.loader.getAsset(entity.image).image, entity.pos.x, entity.pos.y);
-			break;
-			case 'fallback':
-				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
-				if(entity.imgVisible)
-				{
-					this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
-				}
-				if(entity.rectVisible)
-				{
-					this.CONTEXT.strokeStyle = "red";
-					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
-				}
-			break;
-		}
-	},
 	render_: function(entities, info)
 	{
-		this.entityInfo.total = entities.length;
-		this.entityInfo.drawn = 0;
-		var index = 0;
-
+		var tiles = 0;
 		for(var y = info.fromY; y < info.toY; y++)
 		{
 			for(var x = info.fromX; x < info.toX; x++)
 			{
 				if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
 					this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+
+				tiles++;
 			}
 		}
-
-		/*for(var x = size.startX; x < maxX; x++)
-		{
-			for(var y = size.startY; y < maxY ; y++)
-			{
-				if(typeof entities[x][y] != 'undefined' && entities[x][y].visible)
-				{
-					this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
-				}
-				index++;
-			}
-		}*/
-		// this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
-		/*for(var y = 0; y < this.entityInfo.max.y; y++)
-		{
-			for(var x = 0; x < this.entityInfo.max.x; x++)
-			{
-
-				if(start < max)
-				{
-					this.CONTEXT.drawImage(piston.loader.getAsset(entities[start].image).image, entities[start].pos.x, entities[start].pos.y);
-					this.entityInfo.drawn++;
-				}
-				start++;
-			}
-		}*/
+		return tiles;
 	},
 	fps: function()
 	{
