@@ -52,10 +52,18 @@ var PistonEngine = Class.create({
 	},
 	draw: function()
 	{
+		//console.log(JSON.stringify(piston.stage.layers[0].getLayerInfo()))
+		//console.log(JSON.stringify(piston.stage.layers[1].layerInfo), piston.stage.layers[1].layerEntities.length)
 		//var alLEntities = new Array();
 		for(var i = 0; i < piston.stage.layers.length; i++)
 		{
-			piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].layerSize, piston.stage.layers[i].tileSize, piston.stage.layers[i].size);
+			if(piston.stage.layers[i].layerEntities.length > 0)
+			{
+				piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
+				//else
+					//console.log(i, JSON.stringify(piston.stage.layers[i].layerInfo), piston.stage.layers[i].layerEntities.length)
+			}
+			
 		}
 		
 	},

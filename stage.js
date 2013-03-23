@@ -180,11 +180,11 @@ var PistonStage = Class.create({
     },
     getClickedEntity: function(x, y)
     {
-        var entity = this.getEntityAtPos(x, y);
+        /*var entity = this.getEntityAtPos(x, y);
         if(typeof entity !== 'undefined')
             return entity;
         else
-            return false;
+            return false;*/
     },
     isColliding: function(entity1, entity2)
     {

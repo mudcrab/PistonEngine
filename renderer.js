@@ -135,39 +135,32 @@ var PistonRenderer = Class.create({
 			break;
 		}
 	},
-	render_: function(entities, layerSize, tileSize, size)
+	render_: function(entities, info)
 	{
 		this.entityInfo.total = entities.length;
 		this.entityInfo.drawn = 0;
 		var index = 0;
-		var maxY = 0, maxX = 0;
-		if(size.endX > size.totalW)
-			maxX = size.totalW;
-		else
-			maxX = size.endX;
 
-		if(size.endY > size.totalH)
+		for(var y = info.fromY; y < info.toY; y++)
 		{
-			maxY = size.totalH;
+			for(var x = info.fromX; x < info.toX; x++)
+			{
+				if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+			}
 		}
-		else
-		{
-			maxY = size.endY;
-		}
-			
 
-		for(var x = size.startX; x < maxX; x++)
+		/*for(var x = size.startX; x < maxX; x++)
 		{
 			for(var y = size.startY; y < maxY ; y++)
 			{
 				if(typeof entities[x][y] != 'undefined' && entities[x][y].visible)
 				{
-					if(x != 5)
-						this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
 				}
 				index++;
 			}
-		}
+		}*/
 		// this.CONTEXT.drawImage(piston.loader.getAsset(entities[x][y].image).image, entities[x][y].pos.x, entities[x][y].pos.y);
 		/*for(var y = 0; y < this.entityInfo.max.y; y++)
 		{

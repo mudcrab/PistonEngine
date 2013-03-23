@@ -9,32 +9,33 @@ var PistonLayer = Class.create({
 	totalLayerEntities: 0,
 	totalDrawnEntities: 0,
 	hidden: false,
-	startIndex: 0,
-	needle: {
-		startX: 0,
-		startY: 0
-	},
-	current: {
-		x: 0,
-		y: 0
-	},
-	size: {
-		startX: 0,
-		startY: 0,
-		endX: 0,
-		endY: 0,
-		maxX: 0,
-		maxY: 0,
-		totalW: 0,
-		totalH: 0,
-	},
+	stageSize: {},
+	
+	fromX: 0,
+	toX: 0,
+	fromY: 0,
+	toY: 1,
+	maxX: 0,
+	maxY: 0,
+	maxScreenX: 0,
+	maxScreenY: 0,
 
-	initialize: function(id, maxLayerSize, tileSize) {
+	
+
+	initialize: function(id, stageSize, tileSize) {
 		this.layerID = id;
-		this.layerEntities = new Array();
+		this.layerEntities = new Array(1);
+		this.layerEntities[0] = new Array(1);
 		this.drawnLayerEntities = new Array();
 		this.tileSize = tileSize;
-		this.maxLayerSize.w = maxLayerSize.stageWidth;
+		this.maxScreenX = Math.floor(stageSize.screenWidth / tileSize) + 1;
+		this.maxScreenY = Math.floor(stageSize.screenHeight / tileSize) + 1;
+		//this.stageSize = maxLayerSize;
+		//this.layerInfo.maxSizeX = maxLayerSize.screenWidth;
+		//this.layerInfo.maxSizeY = maxLayerSize.screenHeight;
+		//this.layerInfo.maxX = 0;
+		//this.layerInfo.maxY = 0;
+		/*this.maxLayerSize.w = maxLayerSize.stageWidth;
 		this.maxLayerSize.h = maxLayerSize.stageHeight;
 		this.renderSize.x = Math.floor(maxLayerSize.screenWidth / tileSize) + 1;
 		this.renderSize.y = Math.floor(maxLayerSize.screenHeight / tileSize) + 1;
@@ -48,31 +49,69 @@ var PistonLayer = Class.create({
 		this.size.maxX = this.size.endX - this.size.startX;
 		this.size.maxY = this.size.endY - this.size.startY;
 		this.size.totalW = maxLayerSize.stageWidth;
-		this.size.totalH = maxLayerSize.stageHeight;
+		this.size.totalH = maxLayerSize.stageHeight;*/
 		//this.max = size.stageWidth * size.stageHeight;
 	},
-	addChild: function(entity) {
+	addChild: function(entity, row) {
 		entity.layer = this.layerID;
-		var index = 0;
-		for(var y = 0; y < this.maxLayerSize.h; y++)
+		if(typeof row == 'undefined')
 		{
-			for(var x = 0; x < this.maxLayerSize.w; x++)
+			row = 0
+		}
+		else
+		{
+			row = row;
+			this.toY += 1;
+		}
+		this.maxY += row;
+		this.layerEntities[this.maxY][this.maxX] = entity;
+		this.maxX++;
+		this.toX += 1;
+		//this.layerInfo.layerId = this.layerID;
+		/*for(var y = 0; y < this.maxY+1; y++)
+		{
+			for(var x = 0; x < this.maxX+1; x++)
 			{
 				if(typeof this.layerEntities[x][y] == 'undefined')
 				{
 					this.layerEntities[x][y] = entity;
-					this.layerSize.w = x+1;
-					this.layerSize.h = y+1;
+					this.maxX = x+1;
+					this.maxY = y+1;
 					return index;
 				}
 				index++;
 			}
-		}
+		}*/
+		//console.log(this.layerEntities, this.getLayerInfo())
 	},
 	addChildren: function(entities, size)
 	{
-		this.layerSize = size;
+		//this.layerInfo.toX = entities[0].length;
+		//this.layerInfo.toY = entities.length;
+		//this.toX = entities[0].length;
+		//this.toY = entities.length;
 		this.layerEntities = entities;
+		if(entities[0].length > this.maxScreenX)
+			this.toX = this.maxScreenX;
+		else
+			this.toX = entities[0].length;
+
+		if(entities.length > this.maxScreenY)
+			this.toY = this.maxScreenY;
+		else
+			this.toY = entities.length;
+		//this.layerInfo.layerId = this.layerID;
+	},
+	getLayerInfo: function()
+	{
+		return {
+			fromX: this.fromX,
+			fromY: this.fromY,
+			toX: this.toX,
+			toY: this.toY,
+			maxX: this.maxX,
+			maxY: this.maxY
+		}
 	},
 	addChildAt: function(entity) {
 		// later
@@ -84,7 +123,7 @@ var PistonLayer = Class.create({
 
 	},
 	move: function(_x, _y) {
-		this.current.x += _x;
+		/*this.current.x += _x;
 		this.current.y += _y;
 		for(var y = 0; y < this.layerSize.h; y++)
 		{
@@ -102,7 +141,7 @@ var PistonLayer = Class.create({
 		this.size.endX = this.size.startX + this.renderSize.x;
 		this.size.endY = this.size.startY + this.renderSize.y;
 		this.size.maxX = this.size.endX - this.size.startX;
-		this.size.maxY = this.size.endY - this.size.startY;
+		this.size.maxY = this.size.endY - this.size.startY;*/
 	},
 	hideLayer: function() {
 		this.hidden = true;
