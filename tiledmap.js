@@ -42,7 +42,7 @@ var PistonTiledMap = Class.create(PistonMap, {
 								else if(mapType == 'isometric')
 								{
 									var xy = {x: (self.raw.tilewidth * _x) + ( (_y % 2 == 1) ? self.raw.tilewidth / 2 : 0 ) - self.raw.tilewidth / 2, y: (self.raw.tileheight / 2) * _y - self.raw.tileheight / 2};
-								}\
+								}
 
 								var tile = new PistonEntity(xy, { w: self.raw.tilewidth, h: self.raw.tileheight }, self.raw.tilesets[0].tileproperties[id].instanceName);
 								tile.scrollable = true;
@@ -54,6 +54,7 @@ var PistonTiledMap = Class.create(PistonMap, {
 						data.layers.push(layer);
 					}
 				}
+
 				cb(data);
 			}
 		});
