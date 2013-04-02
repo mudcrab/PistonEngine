@@ -112,12 +112,32 @@ var PistonStage = Class.create({
     {
         return this.entities[index];
     },
-    getEntityAtPos: function(x, y, layer)
+    getEntityAtPos: function(_x, _y, layer)
     {
+        //console.log(this.layers[0].layerEntities[0][0]);
         typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
         for(var i = layer; i >= 0; i--)
         {
-            for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
+            //console.log(this.layers[i].entities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)] !== undefined)
+            //console.log(this.layers[i].layerEntities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)])
+            //if(this.layers[i].layerEntities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)] != 'undefined')
+                //return this.layers[i].layerEntities[y, x];
+            for(var y = 0; y < this.layers[i].layerEntities.length; y++)
+            {
+                for(var x = 0; x < this.layers[i].layerEntities[0].length; x++)
+                {
+                    var minX = this.layers[i].layerEntities[y][x].pos.x;
+                    var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
+                    var minY = this.layers[i].layerEntities[y][x].pos.y;
+                    var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
+
+                    if(_x >= minX && _x <= maxX && _y >= minY && _y <= maxY)
+                    {
+                        return this.layers[i].layerEntities[y][x];
+                    }
+                }
+            }
+            /*for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
             {
                 var minX = this.layers[i].layerEntities[entity].pos.x;
                 var maxX = this.layers[i].layerEntities[entity].pos.x + this.layers[i].layerEntities[entity].size.w;
@@ -127,7 +147,7 @@ var PistonStage = Class.create({
                 {
                     return this.layers[i].layerEntities[entity];
                 }
-            }
+            }*/
         }
     },
     searchForEntity: function(instanceName)
@@ -178,13 +198,14 @@ var PistonStage = Class.create({
     {        
         
     },
-    getClickedEntity: function(x, y)
+    getClickedEntity: function(x, y, layer)
     {
-        /*var entity = this.getEntityAtPos(x, y);
+        typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
+        var entity = this.getEntityAtPos(x, y, layer);
         if(typeof entity !== 'undefined')
             return entity;
         else
-            return false;*/
+            return false;
     },
     isColliding: function(entity1, entity2)
     {
