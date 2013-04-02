@@ -41,7 +41,6 @@ var PistonStage = Class.create({
         this.stageSize.stageWidth = w;
         this.stageSize.stageHeight = h;
     },
-    // TODO fix this
 	addChild: function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
@@ -114,14 +113,9 @@ var PistonStage = Class.create({
     },
     getEntityAtPos: function(_x, _y, layer)
     {
-        //console.log(this.layers[0].layerEntities[0][0]);
         typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
         for(var i = layer; i >= 0; i--)
         {
-            //console.log(this.layers[i].entities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)] !== undefined)
-            //console.log(this.layers[i].layerEntities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)])
-            //if(this.layers[i].layerEntities[Math.floor(y / this.layers[i].tileSize), Math.floor(x / this.layers[i].tileSize)] != 'undefined')
-                //return this.layers[i].layerEntities[y, x];
             for(var y = 0; y < this.layers[i].layerEntities.length; y++)
             {
                 for(var x = 0; x < this.layers[i].layerEntities[0].length; x++)
@@ -137,17 +131,6 @@ var PistonStage = Class.create({
                     }
                 }
             }
-            /*for(var entity = 0; entity < this.layers[i].layerEntities.length; entity++)
-            {
-                var minX = this.layers[i].layerEntities[entity].pos.x;
-                var maxX = this.layers[i].layerEntities[entity].pos.x + this.layers[i].layerEntities[entity].size.w;
-                var minY = this.layers[i].layerEntities[entity].pos.y;
-                var maxY = this.layers[i].layerEntities[entity].pos.y + this.layers[i].layerEntities[entity].size.h;
-                if(x >= minX && x <= maxX && y >= minY && y <= maxY)
-                {
-                    return this.layers[i].layerEntities[entity];
-                }
-            }*/
         }
     },
     searchForEntity: function(instanceName)

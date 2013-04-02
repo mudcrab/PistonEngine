@@ -23,8 +23,16 @@ var PistonLayer = Class.create({
 		this.layerEntities = new Array(1);
 		this.layerEntities[0] = new Array(1);
 		this.tileSize = tileSize;
-		this.maxScreenX = Math.floor(stageSize.screenWidth / tileSize) + 1;
-		this.maxScreenY = Math.floor(stageSize.screenHeight / tileSize) + 1;
+		if(typeof tileSize == 'object')
+		{ // 21.5
+			this.maxScreenX = Math.floor((stageSize.screenWidth / (tileSize.w / 2)) / 2) + 1;
+			this.maxScreenY = Math.floor(stageSize.screenHeight / (tileSize.h / 2)) + 1;
+		}	
+		else
+		{
+			this.maxScreenX = Math.floor(stageSize.screenWidth / tileSize) + 1;
+			this.maxScreenY = Math.floor(stageSize.screenHeight / tileSize) + 1;
+		}
 	},
 	addChild: function(entity, row) {
 		entity.layer = this.layerID;
@@ -94,8 +102,8 @@ var PistonLayer = Class.create({
 
 		this.counterX += _x;
 		this.counterY += _y;
-		this.fromX = Math.abs( Math.floor( this.counterX / this.tileSize ) ) - 1;
-		this.fromY = Math.abs( Math.floor( this.counterY / this.tileSize ) ) - 1;
+		this.fromX = Math.abs( Math.floor( this.counterX / this.tileSize.w ) ) - 1;
+		this.fromY = Math.abs( Math.floor( this.counterY / this.tileSize.h ) ) - 1;
 
 		if(this.fromX < 0)
 			this.fromX = 0;
