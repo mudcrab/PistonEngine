@@ -5,6 +5,7 @@ var PistonStage = Class.create({
     drawableEntities: [],
     drawnEntities: 0,
     clickableEntities: [],
+    stageType: 'orthogonal',
     toDraw: null,
     cameraEntity: null,
     stageSize: {
@@ -120,11 +121,21 @@ var PistonStage = Class.create({
             {
                 for(var x = 0; x < this.layers[i].layerEntities[0].length; x++)
                 {
-                    var minX = this.layers[i].layerEntities[y][x].pos.x;
-                    var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
-                    var minY = this.layers[i].layerEntities[y][x].pos.y;
-                    var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
-
+                    if(this.stageType == 'orthogonal')
+                    {
+                        var minX = this.layers[i].layerEntities[y][x].pos.x;
+                        var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
+                        var minY = this.layers[i].layerEntities[y][x].pos.y;
+                        var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
+                    }
+                    else
+                    {
+                        var minX = (_y / this.layers[i].layerEntities[y][x].size.h) + (_x / this.layers[i].layerEntities[y][x].size.w);
+                        var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
+                        var minY = (_x / this.layers[i].layerEntities[y][x].size.w) - (_y / this.layers[i].layerEntities[y][x].size.h);
+                        var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
+                    }
+                    
                     if(_x >= minX && _x <= maxX && _y >= minY && _y <= maxY)
                     {
                         return this.layers[i].layerEntities[y][x];
