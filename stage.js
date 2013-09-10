@@ -5,6 +5,7 @@ var PistonStage = Class.create({
     drawableEntities: [],
     drawnEntities: 0,
     clickableEntities: [],
+    stageType: 'orthogonal',
     toDraw: null,
     cameraEntity: null,
     stageSize: {
@@ -36,16 +37,18 @@ var PistonStage = Class.create({
         this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
         toDraw = new Array();
 	},
+    setSize: function(w, h)
+    {
+        this.stageSize.stageWidth = w;
+        this.stageSize.stageHeight = h;
+    },
 	addChild: function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
-        var newLength = this.entities.push(entity);
-        this.totalEntities++;
-        if(entity.clickable)
-        {
-            this.clickableEntities.push(entity);
-        }
-        return newLength - 1; // eg element index
+    },
+    addChildren: function(entities, layerID, width, height)
+    {
+        this.layers[layerID].addChildren(entities, {w: width, h: height});
     },
     addChildAt: function(index, entity)
     {
@@ -63,8 +66,8 @@ var PistonStage = Class.create({
             }
         }
     },
-    addLayer: function(id) {
-        this.layers.push(new PistonLayer(id, this.stageSize));
+    addLayer: function(id, tileSize) {
+        this.layers.push(new PistonLayer(id, this.stageSize, tileSize));
     },
     deleteLayer: function(id) {
 
@@ -109,9 +112,37 @@ var PistonStage = Class.create({
     {
         return this.entities[index];
     },
-    getEntityAtPos: function(x, y)
+    getEntityAtPos: function(_x, _y, layer)
     {
-
+        typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
+        for(var i = layer; i >= 0; i--)
+        {
+            for(var y = 0; y < this.layers[i].layerEntities.length; y++)
+            {
+                for(var x = 0; x < this.layers[i].layerEntities[0].length; x++)
+                {
+                    if(this.stageType == 'orthogonal')
+                    {
+                        var minX = this.layers[i].layerEntities[y][x].pos.x;
+                        var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
+                        var minY = this.layers[i].layerEntities[y][x].pos.y;
+                        var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
+                    }
+                    else
+                    {
+                        var minX = (_y / this.layers[i].layerEntities[y][x].size.h) + (_x / this.layers[i].layerEntities[y][x].size.w);
+                        var maxX = this.layers[i].layerEntities[y][x].pos.x + this.layers[i].layerEntities[y][x].size.w;
+                        var minY = (_x / this.layers[i].layerEntities[y][x].size.w) - (_y / this.layers[i].layerEntities[y][x].size.h);
+                        var maxY = this.layers[i].layerEntities[y][x].pos.y + this.layers[i].layerEntities[y][x].size.h;
+                    }
+                    
+                    if(_x >= minX && _x <= maxX && _y >= minY && _y <= maxY)
+                    {
+                        return this.layers[i].layerEntities[y][x];
+                    }
+                }
+            }
+        }
     },
     searchForEntity: function(instanceName)
     {
@@ -131,18 +162,10 @@ var PistonStage = Class.create({
     },
     setup: function()
     {
-        this.toDraw = [];
         this.drawnEntities = 0;
-        for(var layer = 0; layer < this.layers.length; layer++)
-        {
-            this.layers[layer].initDrawables();
-            this.toDraw.push(this.layers[layer].drawnLayerEntities);
-            this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
-        }
     },
     move: function(x, y)
     {
-        this.drawableEntities = [];
         var drawn = 0;
         var lastX = this.stagePos.x;
         var lastY = this.stagePos.y;
@@ -150,13 +173,9 @@ var PistonStage = Class.create({
         this.stagePos.y += y;
         if(this.stagePos.x > (this.stagePos.maxScrollX * -1) && this.stagePos.x <= 0 && this.stagePos.y >= (this.stagePos.maxScrollY * -1) && this.stagePos.y <= 0)
         {
-            this.toDraw = [];
-            this.drawnEntities = 0;
             for(var layer = 0; layer < this.layers.length; layer++)
             {
                 this.layers[layer].move(x, y);
-                this.toDraw.push(this.layers[layer].drawnLayerEntities);
-                this.drawnEntities += this.layers[layer].drawnLayerEntities.length;
             }
         }
         else
@@ -164,43 +183,29 @@ var PistonStage = Class.create({
             this.stagePos.x = lastX;
             this.stagePos.y = lastY;
         }
-        this.drawnEntities = drawn;
     },
     updatePos: function(x, y)
     {
         
     },
     update: function()
-    {
-        if(this.cameraEntity !== null)
-            this.cameraEntity.update(this.stagePos, this.stageSize); // update the size with the position because maybe the window is resized during some period
-        for(var layer = 0; layer < this.layers.length; layer++)
-        {
-            this.layers[layer].update();
-        }
+    {        
+        
     },
-    setDrawable: function()
+    getClickedEntity: function(x, y, layer)
     {
-        var drawn = 0;
-        var toDraw = [];
-        for(var i = 0; i < this.entities.length; i++)
-        {
-
-        }
+        typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
+        var entity = this.getEntityAtPos(x, y, layer);
+        if(typeof entity !== 'undefined')
+            return entity;
+        else
+            return false;
     },
-    getClickedEntity: function(x, y)
+    isColliding: function(entity1, entity2)
     {
-        var entities = this.clickableEntities;
-        for(var entity = 0; entity < entities.length; entity++)
-        {
-            var minX = entities[entity].pos.x;
-            var maxX = entities[entity].pos.x + entities[entity].size.w;
-            var minY = entities[entity].pos.y;
-            var maxY = entities[entity].pos.y + entities[entity].size.h;
-            if(x >= minX && x <= maxX && y >= minY && y <= maxY)
-            {
-                return entities[entity];
-            }
-        }
+        if(this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer) && this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer).index == entity2.index)
+           return true;
+        else
+            return false;
     }
 });

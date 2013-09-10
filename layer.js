@@ -1,39 +1,84 @@
 var PistonLayer = Class.create({
 	layerID: null,
+	renderByTile: true,
 	layerEntities: null,
-	drawnLayerEntities: null,
-	layerSize: {},
-	totalLayerEntities: 0,
-	totalDrawnEntities: 0,
+	tileSize: 32,
 	hidden: false,
+	totalEntities: 0,
+	fromX: 0,
+	toX: 0,
+	fromY: 0,
+	toY: 1,
+	maxX: 0,
+	maxY: 0,
+	maxScreenX: 0,
+	maxScreenY: 0,
 
-	initialize: function(id, size) {
+	counterY: 0,
+	counterX: 0,
+	
+
+	initialize: function(id, stageSize, tileSize) {
 		this.layerID = id;
-		this.layerSize = size;
-		this.layerEntities = new Array();
-		this.drawnLayerEntities = new Array();
-	},
-	initDrawables: function() {
-		this.drawnLayerEntities = [];
-		if(!this.hidden)
+		this.layerEntities = new Array(1);
+		this.layerEntities[0] = new Array(1);
+		this.tileSize = tileSize;
+		if(typeof tileSize == 'object')
+		{ // 21.5
+			this.maxScreenX = Math.floor((stageSize.screenWidth / (tileSize.w / 2)) / 2) + 1;
+			this.maxScreenY = Math.floor(stageSize.screenHeight / (tileSize.h / 2)) + 1;
+		}	
+		else
 		{
-			for(var i = 0; i < this.layerEntities.length; i++)
-			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
-				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
-				}
-			}
+			this.maxScreenX = Math.floor(stageSize.screenWidth / tileSize) + 1;
+			this.maxScreenY = Math.floor(stageSize.screenHeight / tileSize) + 1;
 		}
 	},
-	addChild: function(entity) {
-		var len = this.layerEntities.push(entity);
-		this.totalLayerEntities++;
-		if(entity.pos.x >= -32 && entity.pos.x <= this.layerSize.screenWidth && entity.pos.y >= -32 && entity.pos.y <= this.layerSize.screenHeight)
+	addChild: function(entity, row) {
+		entity.layer = this.layerID;
+		if(typeof row == 'undefined')
 		{
-			this.drawnLayerEntities.push(entity);
+			row = 0
 		}
-		return len--;
+		else
+		{
+			row = row;
+			this.toY += 1;
+		}
+		this.maxY += row;
+		this.layerEntities[this.maxY][this.maxX] = entity;
+		this.maxX++;
+		this.toX += 1;
+		this.totalEntities++;
+	},
+	addChildren: function(entities, size)
+	{
+		for(var y = 0; y < entities.length; y++)
+			for(var x = 0; x < entities[0].length; x++)
+				if(typeof entities[y][x] != 'undefined')
+					this.totalEntities++;
+		
+		this.layerEntities = entities;
+		if(entities[0].length > this.maxScreenX)
+			this.toX = this.maxScreenX;
+		else
+			this.toX = entities[0].length;
+
+		if(entities.length > this.maxScreenY)
+			this.toY = this.maxScreenY;
+		else
+			this.toY = entities.length;
+	},
+	getLayerInfo: function()
+	{
+		return {
+			fromX: this.fromX,
+			fromY: this.fromY,
+			toX: this.toX,
+			toY: this.toY,
+			maxX: this.maxX,
+			maxY: this.maxY
+		}
 	},
 	addChildAt: function(entity) {
 		// later
@@ -44,18 +89,47 @@ var PistonLayer = Class.create({
 	getChild: function(id) {
 
 	},
-	move: function(x, y) {
-		this.drawnLayerEntities = [];
-		for(var i = 0; i < this.layerEntities.length; i++)
+	move: function(_x, _y) {
+
+		for(var y = 0; y < this.layerEntities.length; y++)
 		{
-			this.layerEntities[i].move(x, y);
-			if(!this.hidden)
+			for(var x = 0; x < this.layerEntities[0].length; x++)
 			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
-				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
-				}
+				if(!this.layerEntities[y][x].manual)
+					this.layerEntities[y][x].move(_x, _y);
 			}
+		}
+
+		this.counterX += _x;
+		this.counterY += _y;
+		this.fromX = Math.abs( Math.floor( this.counterX / this.tileSize.w ) ) - 1;
+		this.fromY = Math.abs( Math.floor( this.counterY / this.tileSize.h ) ) - 1;
+
+		if(this.fromX < 0)
+			this.fromX = 0;
+
+		if(this.fromY < 0)
+			this.fromY = 0;
+
+
+		if(this.renderByTile)
+		{
+			if(this.layerEntities.length < this.maxScreenY)
+				this.toY = this.layerEntities.length + this.fromY;
+			else
+				this.toY = this.maxScreenY + this.fromY;
+
+			if(this.layerEntities[0].length < this.maxScreenX)
+				this.toX = this.layerEntities[0].length + this.fromY;
+			else
+				this.toX = this.maxScreenX + this.fromX;
+		}
+		else
+		{
+			this.fromX = 0;
+			this.fromY = 0;
+			this.toX = this.layerEntities[0].length;
+			this.toY = this.layerEntities.length;
 		}
 	},
 	hideLayer: function() {
@@ -82,19 +156,4 @@ var PistonLayer = Class.create({
 	clearAllEntities: function() {
 
 	},
-	update: function() {
-
-		this.drawnLayerEntities = [];
-		if(!this.hidden)
-		{
-			for(var i = 0; i < this.layerEntities.length; i++)
-			{
-				if(this.layerEntities[i].pos.x >= -32 && this.layerEntities[i].pos.x <= this.layerSize.screenWidth && this.layerEntities[i].pos.y >= -32 && this.layerEntities[i].pos.y <= this.layerSize.screenHeight)
-				{
-					this.drawnLayerEntities.push(this.layerEntities[i]);
-				}
-			}
-
-		}
-	}
 });

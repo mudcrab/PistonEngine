@@ -8,6 +8,16 @@ var PistonRenderer = Class.create({
 	lastCall: null,
 	delta: null,
 	tick: null,
+	entityInfo: {
+		total: 0,
+		drawn: 0,
+		currentPos: 0,
+		max: {
+			x: 39,
+			y: 28,
+			i: 1092
+		}
+	},
 	initialize: function(canvas_, type, fps, size, cb) 
 	{
 		this.CANVAS = document.getElementById(canvas_);
@@ -18,6 +28,7 @@ var PistonRenderer = Class.create({
 		this.CANVAS.width = this.DISPLAY_SIZE.width;
 		this.CANVAS.height = this.DISPLAY_SIZE.height;
 		this.CONTEXT = this.CANVAS.getContext('2d');
+
 		var that = this;
 		var frame = window.requestAnimationFrame ||
 		            window.webkitRequestAnimationFrame ||
@@ -102,35 +113,20 @@ var PistonRenderer = Class.create({
 	{
 
 	},
-	render: function(entity)
+	render_: function(entities, info)
 	{
-		switch(this.RENDERER_TYPE)
+		var tiles = 0;
+		for(var y = info.fromY; y < info.toY; y++)
 		{
-			case 'canvas':
-				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
-				if(entity.visible)
-				{
-					this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
-				}
-				if(entity.rectVisible)
-				{
-					this.CONTEXT.strokeStyle = "red";
-					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
-				}
-			break;
-			case 'fallback':
-				//this.CONTEXT.clearRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.w);
-				if(entity.imgVisible)
-				{
-					this.CONTEXT.drawImage(entity.image, entity.pos.x, entity.pos.y);
-				}
-				if(entity.rectVisible)
-				{
-					this.CONTEXT.strokeStyle = "red";
-					this.CONTEXT.strokeRect(entity.rectPos.x, entity.rectPos.y, entity.rectSize.w, entity.rectSize.h);
-				}
-			break;
+			for(var x = info.fromX; x < info.toX; x++)
+			{
+				if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
+					this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+
+				tiles++;
+			}
 		}
+		return tiles;
 	},
 	fps: function()
 	{

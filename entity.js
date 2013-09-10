@@ -1,4 +1,5 @@
 var PistonEntity = Class.create({
+	index: 0,
 	ASSETS_PATH: 'assets/',
 	pos: {
 		x: 0,
@@ -12,6 +13,7 @@ var PistonEntity = Class.create({
 	},
 	clickable: false,
 	scrollable: false,
+	manual: false,
 	visible: true,
 	imgVisible: true,
 	source: null,
@@ -20,12 +22,13 @@ var PistonEntity = Class.create({
 	rectVisible: false, // todo recto bounds
 	rectSize: {w: 0, h: 0},
 	rectPos: {x: 0, y: 0},
+	layer: 0,
 	properties: {},
 	initialize: function(pos_, size_, image_, name_) 
 	{
 		this.pos = pos_;
 		this.size = size_;
-		this.source = image_;
+		//this.source = image_;
 		this.name = name_;
 		//this.image = new Image();
 		//this.image.src = this.ASSETS_PATH + image_ + '.png'; // todo change this to asset loader later
