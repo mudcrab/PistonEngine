@@ -2,15 +2,17 @@
 	Piston Engine
 */
 window.piston = window.piston || {};
-var PistonEngine = Class.create({
-	RENDERER: null,
-	mainClass: null,
-	fps: 0,
-	delta: 0,
-	loader: null,
-	totalEntities: 0,
-	totalDrawnEntities: 0,
-	initialize: function(canvasElement, _mC) 
+var PistonEngine = function(canvasElement, _mC) {
+	this.RENDERER = null;
+	this.mainClass = null;
+	this.fps = 0;
+	this.delta = 0;
+	this.loader = null;
+	this.totalEntities = 0;
+	this.totalDrawnEntities = 0;
+	this.initialize(canvasElement, _mC);
+};
+	PistonEngine.prototype.initialize = function(canvasElement, _mC) 
 	{
 		this.mainClass = new _mC;
 		var that = this;
@@ -25,34 +27,34 @@ var PistonEngine = Class.create({
 			{
 				clearTimeout(timeout);
 				that.setup();
-				piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+				piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).width(), height: $(canvasElement).height() }, function() {  that.loop(); });
 			}
 		}, 100);
-	},
-	info: function()
+	};
+	PistonEngine.prototype.info = function()
 	{
 		var info_ = {
 			renderer: piston.renderer.RENDERER_TYPE
 		};
 		return info_;
-	},
-	setup: function()
+	};
+	PistonEngine.prototype.setup = function()
 	{
 		this.mainClass.loader = this.loader;
 		this.mainClass.setup();
-	},
-	loop: function()
+	};
+	PistonEngine.prototype.loop = function()
 	{
 		this.update();
 		this.draw();
-	},
-	update: function()
+	};
+	PistonEngine.prototype.update = function()
 	{
 		this.fps = piston.renderer.fps();
 		this.delta = piston.renderer.getDelta();
 		this.mainClass.update();
-	},
-	draw: function()
+	};
+	PistonEngine.prototype.draw = function()
 	{
 		this.totalDrawnEntities = 0;
 		this.totalEntities = 0;
@@ -64,5 +66,4 @@ var PistonEngine = Class.create({
 				this.totalDrawnEntities += piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
 			}	
 		}	
-	}
-});
+	};

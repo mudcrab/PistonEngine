@@ -1,12 +1,14 @@
-var PistonDebug = Class.create({
+var PistonDebug = function() {
 
-	buffer: [],
-	bufferSize: 500,
-	enabled: false,
-	mstick: 0,
-	barVisible: false,
+	buffer = [];
+	bufferSize = 500;
+	enabled = false;
+	mstick = 0;
+	barVisible = false;
+	this.initialize();
+};
 
-	initialize: function() {
+	PistonDebug.prototype.initialize = function() {
 		var barHTML = '<div id="debug_bar">\
 			<div class="db_item" id="db_fps">FPS 60</div>\
 			<div class="db_item" id="db_time">TIME 60</div>\
@@ -17,8 +19,8 @@ var PistonDebug = Class.create({
 		</div>';
 		$(document.body).insert(barHTML);
 		this.hideDebugBar();
-	},
-	log: function() {
+	};
+	PistonDebug.prototype.log = function() {
 		var date = new Date();
 		var log = '[ ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ' ] ';
 		for(var i = 0; i < arguments.length; i++)
@@ -43,13 +45,13 @@ var PistonDebug = Class.create({
 		if(this.enabled)
 			console.log(log)
 
-	},
-	clear: function()
+	};
+	PistonDebug.prototype.clear = function()
 	{
 		this.buffer = [];
 		console.clear();
-	},
-	showBuffer: function()
+	};
+	PistonDebug.prototype.showBuffer = function()
 	{
 		for(var i = 0; i < this.buffer.length; i++)
 		{
@@ -57,22 +59,22 @@ var PistonDebug = Class.create({
 		}
 		if(this.buffer.length === 0)
 			console.log('Buffer empty');
-	},
-	showDebugBar: function()
+	};
+	PistonDebug.prototype.showDebugBar = function()
 	{
 		$('debug_bar').show();
 		this.barVisible = true;
-	},
-	hideDebugBar: function()
+	};
+	PistonDebug.prototype.hideDebugBar = function()
 	{
 		$('debug_bar').hide();
 		this.barVisible = false;
-	},
-	setBarPosition: function(position) // top or bottom
+	};
+	PistonDebug.prototype.setBarPosition = function(position) // top or bottom
 	{
 
-	},
-	update: function()
+	};
+	PistonDebug.prototype.update = function()
 	{
 		if(this.barVisible)
 		{
@@ -88,5 +90,4 @@ var PistonDebug = Class.create({
 				this.mstick++;
 		}
 	}
-});
 piston.debug = new PistonDebug()

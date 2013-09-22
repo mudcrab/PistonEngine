@@ -1,18 +1,20 @@
-var PistonInput = Class.create({
+var PistonInput = function() {
     
-    upKeys: [],
-    downKeys: [],
-    codeToString: null,
-    leftMouseHandler: {
+    this.upKeys = [];
+    this.downKeys = [];
+    this.codeToString = null;
+    this.leftMouseHandler = {
         click: false,
         press: false,
         up: false,
         down: false,
         element: "none"
-    },
-    mouseXY : {},
+    };
+    this.mouseXY = {};
+    this.initialize();
+};
     
-    initialize: function()
+    PistonInput.prototype.initialize = function()
     {
         this.codeToString = new Array();
         var letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
@@ -79,11 +81,11 @@ var PistonInput = Class.create({
             that.leftMouseUp = true;
         });*/
         //jQuery('document').
-    },
-    addMouseHandler: function(eventType, element)
+    };
+    PistonInput.prototype.addMouseHandler = function(eventType, element)
     {
         var that = this;
-        $(element).observe(eventType, function(event) {
+        /*$(element).observe(eventType, function(event) {
             event.stop();
             switch(eventType)
             {
@@ -111,21 +113,21 @@ var PistonInput = Class.create({
                 y: event.clientY
             };
             that.clickedElement = element;
-        });
-    },
-    getMouseX: function()
+        });*/
+    };
+    PistonInput.prototype.getMouseX = function()
     {
         
-    },
-    getMouseY: function()
+    };
+    PistonInput.prototype.getMouseY = function()
     {
         
-    },
-    getMouse: function()
+    };
+    PistonInput.prototype.getMouse = function()
     {
         
-    },
-    keyDown: function(key)
+    };
+    PistonInput.prototype.keyDown = function(key)
     {
         
         if(this.downKeys[key])
@@ -136,8 +138,8 @@ var PistonInput = Class.create({
         {
             return false;
         }
-    },
-    keyUp: function(key)
+    };
+    PistonInput.prototype.keyUp = function(key)
     {
         if(this.upKeys[key])
         {
@@ -148,8 +150,8 @@ var PistonInput = Class.create({
         {
             return false;
         }
-    },
-    leftMousePress: function(element)
+    };
+    PistonInput.prototype.leftMousePress = function(element)
     {
         if(this.leftMouseHandler.element == element && this.leftMouseHandler.press == true)
         {
@@ -159,8 +161,8 @@ var PistonInput = Class.create({
         }
         else
             return false;
-    },
-    leftMouseClick: function(element)
+    };
+    PistonInput.prototype.leftMouseClick = function(element)
     {
         if(this.leftMouseHandler.element == element && this.leftMouseHandler.click == true)
         {
@@ -170,8 +172,8 @@ var PistonInput = Class.create({
         }
         else
             return false;
-    },
-    leftMouseDown: function(element)
+    };
+    PistonInput.prototype.leftMouseDown = function(element)
     {
         if(this.leftMouseHandler.element == element && this.leftMouseHandler.down == true)
         {
@@ -181,8 +183,8 @@ var PistonInput = Class.create({
         }
         else
             return false;
-    },
-    leftMouseUp: function(element)
+    };
+    PistonInput.prototype.leftMouseUp = function(element)
     {
         if(this.leftMouseHandler.element == element && this.leftMouseHandler.up == true)
         {
@@ -193,7 +195,7 @@ var PistonInput = Class.create({
         else
             return false;
     }
-    /*leftMousePress: function()
+    /*leftMousePress = function()
     {
         var obj = {
             pressed : this.leftMousePressed,
@@ -201,8 +203,8 @@ var PistonInput = Class.create({
             y : this.mouseXY.y
         }
         return obj;
-    },
-    leftMouseClick: function()
+    };
+    leftMouseClick = function()
     {
         if(this.leftMouseUp)
         {
@@ -221,4 +223,3 @@ var PistonInput = Class.create({
             return false;
         }
     }*/
-});

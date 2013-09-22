@@ -1,16 +1,19 @@
-var PistonMap = Class.create({
-	DEFAULT_ASSET_PATH: 'assets/',
-	mWidth: 0,
-	mHeight: 0,
-	layers: 0,
-	name: null,
-	mapData: [],
-	initialize: function()
+var PistonMap = function(map) {
+	this.DEFAULT_ASSET_PATH = 'assets/';
+	this.mWidth = 0;
+	this.mHeight = 0;
+	this.layers = 0;
+	this.name = null;
+	this.mapData = [];
+	this.file = map;
+	this.mapData = new Array();
+	//this.initialize();
+};
+	initialize = function()
 	{
 		this.mapData = new Array();
-	},
-	returnMap: function()
+	};
+	returnMap = function()
 	{
 		return this.mapData;
-	}
-});
+	};
