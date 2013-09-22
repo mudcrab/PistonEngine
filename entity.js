@@ -1,30 +1,31 @@
-var PistonEntity = Class.create({
-	index: 0,
-	ASSETS_PATH: 'assets/',
-	pos: {
+var PistonEntity = function(pos_, size_, image_, name_) {
+	this.index = 0;
+	this.ASSETS_PATH = 'assets/';
+	this.pos = {
 		x: 0,
 		y: 0,
 		lastx: 0,
 		lasty: 0
-	},
-	size: {
+	};
+	this.size = {
 		w: 0,
 		h: 0
-	},
-	clickable: false,
-	scrollable: false,
-	manual: false,
-	visible: true,
-	imgVisible: true,
-	source: null,
-	image: null,
-	name: null,
-	rectVisible: false, // todo recto bounds
-	rectSize: {w: 0, h: 0},
-	rectPos: {x: 0, y: 0},
-	layer: 0,
-	properties: {},
-	initialize: function(pos_, size_, image_, name_) 
+	};
+	this.clickable = false;
+	this.scrollable = false;
+	this.manual = false;
+	this.visible = true;
+	this.imgVisible = true;
+	this.source = null;
+	this.image = null;
+	this.name = null;
+	this.rectVisible = false; // todo recto bounds
+	this.rectSize = {w: 0, h: 0};
+	this.rectPos = {x: 0, y: 0};
+	this.layer = 0;
+	this.properties = {};
+};
+	PistonEntity.prototype.initialize = function(pos_, size_, image_, name_) 
 	{
 		this.pos = pos_;
 		this.size = size_;
@@ -41,7 +42,7 @@ var PistonEntity = Class.create({
 	/* 
 		move entity by x, y pixels 
 	*/
-	move: function(x, y)
+	PistonEntity.prototype.move = function(x, y)
 	{
 		if(this.scrollable)
 		{
@@ -54,7 +55,7 @@ var PistonEntity = Class.create({
 	/*
 		move entity to x, y
 	*/
-	moveTo: function(x, y)
+	PistonEntity.prototype.moveTo = function(x, y)
 	{
 		this.pos.lastx = this.pos.x;
 		this.pos.lasty = this.pos.y;
@@ -64,7 +65,7 @@ var PistonEntity = Class.create({
 	/*
 		set a new image for entity
 	*/
-	changeImg: function(image_, w, h)
+	PistonEntity.prototype.changeImg = function(image_, w, h)
 	{
 		w = undefined ? w = this.size.w : w = w;
 		h = undefined ? h = this.size.h : h = h;
@@ -73,4 +74,3 @@ var PistonEntity = Class.create({
 		this.image.width = size.w;
 		this.image.height = size.h;
 	}
-});

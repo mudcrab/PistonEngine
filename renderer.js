@@ -1,14 +1,14 @@
-var PistonRenderer = Class.create({
-	CANVAS: null,
-	DISPLAY_SIZE: null,
-	CONTEXT: null,
-	RENDERER_TYPE: null,
-	FPS: null,
-	_fps: 0,
-	lastCall: null,
-	delta: null,
-	tick: null,
-	entityInfo: {
+var PistonRenderer = function(canvas_, type, fps, size, cb) {
+	this.CANVAS = null;
+	this.DISPLAY_SIZE = null;
+	this.CONTEXT = null;
+	this.RENDERER_TYPE = null;
+	this.FPS = null;
+	this._fps = 0;
+	this.lastCall = null;
+	this.delta = null;
+	this.tick = null;
+	this.entityInfo = {
 		total: 0,
 		drawn: 0,
 		currentPos: 0,
@@ -17,8 +17,9 @@ var PistonRenderer = Class.create({
 			y: 28,
 			i: 1092
 		}
-	},
-	initialize: function(canvas_, type, fps, size, cb) 
+	}
+};
+	PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
 	{
 		this.CANVAS = document.getElementById(canvas_);
 		
@@ -108,12 +109,12 @@ var PistonRenderer = Class.create({
 				animation();
 			break;
 		}
-	},
-	clear: function()
+	};
+	PistonRenderer.prototype.clear = function()
 	{
 
-	},
-	render_: function(entities, info)
+	};
+	PistonRenderer.prototype.render_ = function(entities, info)
 	{
 		var tiles = 0;
 		for(var y = info.fromY; y < info.toY; y++)
@@ -127,13 +128,12 @@ var PistonRenderer = Class.create({
 			}
 		}
 		return tiles;
-	},
-	fps: function()
+	};
+	PistonRenderer.prototype.fps = function()
 	{
 		return this._fps;
-	},
-	getDelta: function()
+	};
+	PistonRenderer.prototype.getDelta = function()
 	{
 		return this.delta;
-	}
-});
+	};

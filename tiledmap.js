@@ -1,13 +1,16 @@
-var PistonTiledMap = Class.create(PistonMap, {
-	file: null,
-	mWidth: 0,
-	mHeight: 0,
-	raw: {},
-	initialize: function(mapFile)
+var PistonTiledMap = function() {
+	this.file = null;
+	this.mWidth = 0;
+	this.mHeight = 0;
+	this.raw = {};
+};
+PistonTiledMap.prototype = Object.create(PistonMap.prototype);
+//PistonTiledMap.prototype.constructor = PistonMan;
+	PistonTiledMap.prototype.initialize = function(mapFile)
 	{
 		this.file = mapFile;
-	},
-	parseTiled: function(mapType, cb)
+	};
+	PistonTiledMap.prototype.parseTiled = function(mapType, cb)
 	{
 		var self = this;
 		var data = {};
@@ -58,5 +61,4 @@ var PistonTiledMap = Class.create(PistonMap, {
 				cb(data);
 			}
 		});
-	}
-});
+	};

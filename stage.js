@@ -1,34 +1,35 @@
-var PistonStage = Class.create({
-    layers: [],
-	entities: [],
-	totalEntities: 0,
-    drawableEntities: [],
-    drawnEntities: 0,
-    clickableEntities: [],
-    stageType: 'orthogonal',
-    toDraw: null,
-    cameraEntity: null,
-    stageSize: {
+var PistonStage = function(pos_, size_) {
+    this.layers = [],
+	this.entities = [],
+	this.totalEntities = 0,
+    this.drawableEntities = [],
+    this.drawnEntities = 0,
+    this.clickableEntities = [],
+    this.stageType = 'orthogonal',
+    this.toDraw = null,
+    this.cameraEntity = null,
+    this.stageSize = {
         stageWidth: 0,
         stageHeight: 0,
         screenWidth: 0,
         screenHeight: 0,
         pxWidth: 0,
         pxHeight: 0
-    },
-    stagePos: {
+    };
+    this.stagePos = {
         x: 0,
         y: 0,
         maxScrollX: 0,
         maxScrollY: 0
-    },
-    currentPos: {
+    };
+    this.currentPos = {
         l: 0,
         r: 0,
         t: 0,
         b: 0
-    },
-	initialize: function(pos_, size_) 
+    }
+};
+	PistonStage.prototype.initialize = function(pos_, size_) 
 	{
         this.stageSize = size_;
         this.stagePos.x = pos_.x;
@@ -36,21 +37,21 @@ var PistonStage = Class.create({
         this.stagePos.maxScrollX = Math.abs(this.stageSize.pxWidth -this.stageSize.screenWidth);
         this.stagePos.maxScrollY = Math.abs(this.stageSize.pxHeight - this.stageSize.screenHeight);
         toDraw = new Array();
-	},
-    setSize: function(w, h)
+	};
+    PistonStage.prototype.setSize = function(w, h)
     {
         this.stageSize.stageWidth = w;
         this.stageSize.stageHeight = h;
-    },
-	addChild: function(entity, layerID)
+    };
+	PistonStage.prototype.addChild = function(entity, layerID)
     {
         this.layers[layerID].addChild(entity);
-    },
-    addChildren: function(entities, layerID, width, height)
+    };
+    PistonStage.prototype.addChildren = function(entities, layerID, width, height)
     {
         this.layers[layerID].addChildren(entities, {w: width, h: height});
-    },
-    addChildAt: function(index, entity)
+    };
+    PistonStage.prototype.addChildAt = function(index, entity)
     {
         if(entity.isCamera == true)
         {
@@ -65,33 +66,33 @@ var PistonStage = Class.create({
                 this.clickableEntities.push(entity);
             }
         }
-    },
-    addLayer: function(id, tileSize) {
+    };
+    PistonStage.prototype.addLayer = function(id, tileSize) {
         this.layers.push(new PistonLayer(id, this.stageSize, tileSize));
-    },
-    deleteLayer: function(id) {
+    };
+    PistonStage.prototype.deleteLayer = function(id) {
 
-    },
-    shiftLayer: function(id, to) {
+    };
+    PistonStage.prototype.shiftLayer = function(id, to) {
 
-    },
-    hideLayer: function(id) {
+    };
+    PistonStage.prototype.hideLayer = function(id) {
         this.layers[id].hideLayer();
-    },
-    showLayer: function(id) {
+    };
+    PistonStage.prototype.showLayer = function(id) {
         this.layers[id].showLayer();
-    },
-    removeChild: function(entity)
+    };
+    PistonStage.prototype.removeChild = function(entity)
     {
         this.entities.splice(this.searchForEntity(entity), 1);
         this.totalEntities--;
-    },
-    removeChildAt: function(index)
+    };
+    PistonStage.prototype.removeChildAt = function(index)
     {
         this.entities.splice(index, 1);
         this.totalEntities--;
-    },
-    clearStage: function()
+    };
+    PistonStage.prototype.clearStage = function()
     {
         for(var i = 0; i < this.entities.length; i++)
         {
@@ -99,20 +100,20 @@ var PistonStage = Class.create({
         }
         this.entities = [];
         console.log(this.entities);
-    },
-    getEntities: function()
+    };
+    PistonStage.prototype.getEntities = function()
     {
         return this.entities;
-    },
-    getEntity: function(entity)
+    };
+    PistonStage.prototype.getEntity = function(entity)
     {
         return this.entities[this.searchForEntity(entity)];
-    },
-    getEntityAt: function(index)
+    };
+    PistonStage.prototype.getEntityAt = function(index)
     {
         return this.entities[index];
-    },
-    getEntityAtPos: function(_x, _y, layer)
+    };
+    PistonStage.prototype.getEntityAtPos = function(_x, _y, layer)
     {
         typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
         for(var i = layer; i >= 0; i--)
@@ -143,8 +144,8 @@ var PistonStage = Class.create({
                 }
             }
         }
-    },
-    searchForEntity: function(instanceName)
+    };
+    PistonStage.prototype.searchForEntity = function(instanceName)
     {
         var index = null;
         for(var i = 0; i < this.entities.length; i++)
@@ -155,16 +156,16 @@ var PistonStage = Class.create({
             }
         }
         return index;
-    },
-    addCamera: function(entity)
+    };
+    PistonStage.prototype.addCamera = function(entity)
     {
         this.cameraEntity = entity;
-    },
-    setup: function()
+    };
+    PistonStage.prototype.setup = function()
     {
         this.drawnEntities = 0;
-    },
-    move: function(x, y)
+    };
+    PistonStage.prototype.move = function(x, y)
     {
         var drawn = 0;
         var lastX = this.stagePos.x;
@@ -183,16 +184,16 @@ var PistonStage = Class.create({
             this.stagePos.x = lastX;
             this.stagePos.y = lastY;
         }
-    },
-    updatePos: function(x, y)
+    };
+    PistonStage.prototype.updatePos = function(x, y)
     {
         
-    },
-    update: function()
+    };
+    PistonStage.prototype.update = function()
     {        
         
-    },
-    getClickedEntity: function(x, y, layer)
+    };
+    PistonStage.prototype.getClickedEntity = function(x, y, layer)
     {
         typeof layer == 'undefined' ? layer = this.layers.length-1 : layer = layer;
         var entity = this.getEntityAtPos(x, y, layer);
@@ -200,12 +201,11 @@ var PistonStage = Class.create({
             return entity;
         else
             return false;
-    },
-    isColliding: function(entity1, entity2)
+    };
+    PistonStage.prototype.isColliding = function(entity1, entity2)
     {
         if(this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer) && this.getEntityAtPos(entity1.pos.x, entity1.pos.y, entity2.layer).index == entity2.index)
            return true;
         else
             return false;
     }
-});

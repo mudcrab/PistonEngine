@@ -1,15 +1,16 @@
-var PistonAssetLoader = Class.create({
-	DEFAULT_PATH: 'assets/',
-	assets: null,
-	loaded: 0,
-	spritemaps: null,
-	last: 0,
-	initialize: function()
+var PistonAssetLoader = function() {
+	this.DEFAULT_PATH = 'assets/';
+	this.assets = null;
+	this.loaded = 0;
+	this.spritemaps = null;
+	this.last = 0;
+};
+	PistonAssetLoader.prototype.initialize = function()
 	{
 		this.assets = new Array();
 		this.spritemaps = new Array();
-	},
-	addAsset: function(asset)
+	};
+	PistonAssetLoader.prototype.addAsset = function(asset)
 	{
 		var self = this;
 		typeof asset.size == 'undefined' ? asset.size = null : asset.size = size;
@@ -62,8 +63,8 @@ var PistonAssetLoader = Class.create({
 			break;
 		}
 		
-	},
-	getAsset: function(instance)
+	};
+	PistonAssetLoader.prototype.getAsset = function(instance)
 	{
 		var ret = false;
 		for(var asset = 0; asset < this.assets.length; asset++)
@@ -74,17 +75,16 @@ var PistonAssetLoader = Class.create({
 			}
 		
 		return ret;
-	},
-	setLoaded: function(name)
+	};
+	PistonAssetLoader.prototype.setLoaded = function(name)
 	{
 		this.loaded++;
 		piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
-	},
-	getProgress: function()
+	};
+	PistonAssetLoader.prototype.getProgress = function()
 	{
 		return {
 			loaded: this.loaded,
 			total: this.assets.length
 		}
 	}
-});

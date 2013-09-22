@@ -1,24 +1,25 @@
-var PistonLayer = Class.create({
-	layerID: null,
-	renderByTile: true,
-	layerEntities: null,
-	tileSize: 32,
-	hidden: false,
-	totalEntities: 0,
-	fromX: 0,
-	toX: 0,
-	fromY: 0,
-	toY: 1,
-	maxX: 0,
-	maxY: 0,
-	maxScreenX: 0,
-	maxScreenY: 0,
+var PistonLayer = function(id, stageSize, tileSize) {
+	this.layerID = null;
+	this.renderByTile = true;
+	this.layerEntities = null;
+	this.tileSize = 32;
+	this.hidden = false;
+	this.totalEntities = 0;
+	this.fromX = 0;
+	this.toX = 0;
+	this.fromY = 0;
+	this.toY = 1;
+	this.maxX = 0;
+	this.maxY = 0;
+	this.maxScreenX = 0;
+	this.maxScreenY = 0;
 
-	counterY: 0,
-	counterX: 0,
+	this.counterY = 0;
+	this.counterX = 0;
+};
 	
 
-	initialize: function(id, stageSize, tileSize) {
+	PistonLayer.prototype.initialize = function(id, stageSize, tileSize) {
 		this.layerID = id;
 		this.layerEntities = new Array(1);
 		this.layerEntities[0] = new Array(1);
@@ -33,8 +34,8 @@ var PistonLayer = Class.create({
 			this.maxScreenX = Math.floor(stageSize.screenWidth / tileSize) + 1;
 			this.maxScreenY = Math.floor(stageSize.screenHeight / tileSize) + 1;
 		}
-	},
-	addChild: function(entity, row) {
+	};
+	PistonLayer.prototype.addChild = function(entity, row) {
 		entity.layer = this.layerID;
 		if(typeof row == 'undefined')
 		{
@@ -50,8 +51,8 @@ var PistonLayer = Class.create({
 		this.maxX++;
 		this.toX += 1;
 		this.totalEntities++;
-	},
-	addChildren: function(entities, size)
+	};
+	PistonLayer.prototype.addChildren = function(entities, size)
 	{
 		for(var y = 0; y < entities.length; y++)
 			for(var x = 0; x < entities[0].length; x++)
@@ -68,8 +69,8 @@ var PistonLayer = Class.create({
 			this.toY = this.maxScreenY;
 		else
 			this.toY = entities.length;
-	},
-	getLayerInfo: function()
+	};
+	PistonLayer.prototype.getLayerInfo = function()
 	{
 		return {
 			fromX: this.fromX,
@@ -79,17 +80,17 @@ var PistonLayer = Class.create({
 			maxX: this.maxX,
 			maxY: this.maxY
 		}
-	},
-	addChildAt: function(entity) {
+	};
+	PistonLayer.prototype.addChildAt = function(entity) {
 		// later
-	},
-	removeChild: function(entity) {
+	};
+	PistonLayer.prototype.removeChild = function(entity) {
 		// later
-	},
-	getChild: function(id) {
+	};
+	PistonLayer.prototype.getChild = function(id) {
 
-	},
-	move: function(_x, _y) {
+	};
+	PistonLayer.prototype.move = function(_x, _y) {
 
 		for(var y = 0; y < this.layerEntities.length; y++)
 		{
@@ -131,16 +132,16 @@ var PistonLayer = Class.create({
 			this.toX = this.layerEntities[0].length;
 			this.toY = this.layerEntities.length;
 		}
-	},
-	hideLayer: function() {
+	};
+	PistonLayer.prototype.hideLayer = function() {
 		this.hidden = true;
 		for(var i = 0; i < this.drawnLayerEntities.length; i++)
 		{
 			this.drawnLayerEntities[i].visible = false;
 		}
 		this.drawnLayerEntities = [];
-	},
-	showLayer: function() {
+	};
+	PistonLayer.prototype.showLayer = function() {
 		this.hidden = false;
 		for(var i = 0; i < this.layerEntities.length; i++)
 		{
@@ -149,11 +150,10 @@ var PistonLayer = Class.create({
 				this.layerEntities[i].visible = true;
 			}
 		}
-	},
-	deleteLayer: function() {
+	};
+	PistonLayer.prototype.deleteLayer = function() {
 
-	},
-	clearAllEntities: function() {
+	};
+	PistonLayer.prototype.clearAllEntities = function() {
 
-	},
-});
+	};
