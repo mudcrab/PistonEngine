@@ -16,6 +16,7 @@ var PistonLayer = function(id, stageSize, tileSize) {
 
 	this.counterY = 0;
 	this.counterX = 0;
+	this.initialize(id, stageSize, tileSize);
 };
 	
 

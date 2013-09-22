@@ -10,6 +10,7 @@ var PistonEngine = function(canvasElement, _mC) {
 	this.loader = null;
 	this.totalEntities = 0;
 	this.totalDrawnEntities = 0;
+	this.initialize(canvasElement, _mC);
 };
 	PistonEngine.prototype.initialize = function(canvasElement, _mC) 
 	{
@@ -26,7 +27,7 @@ var PistonEngine = function(canvasElement, _mC) {
 			{
 				clearTimeout(timeout);
 				that.setup();
-				piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).getWidth(), height: $(canvasElement).getHeight() }, function() {  that.loop(); });
+				piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).width(), height: $(canvasElement).height() }, function() {  that.loop(); });
 			}
 		}, 100);
 	};

@@ -4,6 +4,7 @@ var PistonAssetLoader = function() {
 	this.loaded = 0;
 	this.spritemaps = null;
 	this.last = 0;
+	this.initialize();
 };
 	PistonAssetLoader.prototype.initialize = function()
 	{
@@ -79,7 +80,8 @@ var PistonAssetLoader = function() {
 	PistonAssetLoader.prototype.setLoaded = function(name)
 	{
 		this.loaded++;
-		piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+		console.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+		//piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
 	};
 	PistonAssetLoader.prototype.getProgress = function()
 	{

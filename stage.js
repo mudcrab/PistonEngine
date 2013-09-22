@@ -27,7 +27,8 @@ var PistonStage = function(pos_, size_) {
         r: 0,
         t: 0,
         b: 0
-    }
+    };
+    this.initialize(pos_, size_);
 };
 	PistonStage.prototype.initialize = function(pos_, size_) 
 	{

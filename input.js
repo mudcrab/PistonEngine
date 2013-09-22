@@ -11,6 +11,7 @@ var PistonInput = function() {
         element: "none"
     };
     this.mouseXY = {};
+    this.initialize();
 };
     
     PistonInput.prototype.initialize = function()
@@ -84,7 +85,7 @@ var PistonInput = function() {
     PistonInput.prototype.addMouseHandler = function(eventType, element)
     {
         var that = this;
-        $(element).observe(eventType, function(event) {
+        /*$(element).observe(eventType, function(event) {
             event.stop();
             switch(eventType)
             {
@@ -112,7 +113,7 @@ var PistonInput = function() {
                 y: event.clientY
             };
             that.clickedElement = element;
-        });
+        });*/
     };
     PistonInput.prototype.getMouseX = function()
     {

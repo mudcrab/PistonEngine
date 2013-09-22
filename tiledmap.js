@@ -1,30 +1,35 @@
-var PistonTiledMap = function() {
+var PistonTiledMap = function(mapFile) {
 	this.file = null;
 	this.mWidth = 0;
 	this.mHeight = 0;
 	this.raw = {};
+	PistonMap.call(this, mapFile);
+	//this.initialize(mapFile);
 };
 PistonTiledMap.prototype = Object.create(PistonMap.prototype);
-//PistonTiledMap.prototype.constructor = PistonMan;
-	PistonTiledMap.prototype.initialize = function(mapFile)
+PistonTiledMap.prototype.constructor = PistonMap;
+	/*PistonTiledMap.prototype.initialize = function(mapFile)
 	{
 		this.file = mapFile;
-	};
+	};*/
 	PistonTiledMap.prototype.parseTiled = function(mapType, cb)
 	{
 		var self = this;
 		var data = {};
-		new Ajax.Request(this.DEFAULT_ASSET_PATH + this.file, {
-			method: "get",
-			onSuccess: function(response) {
-				self.raw = response.responseText.evalJSON();
+		//$.ajax({ url: 'assets/' + this.file }).done(function(data){
+		$.get('assets/' + this.file, function(data) {
+			console.log(data);
+			//onSuccess: function(response) {
+				self.raw = data;
 				self.mWidth = self.raw.width;
 				self.mHeight = self.raw.height;
 				data.width = self.raw.width;
 				data.height = self.raw.height;
 				data.layers = [];
+				console.log(self.raw)
 				for(var l = 0; l < self.raw.layers.length; l++)
 				{
+					console.log('a')
 					if(typeof self.raw.layers[l].data == 'object')
 					{
 						var layer = new Array(data.height);
@@ -59,6 +64,6 @@ PistonTiledMap.prototype = Object.create(PistonMap.prototype);
 				}
 
 				cb(data);
-			}
+			//}
 		});
 	};

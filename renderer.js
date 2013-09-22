@@ -17,11 +17,13 @@ var PistonRenderer = function(canvas_, type, fps, size, cb) {
 			y: 28,
 			i: 1092
 		}
-	}
+	};
+	//console.log(canvas_, type, fps, size, cb)
+	this.initialize(canvas_, type, fps, size, cb);
 };
 	PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
 	{
-		this.CANVAS = document.getElementById(canvas_);
+		this.CANVAS = document.getElementById(canvas_.replace('#', ''));
 		
 		this.DISPLAY_SIZE = size;	
 		this.FPS = fps;

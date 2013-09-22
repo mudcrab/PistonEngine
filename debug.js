@@ -5,6 +5,7 @@ var PistonDebug = function() {
 	enabled = false;
 	mstick = 0;
 	barVisible = false;
+	this.initialize();
 };
 
 	PistonDebug.prototype.initialize = function() {
