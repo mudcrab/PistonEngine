@@ -21,121 +21,121 @@ var PistonRenderer = function(canvas_, type, fps, size, cb) {
 	//console.log(canvas_, type, fps, size, cb)
 	this.initialize(canvas_, type, fps, size, cb);
 };
-	PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
-	{
-		this.CANVAS = document.getElementById(canvas_.replace('#', ''));
-		
-		this.DISPLAY_SIZE = size;	
-		this.FPS = fps;
-		this.RENDERER_TYPE = type;
-		this.CANVAS.width = this.DISPLAY_SIZE.width;
-		this.CANVAS.height = this.DISPLAY_SIZE.height;
-		this.CONTEXT = this.CANVAS.getContext('2d');
+PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
+{
+	this.CANVAS = document.getElementById(canvas_.replace('#', ''));
+	
+	this.DISPLAY_SIZE = size;	
+	this.FPS = fps;
+	this.RENDERER_TYPE = type;
+	this.CANVAS.width = this.DISPLAY_SIZE.width;
+	this.CANVAS.height = this.DISPLAY_SIZE.height;
+	this.CONTEXT = this.CANVAS.getContext('2d');
 
-		var that = this;
-		var frame = window.requestAnimationFrame ||
-		            window.webkitRequestAnimationFrame ||
-		            window.mozRequestAnimationFrame    ||
-		            window.oRequestAnimationFrame      ||
-		            window.msRequestAnimationFrame     ||
-		            null ;
-		if(frame == null)
-		{
-			this.RENDERER_TYPE = 'fallback';
-		}
-		switch(this.RENDERER_TYPE)
-		{
-			case 'canvas':
-				
-		        if(frame !== null)
-		        {
-		        	if(this.lastCall == null)
-		        	{
-		        		that.lastCall = new Date().getTime();
-		        		that._fps = 0;
-		        	}
-		        	var animation = function()
-		        	{
-		        		cb();
-		        		setTimeout(function() {
-		        			frame(animation, that.CANVAS);
-		        		}, that.FPS);
-		        		that.delta = (new Date().getTime() - that.lastCall) / 1000;
-		        		that.lastCall = new Date().getTime();
-		        		if(that.tick == 12)
-		        		{
-		        			that._fps = Math.floor(1 / that.delta);
-		        			that.tick = 0;
-		        		}
-		                else
-		                {
-		                	that.tick++;
-		                }
-		        	};
-		        	frame(animation, that.CANVAS);
-		        }
-		        else
-		        {
-		        	this.RENDERER_TYPE = 'fallback';
-		        	this.FPS = 1000 / 60;
-		        }
-			break;
-			case 'fallback':
-				this.CANVAS.width = this.DISPLAY_SIZE.width;
-				this.CANVAS.height = this.DISPLAY_SIZE.height;
-				this.CONTEXT = this.CANVAS.getContext('2d');
-				if(this.lastCall == null)
-				{
-					that.lastCall = new Date().getTime();
-					that._fps = 0;
-				}
-				var that = this;
-				var animation = function()
-				{
-					setTimeout(function() {
-							cb();
-						animation();
-					}, that.FPS);
-					that.delta = (new Date().getTime() - that.lastCall) / 1000;
-					that.lastCall = new Date().getTime();
-					if(that.tick == 60)
-					{
-						that._fps = Math.floor(1 / that.delta);
-						that.tick = 0;
-					}
-					else
-					{
-						that.tick++;
-					}
-				};
-				animation();
-			break;
-		}
-	};
-	PistonRenderer.prototype.clear = function()
+	var that = this;
+	var frame = window.requestAnimationFrame ||
+	            window.webkitRequestAnimationFrame ||
+	            window.mozRequestAnimationFrame    ||
+	            window.oRequestAnimationFrame      ||
+	            window.msRequestAnimationFrame     ||
+	            null ;
+	if(frame == null)
 	{
-
-	};
-	PistonRenderer.prototype.render_ = function(entities, info)
+		this.RENDERER_TYPE = 'fallback';
+	}
+	switch(this.RENDERER_TYPE)
 	{
-		var tiles = 0;
-		for(var y = info.fromY; y < info.toY; y++)
-		{
-			for(var x = info.fromX; x < info.toX; x++)
+		case 'canvas':
+			
+	        if(frame !== null)
+	        {
+	        	if(this.lastCall == null)
+	        	{
+	        		that.lastCall = new Date().getTime();
+	        		that._fps = 0;
+	        	}
+	        	var animation = function()
+	        	{
+	        		cb();
+	        		setTimeout(function() {
+	        			frame(animation, that.CANVAS);
+	        		}, that.FPS);
+	        		that.delta = (new Date().getTime() - that.lastCall) / 1000;
+	        		that.lastCall = new Date().getTime();
+	        		if(that.tick == 12)
+	        		{
+	        			that._fps = Math.floor(1 / that.delta);
+	        			that.tick = 0;
+	        		}
+	                else
+	                {
+	                	that.tick++;
+	                }
+	        	};
+	        	frame(animation, that.CANVAS);
+	        }
+	        else
+	        {
+	        	this.RENDERER_TYPE = 'fallback';
+	        	this.FPS = 1000 / 60;
+	        }
+		break;
+		case 'fallback':
+			this.CANVAS.width = this.DISPLAY_SIZE.width;
+			this.CANVAS.height = this.DISPLAY_SIZE.height;
+			this.CONTEXT = this.CANVAS.getContext('2d');
+			if(this.lastCall == null)
 			{
-				if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
-					this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
-
-				tiles++;
+				that.lastCall = new Date().getTime();
+				that._fps = 0;
 			}
+			var that = this;
+			var animation = function()
+			{
+				setTimeout(function() {
+						cb();
+					animation();
+				}, that.FPS);
+				that.delta = (new Date().getTime() - that.lastCall) / 1000;
+				that.lastCall = new Date().getTime();
+				if(that.tick == 60)
+				{
+					that._fps = Math.floor(1 / that.delta);
+					that.tick = 0;
+				}
+				else
+				{
+					that.tick++;
+				}
+			};
+			animation();
+		break;
+	}
+};
+PistonRenderer.prototype.clear = function()
+{
+
+};
+PistonRenderer.prototype.render_ = function(entities, info)
+{
+	var tiles = 0;
+	for(var y = info.fromY; y < info.toY; y++)
+	{
+		for(var x = info.fromX; x < info.toX; x++)
+		{
+			if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
+				this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+
+			tiles++;
 		}
-		return tiles;
-	};
-	PistonRenderer.prototype.fps = function()
-	{
-		return this._fps;
-	};
-	PistonRenderer.prototype.getDelta = function()
-	{
-		return this.delta;
-	};
+	}
+	return tiles;
+};
+PistonRenderer.prototype.fps = function()
+{
+	return this._fps;
+};
+PistonRenderer.prototype.getDelta = function()
+{
+	return this.delta;
+};

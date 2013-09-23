@@ -9,11 +9,11 @@ var PistonMap = function(map) {
 	this.mapData = new Array();
 	//this.initialize();
 };
-	initialize = function()
-	{
-		this.mapData = new Array();
-	};
-	returnMap = function()
-	{
-		return this.mapData;
-	};
+initialize = function()
+{
+	this.mapData = new Array();
+};
+returnMap = function()
+{
+	return this.mapData;
+};
