@@ -56,7 +56,6 @@ PistonTiledMap.prototype.parseTiled = function(mapType, cb)
 					}
 				}
 				data.layers.push(layer);
-				console.log(layer)
 			}
 		}
 		cb(data);

@@ -80,8 +80,8 @@ PistonAssetLoader.prototype.getAsset = function(instance)
 PistonAssetLoader.prototype.setLoaded = function(name)
 {
 	this.loaded++;
-	console.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
-	//piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+	//console.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+	piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
 };
 PistonAssetLoader.prototype.getProgress = function()
 {

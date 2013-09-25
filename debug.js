@@ -1,10 +1,10 @@
 var PistonDebug = function() {
 
-	buffer = [];
-	bufferSize = 500;
-	enabled = false;
-	mstick = 0;
-	barVisible = false;
+	this.buffer = [];
+	this.bufferSize = 500;
+	this.enabled = false;
+	this.mstick = 0;
+	this.barVisible = false;
 	this.initialize();
 };
 
@@ -17,7 +17,7 @@ var PistonDebug = function() {
 			<div class="db_item" id="db_log"></div>\
 			<div class="dbclear"></div>\
 		</div>';
-		$(document.body).insert(barHTML);
+		$('body').append(barHTML);
 		this.hideDebugBar();
 	};
 	PistonDebug.prototype.log = function() {
@@ -62,12 +62,12 @@ var PistonDebug = function() {
 	};
 	PistonDebug.prototype.showDebugBar = function()
 	{
-		$('debug_bar').show();
+		$('#debug_bar').show();
 		this.barVisible = true;
 	};
 	PistonDebug.prototype.hideDebugBar = function()
 	{
-		$('debug_bar').hide();
+		$('#debug_bar').hide();
 		this.barVisible = false;
 	};
 	PistonDebug.prototype.setBarPosition = function(position) // top or bottom

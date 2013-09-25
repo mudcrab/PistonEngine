@@ -18,13 +18,13 @@ var PistonRenderer = function(canvas_, type, fps, size, cb) {
 			i: 1092
 		}
 	};
+	this.lastRun;
 	//console.log(canvas_, type, fps, size, cb)
 	this.initialize(canvas_, type, fps, size, cb);
 };
 PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
 {
 	this.CANVAS = document.getElementById(canvas_.replace('#', ''));
-	
 	this.DISPLAY_SIZE = size;	
 	this.FPS = fps;
 	this.RENDERER_TYPE = type;
@@ -32,85 +32,39 @@ PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb)
 	this.CANVAS.height = this.DISPLAY_SIZE.height;
 	this.CONTEXT = this.CANVAS.getContext('2d');
 
+	window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame || 
+    window.webkitRequestAnimationFrame   || 
+    window.mozRequestAnimationFrame      || 
+    window.oRequestAnimationFrame        || 
+    window.msRequestAnimationFrame       || 
+    function(callback, element){
+        window.setTimeout(function(){
+           
+            callback(+new Date);
+        }, 1000 / 60);
+	    };
+	})();
 	var that = this;
-	var frame = window.requestAnimationFrame ||
-	            window.webkitRequestAnimationFrame ||
-	            window.mozRequestAnimationFrame    ||
-	            window.oRequestAnimationFrame      ||
-	            window.msRequestAnimationFrame     ||
-	            null ;
-	if(frame == null)
+	if(this.lastCall == null)
 	{
-		this.RENDERER_TYPE = 'fallback';
+		that.lastCall = new Date().getTime();
+		that._fps = 0;
 	}
-	switch(this.RENDERER_TYPE)
+	var animation = function()
 	{
-		case 'canvas':
-			
-	        if(frame !== null)
-	        {
-	        	if(this.lastCall == null)
-	        	{
-	        		that.lastCall = new Date().getTime();
-	        		that._fps = 0;
-	        	}
-	        	var animation = function()
-	        	{
-	        		cb();
-	        		setTimeout(function() {
-	        			frame(animation, that.CANVAS);
-	        		}, that.FPS);
-	        		that.delta = (new Date().getTime() - that.lastCall) / 1000;
-	        		that.lastCall = new Date().getTime();
-	        		if(that.tick == 12)
-	        		{
-	        			that._fps = Math.floor(1 / that.delta);
-	        			that.tick = 0;
-	        		}
-	                else
-	                {
-	                	that.tick++;
-	                }
-	        	};
-	        	frame(animation, that.CANVAS);
-	        }
-	        else
-	        {
-	        	this.RENDERER_TYPE = 'fallback';
-	        	this.FPS = 1000 / 60;
-	        }
-		break;
-		case 'fallback':
-			this.CANVAS.width = this.DISPLAY_SIZE.width;
-			this.CANVAS.height = this.DISPLAY_SIZE.height;
-			this.CONTEXT = this.CANVAS.getContext('2d');
-			if(this.lastCall == null)
-			{
-				that.lastCall = new Date().getTime();
-				that._fps = 0;
-			}
-			var that = this;
-			var animation = function()
-			{
-				setTimeout(function() {
-						cb();
-					animation();
-				}, that.FPS);
-				that.delta = (new Date().getTime() - that.lastCall) / 1000;
-				that.lastCall = new Date().getTime();
-				if(that.tick == 60)
-				{
-					that._fps = Math.floor(1 / that.delta);
-					that.tick = 0;
-				}
-				else
-				{
-					that.tick++;
-				}
-			};
-			animation();
-		break;
+		cb();
+		that.delta = (new Date().getTime() - that.lastCall) / 1000;
+		that.lastCall = new Date().getTime();
+		that._fps = Math.floor(1/that.delta);
+		requestAnimFrame(animation, that.CANVAS);
 	}
+	requestAnimFrame(animation, that.CANVAS);
+};
+PistonRenderer.prototype.gameLoop = function()
+{
+
+
 };
 PistonRenderer.prototype.clear = function()
 {
@@ -131,6 +85,7 @@ PistonRenderer.prototype.render_ = function(entities, info)
 	}
 	return tiles;
 };
+PistonRenderer.prototype.setFps = function(fps) { this._fps = fps; return 0; }
 PistonRenderer.prototype.fps = function()
 {
 	return this._fps;
