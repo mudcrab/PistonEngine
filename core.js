@@ -2,20 +2,35 @@
 	Piston Engine
 */
 window.piston = window.piston || {};
-var PistonEngine = function(canvasElement, _mC) {
-	this.RENDERER = null;
+var PistonEngine = function(canvas, width, height) {
+	this.renderer = new PistonRenderer();
+	this.render = null;
 	this.mainClass = null;
 	this.fps = 0;
 	this.delta = 0;
 	this.loader = null;
 	this.totalEntities = 0;
 	this.totalDrawnEntities = 0;
-	this.initialize(canvasElement, _mC);
 	this.interval = 0;
+	if(typeof canvas !== 'undefined')
+		canvas = document.getElementById(canvas);
+	else
+	{
+		canvas = document.createElement('canvas');
+		canvas.setAttribute('id', '#gameDisplay');
+		document.body.appendChild(canvas);
+	}
+	width = typeof width != 'undefined' ? width : piston.utils.viewport().width;
+	height = typeof height != 'undefined' ? height : piston.utils.viewport().height;
+	this.initialize(canvas, width, height);
 };
-PistonEngine.prototype.initialize = function(canvasElement, _mC) 
+PistonEngine.prototype.initialize = function(canvas, width, height) 
 {
-	this.mainClass = new _mC;
+	//this.renderer.initialize(canvas, 'canvas', 8, { width: $(canvas).width(), height: $(canvas).height() }, function() {  that.update(); });	
+	//	console.log('asd')
+	this.renderer.initialize(canvas, width, height, this.loop);
+	//this.render = this.renderer.render;
+	/*this.mainClass = new _mC;
 	var that = this;
 	piston.loader = new PistonAssetLoader();
 	var assets = that.mainClass.toLoad;
@@ -30,7 +45,8 @@ PistonEngine.prototype.initialize = function(canvasElement, _mC)
 			that.setup();
 			piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).width(), height: $(canvasElement).height() }, function() {  that.update(); });
 		}
-	}, 100);
+	}, 100);*/
+	piston.debug.log('Piston initialized');
 };
 PistonEngine.prototype.info = function()
 {
@@ -44,11 +60,10 @@ PistonEngine.prototype.setup = function()
 	this.mainClass.loader = piston.loader;
 	this.mainClass.setup();
 };
-PistonEngine.prototype.loop = function()
+PistonEngine.prototype.loop = function(delta)
 {
-	console.log('update')
-	this.update();
-	this.draw();
+	//this.update();
+	//this.draw();
 };
 PistonEngine.prototype.update = function()
 {

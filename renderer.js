@@ -1,4 +1,4 @@
-var PistonRenderer = function(canvas_, type, fps, size, cb) {
+var PistonRenderer = function() {
 	this.CANVAS = null;
 	this.DISPLAY_SIZE = null;
 	this.CONTEXT = null;
@@ -20,16 +20,14 @@ var PistonRenderer = function(canvas_, type, fps, size, cb) {
 	};
 	this.lastRun;
 	//console.log(canvas_, type, fps, size, cb)
-	this.initialize(canvas_, type, fps, size, cb);
+	// this.initialize(canvas_, type, fps, size, cb);
 };
-PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
+PistonRenderer.prototype.initialize = function(canvas_, width, height, callback) 
 {
-	this.CANVAS = document.getElementById(canvas_.replace('#', ''));
-	this.DISPLAY_SIZE = size;	
+	this.CANVAS = canvas_;
 	this.FPS = fps;
-	this.RENDERER_TYPE = type;
-	this.CANVAS.width = this.DISPLAY_SIZE.width;
-	this.CANVAS.height = this.DISPLAY_SIZE.height;
+	this.CANVAS.width = width;
+	this.CANVAS.height = height;
 	this.CONTEXT = this.CANVAS.getContext('2d');
 
 	window.requestAnimFrame = (function(){
@@ -53,7 +51,7 @@ PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb)
 	}
 	var animation = function()
 	{
-		cb();
+		callback(that.delta);
 		that.delta = (new Date().getTime() - that.lastCall) / 1000;
 		that.lastCall = new Date().getTime();
 		that._fps = Math.floor(1/that.delta);
@@ -61,29 +59,24 @@ PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb)
 	}
 	requestAnimFrame(animation, that.CANVAS);
 };
-PistonRenderer.prototype.gameLoop = function()
-{
-
-
-};
-PistonRenderer.prototype.clear = function()
+PistonRenderer.prototype.render = function()
 {
 
 };
 PistonRenderer.prototype.render_ = function(entities, info)
 {
-	var tiles = 0;
-	for(var y = info.fromY; y < info.toY; y++)
-	{
-		for(var x = info.fromX; x < info.toX; x++)
-		{
-			if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
-				this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+	// var tiles = 0;
+	// for(var y = info.fromY; y < info.toY; y++)
+	// {
+	// 	for(var x = info.fromX; x < info.toX; x++)
+	// 	{
+	// 		if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
+	// 			this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
 
-			tiles++;
-		}
-	}
-	return tiles;
+	// 		tiles++;
+	// 	}
+	// }
+	// return tiles;
 };
 PistonRenderer.prototype.setFps = function(fps) { this._fps = fps; return 0; }
 PistonRenderer.prototype.fps = function()
