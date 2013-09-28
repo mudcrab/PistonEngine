@@ -12,7 +12,6 @@ var PistonEngine = function(width, height, canvas) {
 	this.totalEntities = 0;
 	this.totalDrawnEntities = 0;
 	this.interval = 0;
-	this.toUpdate = {};
 	this.toRender = {};
 	this.stages = [];
 	this.currentStage = 0;
@@ -32,26 +31,7 @@ var PistonEngine = function(width, height, canvas) {
 PistonEngine.prototype.initialize = function(width, height, canvas) 
 {
 	var self = this;
-	//this.renderer.initialize(canvas, 'canvas', 8, { width: $(canvas).width(), height: $(canvas).height() }, function() {  that.update(); });	
-	//	console.log('asd')
-	this.renderer.initialize(canvas, width, height, function() { self.loop() });
-	//this.render = this.renderer.render;
-	/*this.mainClass = new _mC;
-	var that = this;
-	piston.loader = new PistonAssetLoader();
-	var assets = that.mainClass.toLoad;
-	for(var i = 0; i < assets.length; i++)
-	{
-		piston.loader.addAsset(assets[i]);
-	}
-	var timeout = setInterval(function() {
-		if(piston.loader.loaded == piston.loader.assets.length)
-		{
-			clearTimeout(timeout);
-			that.setup();
-			piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).width(), height: $(canvasElement).height() }, function() {  that.update(); });
-		}
-	}, 100);*/
+	this.renderer.initialize(canvas, width, height, function(fps, delta) { self.loop(fps, delta) });
 	piston.debug.log('Piston initialized');
 };
 PistonEngine.prototype.info = function()
@@ -68,26 +48,12 @@ PistonEngine.prototype.setup = function()
 };
 PistonEngine.prototype.update = function()
 {
-	for(var fn in this.toUpdate)
-	{
-		this.toUpdate[fn]();
-	}
+	this.stages[this.currentStage].update(this.delta);
 };
-PistonEngine.prototype.draw1 = function()
+PistonEngine.prototype.loop = function(fps, delta)
 {
-	this.totalDrawnEntities = 0;
-	this.totalEntities = 0;
-	for(var i = 0; i < piston.stage.layers.length; i++)
-	{
-		this.totalEntities += piston.stage.layers[i].totalEntities;
-		if(piston.stage.layers[i].layerEntities.length > 0)
-		{
-			this.totalDrawnEntities += piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
-		}	
-	}	
-};
-PistonEngine.prototype.loop = function(delta)
-{
+	this.fps = fps;
+	this.delta = delta;
 	this.update();
 	this.draw();
 };
@@ -97,37 +63,20 @@ PistonEngine.prototype.toggleFPS = function(state)
 	if(state)
 	{
 		that.interval = setInterval(function() {
-			console.log('set');
-			$('#fps').text(that.fps);
+			$('#fps').text(that.renderer._fps);
 		}, 1000);
 	}
 	else
 		clearInterval(that.interval);
 };
-PistonEngine.prototype.addUpdate = function(name, fn)
+PistonEngine.prototype.addStage = function(stage)
 {
-	this.toUpdate[name] = fn;
-};
-PistonEngine.prototype.removeUpdate = function(name)
-{
-	delete this.toUpdate[name];
-};
-PistonEngine.prototype.clearUpdateQueue = function()
-{
-	this.toUpdate = {};
-};
-PistonEngine.prototype.getUpdateQueue = function()
-{
-	return this.toUpdate;
-};
-PistonEngine.prototype.addStage = function(name)
-{
-	var name = typeof name == 'undefined' ? '' : name;
-	this.stages.push(new PistonStage(name));
-};
-PistonEngine.prototype.updateStage = function()
-{
-
+	if(typeof stage !== 'string')
+	{
+		this.stages.push(stage);
+	}
+	else
+		this.stages.push(new PistonStage(stage));
 };
 PistonEngine.prototype.getStage = function()
 {
@@ -138,6 +87,6 @@ PistonEngine.prototype.draw = function()
 	var stageEntities = this.stages[this.currentStage].draw();
 	for(entity in stageEntities)
 	{
-		//console.log(stageEntities[entity])
+		this.renderer.render(stageEntities[entity]);
 	}
 };
