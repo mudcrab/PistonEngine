@@ -81,7 +81,7 @@ PistonAssetLoader.prototype.setLoaded = function(name)
 {
 	this.loaded++;
 	//console.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
-	piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
+	//piston.debug.log('Loaded asset [ ' + name + ' ] ' + this.loaded + ' of ' + this.assets.length)
 };
 PistonAssetLoader.prototype.getProgress = function()
 {
@@ -89,4 +89,19 @@ PistonAssetLoader.prototype.getProgress = function()
 		loaded: this.loaded,
 		total: this.assets.length
 	}
-}
+};
+PistonAssetLoader.prototype.loadAssets = function(assets, callback)
+{
+	for(var i = 0; i < assets.length; i++)
+	{
+		this.addAsset(assets[i]);
+	}
+	var timeout = setInterval(function() {
+		if(piston.loader.loaded == piston.loader.assets.length)
+		{
+			clearTimeout(timeout);
+			piston.debug.log('All assets loaded');
+			callback();
+		}
+	}, 100);
+};
