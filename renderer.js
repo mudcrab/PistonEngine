@@ -29,17 +29,16 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 	this.CANVAS.width = width;
 	this.CANVAS.height = height;
 	this.CONTEXT = this.CANVAS.getContext('2d');
-
 	window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame || 
     window.webkitRequestAnimationFrame   || 
     window.mozRequestAnimationFrame      || 
     window.oRequestAnimationFrame        || 
     window.msRequestAnimationFrame       || 
-    function(callback, element){
+    function(cb, element){
         window.setTimeout(function(){
            
-            callback(+new Date);
+            cb(+new Date);
         }, 1000 / 60);
 	    };
 	})();
@@ -51,7 +50,7 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 	}
 	var animation = function()
 	{
-		callback(that.delta);
+		callback(that._fps, that.delta);
 		that.delta = (new Date().getTime() - that.lastCall) / 1000;
 		that.lastCall = new Date().getTime();
 		that._fps = Math.floor(1/that.delta);
@@ -61,7 +60,10 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 };
 PistonRenderer.prototype.render = function(obj)
 {
-	console.log(obj);
+	this.CONTEXT.save();
+	this.CONTEXT.clearRect(obj.pos.x - 1, obj.pos.y - 1, obj.size.w, obj.size.h);
+	this.CONTEXT.drawImage(piston.loader.getAsset(obj.image).image, obj.pos.x, obj.pos.y);
+	this.CONTEXT.restore();
 };
 PistonRenderer.prototype.render_ = function(entities, info)
 {
