@@ -31,12 +31,17 @@ PistonLayer.prototype.move = function(x, y)
 {
 	this.pos.x += x;
 	this.pos.y += y;
+	for(var i = 0; i < this.entities.length; i++)
+	{
+		this.entities[i].x += x;
+		this.entities[i].y += y;
+	}
 };
 /*
 	moves the whole layer to x y
 */
 PistonLayer.prototype.moveTo = function(x, y)
 {
-	this.pos.x = x;
-	this.pos.y = y;
+	//this.pos.x = x;
+	//this.pos.y = y;
 };

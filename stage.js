@@ -35,6 +35,10 @@ PistonStage.prototype.addEntity = function(entity, layer)
 	else
 		piston.debug.log('No entity specified');
 };
+PistonStage.prototype.getEntity = function(index, layer)
+{
+
+};
 /*
 	moves layer by x y, if layer not specified moves all layers
 */
@@ -69,26 +73,29 @@ PistonStage.prototype.getAllEntities = function(layer)
 	var entities = [];
 	if(layer !== 'undefined')
 	{
-		for(var layer in this.layers)
+		for(var layer = 0; layer <  this.layers.length; layer++)
 			entities.push(this.layers[layer].entities)
 	}
 	else
 		entities.push(this.layers[layer].entities);
 	return entities;
 };
+PistonStage.prototype.update = function(delta)
+{
+
+};
 PistonStage.prototype.draw = function()
 {
 	var entitiesToDraw = [];
 	var layers = this.getAllEntities();
-
-	for(var layer in layers)
+	for(var layer = 0; layer < layers.length; layer++)
 	{
-		for(var entity in layers[layer])
+		for(var entity = 0; entity < layers[layer].length; entity++)
 		{
 			if(layers[layer][entity].draw)
 			{
 				entitiesToDraw.push(layers[layer][entity]);
-				// layers[layer][entity].draw = false;
+				layers[layer][entity].draw = false;
 			}
 		}
 	}
