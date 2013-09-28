@@ -55,13 +55,13 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 		that.delta = (new Date().getTime() - that.lastCall) / 1000;
 		that.lastCall = new Date().getTime();
 		that._fps = Math.floor(1/that.delta);
-		requestAnimFrame(animation, that.CANVAS);
+		requestAnimFrame(animation);
 	}
 	requestAnimFrame(animation, that.CANVAS);
 };
-PistonRenderer.prototype.render = function()
+PistonRenderer.prototype.render = function(obj)
 {
-
+	console.log(obj);
 };
 PistonRenderer.prototype.render_ = function(entities, info)
 {
