@@ -1,4 +1,4 @@
-var PistonRenderer = function(canvas_, type, fps, size, cb) {
+var PistonRenderer = function() {
 	this.CANVAS = null;
 	this.DISPLAY_SIZE = null;
 	this.CONTEXT = null;
@@ -18,119 +18,69 @@ var PistonRenderer = function(canvas_, type, fps, size, cb) {
 			i: 1092
 		}
 	};
+	this.lastRun;
 	//console.log(canvas_, type, fps, size, cb)
-	this.initialize(canvas_, type, fps, size, cb);
+	// this.initialize(canvas_, type, fps, size, cb);
 };
-PistonRenderer.prototype.initialize = function(canvas_, type, fps, size, cb) 
+PistonRenderer.prototype.initialize = function(canvas_, width, height, callback) 
 {
-	this.CANVAS = document.getElementById(canvas_.replace('#', ''));
-	
-	this.DISPLAY_SIZE = size;	
+	this.CANVAS = canvas_;
 	this.FPS = fps;
-	this.RENDERER_TYPE = type;
-	this.CANVAS.width = this.DISPLAY_SIZE.width;
-	this.CANVAS.height = this.DISPLAY_SIZE.height;
+	this.CANVAS.width = width;
+	this.CANVAS.height = height;
 	this.CONTEXT = this.CANVAS.getContext('2d');
-
+	window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame || 
+    window.webkitRequestAnimationFrame   || 
+    window.mozRequestAnimationFrame      || 
+    window.oRequestAnimationFrame        || 
+    window.msRequestAnimationFrame       || 
+    function(cb, element){
+        window.setTimeout(function(){
+           
+            cb(+new Date);
+        }, 1000 / 60);
+	    };
+	})();
 	var that = this;
-	var frame = window.requestAnimationFrame ||
-	            window.webkitRequestAnimationFrame ||
-	            window.mozRequestAnimationFrame    ||
-	            window.oRequestAnimationFrame      ||
-	            window.msRequestAnimationFrame     ||
-	            null ;
-	if(frame == null)
+	if(this.lastCall == null)
 	{
-		this.RENDERER_TYPE = 'fallback';
+		that.lastCall = new Date().getTime();
+		that._fps = 0;
 	}
-	switch(this.RENDERER_TYPE)
+	var animation = function()
 	{
-		case 'canvas':
-			
-	        if(frame !== null)
-	        {
-	        	if(this.lastCall == null)
-	        	{
-	        		that.lastCall = new Date().getTime();
-	        		that._fps = 0;
-	        	}
-	        	var animation = function()
-	        	{
-	        		cb();
-	        		setTimeout(function() {
-	        			frame(animation, that.CANVAS);
-	        		}, that.FPS);
-	        		that.delta = (new Date().getTime() - that.lastCall) / 1000;
-	        		that.lastCall = new Date().getTime();
-	        		if(that.tick == 12)
-	        		{
-	        			that._fps = Math.floor(1 / that.delta);
-	        			that.tick = 0;
-	        		}
-	                else
-	                {
-	                	that.tick++;
-	                }
-	        	};
-	        	frame(animation, that.CANVAS);
-	        }
-	        else
-	        {
-	        	this.RENDERER_TYPE = 'fallback';
-	        	this.FPS = 1000 / 60;
-	        }
-		break;
-		case 'fallback':
-			this.CANVAS.width = this.DISPLAY_SIZE.width;
-			this.CANVAS.height = this.DISPLAY_SIZE.height;
-			this.CONTEXT = this.CANVAS.getContext('2d');
-			if(this.lastCall == null)
-			{
-				that.lastCall = new Date().getTime();
-				that._fps = 0;
-			}
-			var that = this;
-			var animation = function()
-			{
-				setTimeout(function() {
-						cb();
-					animation();
-				}, that.FPS);
-				that.delta = (new Date().getTime() - that.lastCall) / 1000;
-				that.lastCall = new Date().getTime();
-				if(that.tick == 60)
-				{
-					that._fps = Math.floor(1 / that.delta);
-					that.tick = 0;
-				}
-				else
-				{
-					that.tick++;
-				}
-			};
-			animation();
-		break;
+		callback(that._fps, that.delta);
+		that.delta = (new Date().getTime() - that.lastCall) / 1000;
+		that.lastCall = new Date().getTime();
+		that._fps = Math.floor(1/that.delta);
+		requestAnimFrame(animation);
 	}
+	requestAnimFrame(animation, that.CANVAS);
 };
-PistonRenderer.prototype.clear = function()
+PistonRenderer.prototype.render = function(obj)
 {
-
+	this.CONTEXT.save();
+	this.CONTEXT.clearRect(obj.pos.x - 1, obj.pos.y - 1, obj.size.w, obj.size.h);
+	this.CONTEXT.drawImage(piston.loader.getAsset(obj.image).image, obj.pos.x, obj.pos.y);
+	this.CONTEXT.restore();
 };
 PistonRenderer.prototype.render_ = function(entities, info)
 {
-	var tiles = 0;
-	for(var y = info.fromY; y < info.toY; y++)
-	{
-		for(var x = info.fromX; x < info.toX; x++)
-		{
-			if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
-				this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
+	// var tiles = 0;
+	// for(var y = info.fromY; y < info.toY; y++)
+	// {
+	// 	for(var x = info.fromX; x < info.toX; x++)
+	// 	{
+	// 		if(typeof entities[y][x] != 'undefined' && entities[y][x].visible)
+	// 			this.CONTEXT.drawImage(piston.loader.getAsset(entities[y][x].image).image, entities[y][x].pos.x, entities[y][x].pos.y);
 
-			tiles++;
-		}
-	}
-	return tiles;
+	// 		tiles++;
+	// 	}
+	// }
+	// return tiles;
 };
+PistonRenderer.prototype.setFps = function(fps) { this._fps = fps; return 0; }
 PistonRenderer.prototype.fps = function()
 {
 	return this._fps;

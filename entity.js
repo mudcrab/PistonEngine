@@ -24,6 +24,7 @@ var PistonEntity = function(pos_, size_, image_, name_) {
 	this.rectPos = {x: 0, y: 0};
 	this.layer = 0;
 	this.properties = {};
+	this.draw = true;
 	this.initialize(pos_, size_, image_, name_);
 };
 PistonEntity.prototype.initialize = function(pos_, size_, image_, name_) 

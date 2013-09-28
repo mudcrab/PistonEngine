@@ -2,34 +2,37 @@
 	Piston Engine
 */
 window.piston = window.piston || {};
-var PistonEngine = function(canvasElement, _mC) {
-	this.RENDERER = null;
+var PistonEngine = function(width, height, canvas) {
+	this.renderer = new PistonRenderer();
+	this.render = null;
 	this.mainClass = null;
 	this.fps = 0;
 	this.delta = 0;
 	this.loader = null;
 	this.totalEntities = 0;
 	this.totalDrawnEntities = 0;
-	this.initialize(canvasElement, _mC);
-};
-PistonEngine.prototype.initialize = function(canvasElement, _mC) 
-{
-	this.mainClass = new _mC;
-	var that = this;
-	piston.loader = new PistonAssetLoader();
-	var assets = that.mainClass.toLoad;
-	for(var i = 0; i < assets.length; i++)
+	this.interval = 0;
+	this.toRender = {};
+	this.stages = [];
+	this.currentStage = 0;
+
+	if(typeof canvas !== 'undefined')
+		canvas = document.getElementById(canvas);
+	else
 	{
-		piston.loader.addAsset(assets[i]);
+		canvas = document.createElement('canvas');
+		canvas.setAttribute('id', '#gameDisplay');
+		document.body.appendChild(canvas);
 	}
-	var timeout = setInterval(function() {
-		if(piston.loader.loaded == piston.loader.assets.length)
-		{
-			clearTimeout(timeout);
-			that.setup();
-			piston.renderer = new PistonRenderer(canvasElement, 'canvas', 8, { width: $(canvasElement).width(), height: $(canvasElement).height() }, function() {  that.loop(); });
-		}
-	}, 100);
+	width = typeof width != 'undefined' ? width : piston.utils.viewport().width;
+	height = typeof height != 'undefined' ? height : piston.utils.viewport().height;
+	this.initialize(width, height, canvas);
+};
+PistonEngine.prototype.initialize = function(width, height, canvas) 
+{
+	var self = this;
+	this.renderer.initialize(canvas, width, height, function(fps, delta) { self.loop(fps, delta) });
+	piston.debug.log('Piston initialized');
 };
 PistonEngine.prototype.info = function()
 {
@@ -40,30 +43,50 @@ PistonEngine.prototype.info = function()
 };
 PistonEngine.prototype.setup = function()
 {
-	this.mainClass.loader = this.loader;
+	this.mainClass.loader = piston.loader;
 	this.mainClass.setup();
-};
-PistonEngine.prototype.loop = function()
-{
-	this.update();
-	this.draw();
 };
 PistonEngine.prototype.update = function()
 {
-	this.fps = piston.renderer.fps();
-	this.delta = piston.renderer.getDelta();
-	this.mainClass.update();
+	this.stages[this.currentStage].update(this.delta);
+};
+PistonEngine.prototype.loop = function(fps, delta)
+{
+	this.fps = fps;
+	this.delta = delta;
+	this.update();
+	this.draw();
+};
+PistonEngine.prototype.toggleFPS = function(state)
+{
+	var that = this;
+	if(state)
+	{
+		that.interval = setInterval(function() {
+			$('#fps').text(that.renderer._fps);
+		}, 1000);
+	}
+	else
+		clearInterval(that.interval);
+};
+PistonEngine.prototype.addStage = function(stage)
+{
+	if(typeof stage !== 'string')
+	{
+		this.stages.push(stage);
+	}
+	else
+		this.stages.push(new PistonStage(stage));
+};
+PistonEngine.prototype.getStage = function()
+{
+	return this.stages[this.currentStage];
 };
 PistonEngine.prototype.draw = function()
 {
-	this.totalDrawnEntities = 0;
-	this.totalEntities = 0;
-	for(var i = 0; i < piston.stage.layers.length; i++)
+	var stageEntities = this.stages[this.currentStage].draw();
+	for(entity in stageEntities)
 	{
-		this.totalEntities += piston.stage.layers[i].totalEntities;
-		if(piston.stage.layers[i].layerEntities.length > 0)
-		{
-			this.totalDrawnEntities += piston.renderer.render_(piston.stage.layers[i].layerEntities, piston.stage.layers[i].getLayerInfo());
-		}	
-	}	
+		this.renderer.render(stageEntities[entity]);
+	}
 };
