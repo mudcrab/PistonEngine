@@ -25,7 +25,7 @@ PistonAssetLoader.prototype.addAsset = function(asset)
 				this.last++;
 				var img = new Image();
 				img.src = asset.path + asset.file + '.png';
-				img.onload = setLoaded(asset.instanceName);
+				img.onload = self.setLoaded(asset.instanceName);
 				asset.image = img;
 				asset.loaded = true;
 				this.assets.push(asset);
