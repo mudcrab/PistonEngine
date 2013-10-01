@@ -19,11 +19,14 @@ var PistonRenderer = function() {
 		}
 	};
 	this.lastRun;
+	this.img = null;
 	//console.log(canvas_, type, fps, size, cb)
 	// this.initialize(canvas_, type, fps, size, cb);
 };
 PistonRenderer.prototype.initialize = function(canvas_, width, height, callback) 
 {
+	this.img = new Image();
+	this.img.src = '/assets/asd.png';
 	this.CANVAS = canvas_;
 	this.FPS = fps;
 	this.CANVAS.width = width;
@@ -61,8 +64,16 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 PistonRenderer.prototype.render = function(obj)
 {
 	this.CONTEXT.save();
-	this.CONTEXT.clearRect(obj.pos.x - 1, obj.pos.y - 1, obj.size.w, obj.size.h);
-	this.CONTEXT.drawImage(piston.loader.getAsset(obj.image).image, obj.pos.x, obj.pos.y);
+	//this.CONTEXT.clearRect(obj.pos.lastx, obj.pos.lasty, obj.size.w, obj.size.h);
+	this.CONTEXT.clearRect(0, 0, 800, 600);
+	if(obj.rotation != 0)
+	{
+		this.CONTEXT.translate(obj.pos.x + obj.size.w / 2, obj.pos.y + obj.size.h / 2);
+		this.CONTEXT.rotate(obj.rotation);
+		this.CONTEXT.drawImage(piston.loader.getAsset(obj.image).image, -obj.size.w / 2, -obj.size.h / 2);
+	}
+	else
+		this.CONTEXT.drawImage(piston.loader.getAsset(obj.image).image, obj.pos.x, obj.pos.y);
 	this.CONTEXT.restore();
 };
 PistonRenderer.prototype.render_ = function(entities, info)
