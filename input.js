@@ -94,6 +94,34 @@ PistonInput.prototype.initialize = function()
 			element: event.target.id
 		};
 	});
+	window.addEventListener('touchstart', function(event) {
+		event.stopPropagation();
+		that.leftMousePressed = true;
+		that.mouseXY.x = event.changedTouches[0].clientX;
+		that.mouseXY.y = event.changedTouches[0].clientY;
+		that.leftMouseHandler = {
+			click: true,
+			press: false,
+			up: false,
+			down: false,
+			element: event.target.id
+		};
+
+	}, false);
+	window.addEventListener('touchend', function(event) {
+		event.stopPropagation();
+		that.mouseXY.x = event.changedTouches[0].clientX;
+		that.mouseXY.y = event.changedTouches[0].clientY;
+		that.leftMousePressed = false;
+		that.leftMouseUp = true;
+		that.leftMouseHandler = {
+			click: false,
+			press: false,
+			up: true,
+			down: false,
+			element: event.target.id
+		};
+	}, false);
 };
 PistonInput.prototype.getMousePos = function()
 {
