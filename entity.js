@@ -25,6 +25,7 @@ var PistonEntity = function(pos_, size_, image_, name_) {
 	this.layer = 0;
 	this.properties = {};
 	this.draw = true;
+	this.rotation = 0;
 	this.initialize(pos_, size_, image_, name_);
 };
 PistonEntity.prototype.initialize = function(pos_, size_, image_, name_) 
@@ -56,13 +57,47 @@ PistonEntity.prototype.move = function(x, y)
 };
 /*
 	move entity to x, y
+	not the most elegant solution, but works for now, and it'll be refactored later
 */
 PistonEntity.prototype.moveTo = function(x, y)
 {
-	this.pos.lastx = this.pos.x;
-	this.pos.lasty = this.pos.y;
-	this.pos.x = x;
-	this.pos.y = y;
+	var mX = 1;
+	var mY = 1;
+
+	if(typeof this.speedX !== 'undefined')
+	{
+		if(Math.abs(this.pos.x - x) <= 10)
+			this.speedX = 1;
+
+		mX = this.speedX;
+	}
+	if(typeof this.speedY !== 'undefined')
+	{
+		if(Math.abs(this.pos.y - y) <= 10)
+			this.speedY = 1;
+
+		mY = this.speedY;
+	}
+
+	if(this.pos.x > x)
+	{
+		mX = mX * -1;
+	}
+	else if(this.pos.x < x)
+	{
+		mX = mX * 1;
+	}
+	else
+		mX = 0;
+
+	if(this.pos.y > y)
+		mY = mY * -1;
+	else if(this.pos.y < y)
+		mY = mY * 1;
+	else
+		mY = 0;
+
+	this.move(mX, mY);
 };
 /*
 	set a new image for entity
@@ -75,4 +110,8 @@ PistonEntity.prototype.changeImg = function(image_, w, h)
 	this.image.src = this.ASSETS_PATH + image_ + '.png';
 	this.image.width = size.w;
 	this.image.height = size.h;
+};
+PistonEntity.prototype.rotate = function(deg)
+{
+	this.rotation = deg;
 };
