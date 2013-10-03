@@ -64,8 +64,7 @@ PistonRenderer.prototype.initialize = function(canvas_, width, height, callback)
 PistonRenderer.prototype.render = function(obj)
 {
 	this.CONTEXT.save();
-	//this.CONTEXT.clearRect(obj.pos.lastx, obj.pos.lasty, obj.size.w, obj.size.h);
-	this.CONTEXT.clearRect(0, 0, 800, 600);
+	this.CONTEXT.clearRect(obj.pos.lastx, obj.pos.lasty, obj.size.w, obj.size.h);
 	if(obj.rotation != 0)
 	{
 		this.CONTEXT.translate(obj.pos.x + obj.size.w / 2, obj.pos.y + obj.size.h / 2);
