@@ -97,6 +97,11 @@ PistonEntity.prototype.moveTo = function(x, y)
 	else
 		mY = 0;
 
+	if(this.pos.x == x && this.pos.y == y)
+		this.draw = false;
+	else
+		this.draw = true;
+
 	this.move(mX, mY);
 };
 /*
