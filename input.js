@@ -68,64 +68,64 @@ PistonInput.prototype.initialize = function()
 		that.downKeys[that.codeToString[event.keyCode]] = false;
 		that.upKeys[that.codeToString[event.keyCode]] = true;
 	});
-		/*window.addEventListener('mousedown', function(event) {
-			that.leftMousePressed = true;
-			that.mouseXY.x = event.clientX;
-			that.mouseXY.y = event.clientY;
-		});*/
-		/*window.addEventListener('mouseup', function(event) {
-			event.stopPropagation();
-			that.leftMousePressed = false;
-			that.mouseXY.x = event.clientX;
-			that.mouseXY.y = event.clientY;
-			that.leftMouseUp = true;
-		});*/
-		//jQuery('document').
-	};
-PistonInput.prototype.addMouseHandler = function(eventType, element)
-{
-	var that = this;
-	/*$(element).observe(eventType, function(event) {
-		event.stop();
-		switch(eventType)
-		{
-			case 'click':
-				that.leftMouseHandler = {
-					click: true,
-					press: false,
-					up: false,
-					down: false,
-					element: element
-				};
-			break;
-			case 'mouseup':
-				that.leftMouseHandler = {
-					click: false,
-					press: false,
-					up: true,
-					down: false,
-					element: element
-				};
-			break;
-		}
-		that.mouseXY = {
-			x: event.clientX,
-			y: event.clientY
+	window.addEventListener('mousedown', function(event) {
+		that.leftMousePressed = true;
+		that.mouseXY.x = event.clientX;
+		that.mouseXY.y = event.clientY;
+		that.leftMouseHandler = {
+			click: true,
+			press: false,
+			up: false,
+			down: false,
+			element: event.target.id
 		};
-		that.clickedElement = element;
-	});*/
-};
-PistonInput.prototype.getMouseX = function()
-{
+	});
+	window.addEventListener('mouseup', function(event) {
+		event.stopPropagation();
+		that.leftMousePressed = false;
+		that.mouseXY.x = event.clientX;
+		that.mouseXY.y = event.clientY;
+		that.leftMouseUp = true;
+		that.leftMouseHandler = {
+			click: false,
+			press: false,
+			up: true,
+			down: false,
+			element: event.target.id
+		};
+	});
+	window.addEventListener('touchstart', function(event) {
+		event.stopPropagation();
+		that.leftMousePressed = true;
+		that.mouseXY.x = event.changedTouches[0].clientX;
+		that.mouseXY.y = event.changedTouches[0].clientY;
+		that.leftMouseHandler = {
+			click: true,
+			press: false,
+			up: false,
+			down: false,
+			element: event.target.id
+		};
 
+	}, false);
+	window.addEventListener('touchend', function(event) {
+		event.stopPropagation();
+		that.mouseXY.x = event.changedTouches[0].clientX;
+		that.mouseXY.y = event.changedTouches[0].clientY;
+		that.leftMousePressed = false;
+		that.leftMouseUp = true;
+		that.leftMouseHandler = {
+			click: false,
+			press: false,
+			up: true,
+			down: false,
+			element: event.target.id
+		};
+	}, false);
 };
-PistonInput.prototype.getMouseY = function()
+PistonInput.prototype.getMousePos = function()
 {
-
-};
-PistonInput.prototype.getMouse = function()
-{
-
+	return this.mouseXY;
 };
 PistonInput.prototype.keyDown = function(key)
 {
